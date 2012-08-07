@@ -1,0 +1,49 @@
+<Project name="chrono-marker" fileversion="2.0" DefaultNamespace="Chrono" language="C#" targetFramework="4.0" ctype="DotNetProject">
+  <Configurations active="Debug|x86">
+    <Configuration name="Debug|x86" ctype="DotNetProjectConfiguration">
+      <Output directory="bin\Debug" assembly="chrono-marker" />
+      <Build debugmode="True" target="WinExe" />
+      <Execution consolepause="False" runwithwarnings="True" runtime="MsNet" />
+      <CodeGeneration compiler="Mcs" warninglevel="4" optimize="False" unsafecodeallowed="False" generateoverflowchecks="False" definesymbols="DEBUG;" generatexmldocumentation="False" ctype="CSharpCompilerParameters" />
+    </Configuration>
+    <Configuration name="Release|x86" ctype="DotNetProjectConfiguration">
+      <Output directory="bin\Release" assembly="chrono-marker" />
+      <Build debugmode="False" target="WinExe" />
+      <Execution consolepause="False" runwithwarnings="True" runtime="MsNet" />
+      <CodeGeneration compiler="Mcs" warninglevel="4" optimize="True" unsafecodeallowed="False" generateoverflowchecks="False" generatexmldocumentation="False" ctype="CSharpCompilerParameters" />
+    </Configuration>
+  </Configurations>
+  <Contents>
+    <File subtype="Code" buildaction="EmbedAsResource" name="gtk-gui\gui.stetic" />
+    <File subtype="Code" buildaction="Compile" name="gtk-gui\generated.cs" />
+    <File subtype="Code" buildaction="Compile" name="AssemblyInfo.cs" />
+    <File subtype="Code" buildaction="Compile" name="WatchEventHandler.cs" />
+    <File subtype="Code" buildaction="Compile" name="Watch.cs" />
+    <File subtype="Code" buildaction="Compile" name="Program.cs" />
+    <File subtype="Code" buildaction="Compile" name="LoggingHandler.cs" />
+    <File subtype="Code" buildaction="Compile" name="LoggingEventArgs.cs" />
+    <File subtype="Code" buildaction="Compile" name="LoggerWatchEventHandler.cs" />
+    <File subtype="Code" buildaction="Compile" name="Logger.cs" />
+    <File subtype="Code" buildaction="Compile" name="LogEntry.cs" />
+    <File subtype="Code" buildaction="Compile" name="LoggerWindow.cs" />
+    <File subtype="Code" buildaction="Compile" name="StopwatchWindow.cs" />
+    <File subtype="Code" buildaction="Compile" name="gtk-gui\Chrono.LoggerWindow.cs" />
+    <File subtype="Code" buildaction="Compile" name="gtk-gui\Chrono.StopwatchWindow.cs" />
+    <File subtype="Code" buildaction="Compile" name="TimedCaller.cs" />
+    <File subtype="Code" buildaction="Compile" name="AboutDialog.cs" />
+    <File subtype="Code" buildaction="Compile" name="gtk-gui\Chrono.AboutDialog.cs" />
+    <File subtype="Code" buildaction="Nothing" name="..\extra\icon.ico" />
+    <File subtype="Code" buildaction="EmbedAsResource" name="..\extra\icon.png" />
+  </Contents>
+  <References>
+    <ProjectReference type="Package" localcopy="True" refto="System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+    <ProjectReference specificVersion="False" type="Package" localcopy="True" refto="gtk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <ProjectReference specificVersion="False" type="Package" localcopy="True" refto="gdk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <ProjectReference specificVersion="False" type="Package" localcopy="True" refto="glib-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <ProjectReference specificVersion="False" type="Package" localcopy="True" refto="glade-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <ProjectReference specificVersion="False" type="Package" localcopy="True" refto="pango-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <ProjectReference specificVersion="False" type="Package" localcopy="True" refto="atk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <ProjectReference type="Package" localcopy="False" refto="Mono.Posix, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
+  </References>
+  <LanguageParameters StartupObject="Chrono.Program" ApplicationIcon="..\extra\icon.ico" ctype="CSharpProjectParameters" />
+</Project>
