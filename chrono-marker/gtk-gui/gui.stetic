@@ -20,6 +20,7 @@
         <property name="Accelerator">&lt;Primary&gt;&lt;Mod2&gt;q</property>
         <property name="Label" translatable="yes">Quit</property>
         <property name="ShortLabel" translatable="yes">Quit</property>
+        <signal name="Activated" handler="actionQuit_event" />
       </action>
       <action id="ViewAction">
         <property name="Type">Action</property>
@@ -48,6 +49,7 @@
         <property name="Type">Action</property>
         <property name="Label" translatable="yes">Edit</property>
         <property name="ShortLabel" translatable="yes">Edit</property>
+        <signal name="Activated" handler="editMenuOpen_event" />
       </action>
       <action id="CopyAction">
         <property name="Type">Action</property>
@@ -85,7 +87,7 @@
     <property name="MemberName" />
     <property name="Title" translatable="yes">Chrono Marker Logs</property>
     <property name="WindowPosition">CenterOnParent</property>
-    <signal name="DeleteEvent" handler="windowClose_event" />
+    <signal name="Hidden" handler="windowHidden_event" />
     <child>
       <widget class="Gtk.VBox" id="vbox1">
         <property name="MemberName" />

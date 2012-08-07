@@ -155,11 +155,6 @@ namespace Chrono
 			ShowWatch();
 		}
 
-		protected void windowClose_event(object o, DeleteEventArgs args)
-		{
-			Application.Quit();
-		}
-
 		protected void copyAction_event(object sender, EventArgs e)
 		{
 			List<LogEntry> selectedEntries = GetSelectedLogs();
@@ -220,6 +215,23 @@ namespace Chrono
 			}
 
 			dialog.Destroy();
+		}
+
+		protected void editMenuOpen_event(object sender, EventArgs e)
+		{
+			CopyAction.Sensitive = DeleteAction.Sensitive =
+				!(logView.Selection.CountSelectedRows( ) == 0 );
+		}
+
+		protected void actionQuit_event (object sender, EventArgs e)
+		{
+			this.Hide();
+		}
+
+		protected void windowHidden_event (object sender, EventArgs e)
+		{
+			Console.Write("Cake");
+			Application.Quit();
 		}
 		#endregion
 	}

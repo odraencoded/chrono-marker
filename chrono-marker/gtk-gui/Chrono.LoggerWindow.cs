@@ -67,7 +67,7 @@ namespace Chrono
 			this.UIManager.InsertActionGroup (w1, 0);
 			this.AddAccelGroup (this.UIManager.AccelGroup);
 			this.Name = "Chrono.LoggerWindow";
-			this.Title = global::Mono.Unix.Catalog.GetString ("LoggerWindow");
+			this.Title = global::Mono.Unix.Catalog.GetString ("Chrono Marker Logs");
 			this.WindowPosition = ((global::Gtk.WindowPosition)(4));
 			// Container child Chrono.LoggerWindow.Gtk.Container+ContainerChild
 			this.vbox1 = new global::Gtk.VBox ();
@@ -101,9 +101,11 @@ namespace Chrono
 			this.DefaultWidth = 473;
 			this.DefaultHeight = 373;
 			this.Show ();
-			this.DeleteEvent += new global::Gtk.DeleteEventHandler (this.windowClose_event);
+			this.Hidden += new global::System.EventHandler (this.windowHidden_event);
+			this.QuitAction.Activated += new global::System.EventHandler (this.actionQuit_event);
 			this.StopwatchAction.Activated += new global::System.EventHandler (this.viewStopwatch_event);
 			this.AboutAction.Activated += new global::System.EventHandler (this.helpAbout_event);
+			this.EditAction.Activated += new global::System.EventHandler (this.editMenuOpen_event);
 			this.CopyAction.Activated += new global::System.EventHandler (this.copyAction_event);
 			this.DeleteAction.Activated += new global::System.EventHandler (this.deleteAction_event);
 			this.SelectAllAction.Activated += new global::System.EventHandler (this.selectAllAction_event);
