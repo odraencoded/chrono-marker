@@ -16,7 +16,6 @@ namespace Chrono
 		private global::Gtk.Action DeleteAction;
 		private global::Gtk.Action SelectAllAction;
 		private global::Gtk.Action ExportAction;
-		private global::Gtk.Action Action;
 		private global::Gtk.VBox vbox1;
 		private global::Gtk.MenuBar menubar1;
 		private global::Gtk.ScrolledWindow GtkScrolledWindow;
@@ -61,9 +60,6 @@ namespace Chrono
 			this.ExportAction = new global::Gtk.Action ("ExportAction", global::Mono.Unix.Catalog.GetString ("Export"), null, null);
 			this.ExportAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Export");
 			w1.Add (this.ExportAction, null);
-			this.Action = new global::Gtk.Action ("Action", global::Mono.Unix.Catalog.GetString ("-"), null, null);
-			this.Action.ShortLabel = global::Mono.Unix.Catalog.GetString ("-");
-			w1.Add (this.Action, null);
 			this.UIManager.InsertActionGroup (w1, 0);
 			this.AddAccelGroup (this.UIManager.AccelGroup);
 			this.Name = "Chrono.LoggerWindow";

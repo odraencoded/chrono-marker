@@ -70,6 +70,6 @@
     <Execute type="None" entry="chrono-marker" />
   </StartMode>
   <Entries>
-    <Entry filename="chrono-marker\chrono-marker.mdp" />
+    <Entry filename="chrono-marker/chrono-marker.mdp" />
   </Entries>
 </Combine>

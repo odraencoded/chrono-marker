@@ -230,7 +230,6 @@ namespace Chrono
 
 		protected void windowHidden_event (object sender, EventArgs e)
 		{
-			Console.Write("Cake");
 			Application.Quit();
 		}
 		#endregion

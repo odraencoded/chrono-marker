@@ -71,14 +71,20 @@ namespace Chrono
 
 				clockedTicks += ( long )Math.Round( ( Stopwatch.GetTimestamp( ) - startMark ) * Speed );
 
+				// Creating it here solves possible miliseconds differences
+				// in the event creation due to clockedTicks set lag
 				if( Stopped != null )
 					Stopped( this, new WatchEventArgs(this) );
 			} else {
+				// Creating it here solves possible milisecond differences
+				// in the event creation to the timestamp it should store
+				WatchEventArgs eventArgs = new WatchEventArgs(this);
+
 				IsRunning = true;// Watch is stopped, start it.
 				startMark = Stopwatch.GetTimestamp( );
 
 				if( Started != null )
-					Started( this, new WatchEventArgs(this) );
+					Started( this, eventArgs );
 			}
 
 			return IsRunning;

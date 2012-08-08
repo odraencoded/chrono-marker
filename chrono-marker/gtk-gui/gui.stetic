@@ -78,11 +78,6 @@
         <property name="ShortLabel" translatable="yes">Export</property>
         <signal name="Activated" handler="exportAction_event" />
       </action>
-      <action id="Action">
-        <property name="Type">Action</property>
-        <property name="Label" translatable="yes">-</property>
-        <property name="ShortLabel" translatable="yes">-</property>
-      </action>
     </action-group>
     <property name="MemberName" />
     <property name="Title" translatable="yes">Chrono Marker Logs</property>
