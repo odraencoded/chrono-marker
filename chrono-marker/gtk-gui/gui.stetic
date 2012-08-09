@@ -122,7 +122,7 @@
                 <property name="EnableSearch">False</property>
                 <property name="Reorderable">True</property>
                 <signal name="PopupMenu" handler="logViewPopup_event" after="yes" />
-                <signal name="ButtonPressEvent" handler="logViewButtonPress_event" />
+                <signal name="ButtonPressEvent" handler="logViewButtonPress_event" after="yes" />
               </widget>
             </child>
           </widget>
@@ -580,7 +580,6 @@ You should have received a copy of the GNU General Public License along with Chr
                                         <property name="MemberName" />
                                         <property name="CanFocus">True</property>
                                         <property name="Label" translatable="yes">Backward</property>
-                                        <property name="Active">True</property>
                                         <property name="DrawIndicator">True</property>
                                         <property name="HasLabel">True</property>
                                         <property name="UseUnderline">True</property>

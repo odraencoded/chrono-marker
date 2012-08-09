@@ -181,7 +181,6 @@ namespace Chrono
 			this.radioBackward = new global::Gtk.RadioButton (global::Mono.Unix.Catalog.GetString ("Backward"));
 			this.radioBackward.CanFocus = true;
 			this.radioBackward.Name = "radioBackward";
-			this.radioBackward.Active = true;
 			this.radioBackward.DrawIndicator = true;
 			this.radioBackward.UseUnderline = true;
 			this.radioBackward.Group = new global::GLib.SList (global::System.IntPtr.Zero);

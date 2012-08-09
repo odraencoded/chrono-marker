@@ -44,8 +44,6 @@ namespace Chrono
 			ListStore comboNameStore = watchNameEntry.Model as ListStore;
 
 			foreach( LoggingHandler handler in manyHandlers ) {
-
-
 				TreeIter iter =  comboNameStore.AppendValues(handler.Name);
 
 				comboNameIters.Add(handler, iter);

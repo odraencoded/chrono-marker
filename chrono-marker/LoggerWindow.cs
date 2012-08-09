@@ -183,10 +183,9 @@ namespace Chrono
 
 		protected void logViewButtonPress_event(object o, ButtonPressEventArgs args)
 		{
-			logViewShowContextMenu();
-			/*if( args.Event.Button == 3 ) {
+			if( args.Event.Button == 3 ) {
 				logViewShowContextMenu();
-			}*/
+			}
 		}
 
 		private void logViewShowContextMenu()
@@ -200,16 +199,12 @@ namespace Chrono
 		protected void exportAction_event(object sender, EventArgs e)
 		{
 			FileChooserDialog dialog = new FileChooserDialog(
-				"Export Log", this, FileChooserAction.Save,
+				"Export Log Text", this, FileChooserAction.Save,
 				Stock.Cancel, ResponseType.Cancel,
 				Stock.Save, ResponseType.Accept,
 				null);
 
 			dialog.DoOverwriteConfirmation = true;
-			FileFilter txtFilter = new FileFilter();
-			txtFilter.AddPattern( "*.txt" );
-			txtFilter.Name = "Text file";
-			dialog.AddFilter( txtFilter );
 
 			if( dialog.Run( ) == (int)ResponseType.Accept) {
 				Logger.ExportTo(dialog.Filename);
