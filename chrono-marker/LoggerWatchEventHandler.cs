@@ -26,13 +26,15 @@ namespace Chrono
 
     public class LoggerWatchEventArgs : EventArgs
     {
-        public LoggerWatchEventArgs(Logger logger, Watch watch)
+        public LoggerWatchEventArgs(Logger logger, LoggingHandler loggingHandler, Watch watch)
         {
             this.Logger = logger;
             this.Watch = watch;
+			this.LoggingHandler = loggingHandler;
         }
 
         public Logger Logger { get; private set; }
         public Watch Watch { get; private set; }
+		public LoggingHandler LoggingHandler {get; private set;}
     }
 }

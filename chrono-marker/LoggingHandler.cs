@@ -25,28 +25,58 @@ namespace Chrono
     /// <summary>Handles event logging and logging data storage</summary>
     public class LoggingHandler
     {
-        public LoggingHandler(Logger logger, Watch clock)
-        {
-            this.Logger = logger;
-            this.Watch = clock;
+        public LoggingHandler(Logger logger, Watch clock, string name)
+		{
+			this.Logger = logger;
+			this.Watch = clock;
+			this.Name = name;
 
-            Logging = true;
+			clock.Started += clockStarted_event;
+			clock.Stopped += clockStopped_event;
 
-            clock.Started += clockStarted_event;
-            clock.Stopped += clockStopped_event;
-        }
+			_logStops = true;
+			_logStarts = true;
+		}
 
         public string Name { get; private set; }
 
         public Logger Logger { get; private set; }
         public Watch Watch { get; private set; }
 
-        public bool Logging { get; set; }
+		public bool LogStarts {
+			get { return _logStarts;}
+			set {
+				if( value == _logStarts )
+					return;
+				if( value == true ) {
+					Watch.Started += clockStarted_event;
+				} else {
+					Watch.Started -= clockStarted_event;
+				}
+				_logStarts = value;
+			}
+		}
+		public bool LogStops {
+			get { return _logStops;}
+			set {
+				if( value == _logStops )
+					return;
+				if( value == true ) {
+					Watch.Stopped += clockStopped_event;
+				} else {
+					Watch.Stopped -= clockStopped_event;
+				}
+				_logStops = value;
+			}
+		}
+
+		private bool _logStarts;
+		private bool _logStops;
 
         void clockStarted_event(object sender, WatchEventArgs e)
         {
             LogEntry logEntry = new LogEntry(e.Timestamp);
-            logEntry.ClockName = e.Watch.Name;
+			logEntry.ClockName = Name;
 
             string description = "Started ";
 
@@ -64,7 +94,7 @@ namespace Chrono
         void clockStopped_event(object sender, WatchEventArgs e)
         {
             LogEntry logEntry = new LogEntry(e.Timestamp);
-            logEntry.ClockName = e.Watch.Name;
+			logEntry.ClockName = Name;
 
             string description = "Stopped ";
 
@@ -78,5 +108,10 @@ namespace Chrono
 
             Logger.AddEntry(logEntry);
         }
+
+		public override int GetHashCode()
+		{
+			return Name.GetHashCode();
+		}
     }
 }

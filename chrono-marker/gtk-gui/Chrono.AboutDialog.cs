@@ -22,9 +22,9 @@ namespace Chrono
 			// Widget Chrono.AboutDialog
 			this.Name = "Chrono.AboutDialog";
 			this.Title = global::Mono.Unix.Catalog.GetString ("About Chrono Marker");
+			this.Icon = global::Gdk.Pixbuf.LoadFromResource ("icon.ico");
 			this.TypeHint = ((global::Gdk.WindowTypeHint)(1));
 			this.WindowPosition = ((global::Gtk.WindowPosition)(4));
-			this.Modal = true;
 			this.AllowGrow = false;
 			// Internal child Chrono.AboutDialog.VBox
 			global::Gtk.VBox w1 = this.VBox;
@@ -47,16 +47,14 @@ namespace Chrono
 			this.image1.WidthRequest = 90;
 			this.image1.HeightRequest = 90;
 			this.image1.Name = "image1";
-			this.image1.Pixbuf = global::Gdk.Pixbuf.LoadFromResource ("icon.png");
+			this.image1.Pixbuf = global::Gdk.Pixbuf.LoadFromResource ("icon.ico");
 			this.hbox1.Add (this.image1);
 			global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.image1]));
 			w2.Position = 0;
 			// Container child hbox1.Gtk.Box+BoxChild
 			this.label2 = new global::Gtk.Label ();
 			this.label2.Name = "label2";
-			this.label2.LabelProp = global::Mono.Unix.Catalog.GetString ("<span size=\"x-large\" font_weight=\"heavy\">Chrono Marker</span>\nStopwatch and time " +
-				"logger gadget\n\nCopyright &#169; 2012 Leonardo Augusto Pereira"
-			);
+			this.label2.LabelProp = global::Mono.Unix.Catalog.GetString ("<span size=\"x-large\" font_weight=\"heavy\">Chrono Marker</span>\nStopwatch and time logger gadget\n\nCopyright &#169; 2012 Leonardo Augusto Pereira");
 			this.label2.UseMarkup = true;
 			this.label2.Wrap = true;
 			this.label2.Justify = ((global::Gtk.Justification)(2));
@@ -81,12 +79,7 @@ namespace Chrono
 			// Container child GtkAlignment1.Gtk.Container+ContainerChild
 			this.label1 = new global::Gtk.Label ();
 			this.label1.Name = "label1";
-			this.label1.LabelProp = global::Mono.Unix.Catalog.GetString (@"Chrono Marker is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-
-Chrono Marker  is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License along with Chrono Marker. If not, see <http://www.gnu.org/licenses/>."
-			);
+			this.label1.LabelProp = global::Mono.Unix.Catalog.GetString ("Chrono Marker is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.\n\nChrono Marker  is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.\n\nYou should have received a copy of the GNU General Public License along with Chrono Marker. If not, see <http://www.gnu.org/licenses/>.");
 			this.label1.Wrap = true;
 			this.GtkAlignment1.Add (this.label1);
 			this.frame2.Add (this.GtkAlignment1);
@@ -140,8 +133,8 @@ You should have received a copy of the GNU General Public License along with Chr
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();
 			}
-			this.DefaultWidth = 373;
-			this.DefaultHeight = 431;
+			this.DefaultWidth = 448;
+			this.DefaultHeight = 457;
 			this.Show ();
 			this.buttonCancel.Clicked += new global::System.EventHandler (this.closeClicked_event);
 		}

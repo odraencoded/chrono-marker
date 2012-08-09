@@ -7,8 +7,6 @@ namespace Chrono
 		private global::Gtk.UIManager UIManager;
 		private global::Gtk.Action FileAction;
 		private global::Gtk.Action QuitAction;
-		private global::Gtk.Action ViewAction;
-		private global::Gtk.Action StopwatchAction;
 		private global::Gtk.Action HelpAction;
 		private global::Gtk.Action AboutAction;
 		private global::Gtk.Action EditAction;
@@ -16,6 +14,7 @@ namespace Chrono
 		private global::Gtk.Action DeleteAction;
 		private global::Gtk.Action SelectAllAction;
 		private global::Gtk.Action ExportAction;
+		private global::Gtk.Action StopwatchesAction;
 		private global::Gtk.VBox vbox1;
 		private global::Gtk.MenuBar menubar1;
 		private global::Gtk.ScrolledWindow GtkScrolledWindow;
@@ -33,12 +32,6 @@ namespace Chrono
 			this.QuitAction = new global::Gtk.Action ("QuitAction", global::Mono.Unix.Catalog.GetString ("Quit"), null, null);
 			this.QuitAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Quit");
 			w1.Add (this.QuitAction, "<Primary><Mod2>q");
-			this.ViewAction = new global::Gtk.Action ("ViewAction", global::Mono.Unix.Catalog.GetString ("View"), null, null);
-			this.ViewAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("View");
-			w1.Add (this.ViewAction, null);
-			this.StopwatchAction = new global::Gtk.Action ("StopwatchAction", global::Mono.Unix.Catalog.GetString ("Stopwatch"), null, null);
-			this.StopwatchAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Stopwatch");
-			w1.Add (this.StopwatchAction, null);
 			this.HelpAction = new global::Gtk.Action ("HelpAction", global::Mono.Unix.Catalog.GetString ("Help"), null, null);
 			this.HelpAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Help");
 			w1.Add (this.HelpAction, null);
@@ -49,9 +42,11 @@ namespace Chrono
 			this.EditAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Edit");
 			w1.Add (this.EditAction, null);
 			this.CopyAction = new global::Gtk.Action ("CopyAction", global::Mono.Unix.Catalog.GetString ("Copy"), null, null);
+			this.CopyAction.Sensitive = false;
 			this.CopyAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Copy");
 			w1.Add (this.CopyAction, "<Control>c");
 			this.DeleteAction = new global::Gtk.Action ("DeleteAction", global::Mono.Unix.Catalog.GetString ("Delete"), null, null);
+			this.DeleteAction.Sensitive = false;
 			this.DeleteAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Delete");
 			w1.Add (this.DeleteAction, "Delete");
 			this.SelectAllAction = new global::Gtk.Action ("SelectAllAction", global::Mono.Unix.Catalog.GetString ("Select all"), null, null);
@@ -60,16 +55,19 @@ namespace Chrono
 			this.ExportAction = new global::Gtk.Action ("ExportAction", global::Mono.Unix.Catalog.GetString ("Export"), null, null);
 			this.ExportAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Export");
 			w1.Add (this.ExportAction, null);
+			this.StopwatchesAction = new global::Gtk.Action ("StopwatchesAction", global::Mono.Unix.Catalog.GetString ("Stopwatches..."), null, null);
+			this.StopwatchesAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Stopwatches");
+			w1.Add (this.StopwatchesAction, null);
 			this.UIManager.InsertActionGroup (w1, 0);
 			this.AddAccelGroup (this.UIManager.AccelGroup);
 			this.Name = "Chrono.LoggerWindow";
 			this.Title = global::Mono.Unix.Catalog.GetString ("Chrono Marker Logs");
-			this.WindowPosition = ((global::Gtk.WindowPosition)(4));
+			this.Icon = global::Gdk.Pixbuf.LoadFromResource ("icon.ico");
 			// Container child Chrono.LoggerWindow.Gtk.Container+ContainerChild
 			this.vbox1 = new global::Gtk.VBox ();
 			this.vbox1.Name = "vbox1";
 			// Container child vbox1.Gtk.Box+BoxChild
-			this.UIManager.AddUiFromString (@"<ui><menubar name='menubar1'><menu name='FileAction' action='FileAction'><menuitem name='ExportAction' action='ExportAction'/><separator/><menuitem name='QuitAction' action='QuitAction'/></menu><menu name='EditAction' action='EditAction'><menuitem name='SelectAllAction' action='SelectAllAction'/><menuitem name='CopyAction' action='CopyAction'/><separator/><menuitem name='DeleteAction' action='DeleteAction'/></menu><menu name='ViewAction' action='ViewAction'><menuitem name='StopwatchAction' action='StopwatchAction'/></menu><menu name='HelpAction' action='HelpAction'><menuitem name='AboutAction' action='AboutAction'/></menu></menubar></ui>");
+			this.UIManager.AddUiFromString ("<ui><menubar name='menubar1'><menu name='FileAction' action='FileAction'><menuitem name='ExportAction' action='ExportAction'/><separator/><menuitem name='QuitAction' action='QuitAction'/></menu><menu name='EditAction' action='EditAction'><menuitem name='SelectAllAction' action='SelectAllAction'/><menuitem name='CopyAction' action='CopyAction'/><separator/><menuitem name='DeleteAction' action='DeleteAction'/><separator/><menuitem name='StopwatchesAction' action='StopwatchesAction'/></menu><menu name='HelpAction' action='HelpAction'><menuitem name='AboutAction' action='AboutAction'/></menu></menubar></ui>");
 			this.menubar1 = ((global::Gtk.MenuBar)(this.UIManager.GetWidget ("/menubar1")));
 			this.menubar1.Name = "menubar1";
 			this.vbox1.Add (this.menubar1);
@@ -85,6 +83,7 @@ namespace Chrono
 			this.logView = new global::Gtk.TreeView ();
 			this.logView.CanFocus = true;
 			this.logView.Name = "logView";
+			this.logView.EnableSearch = false;
 			this.logView.Reorderable = true;
 			this.GtkScrolledWindow.Add (this.logView);
 			this.vbox1.Add (this.GtkScrolledWindow);
@@ -97,15 +96,15 @@ namespace Chrono
 			this.DefaultWidth = 473;
 			this.DefaultHeight = 373;
 			this.Show ();
-			this.Hidden += new global::System.EventHandler (this.windowHidden_event);
 			this.QuitAction.Activated += new global::System.EventHandler (this.actionQuit_event);
-			this.StopwatchAction.Activated += new global::System.EventHandler (this.viewStopwatch_event);
 			this.AboutAction.Activated += new global::System.EventHandler (this.helpAbout_event);
-			this.EditAction.Activated += new global::System.EventHandler (this.editMenuOpen_event);
 			this.CopyAction.Activated += new global::System.EventHandler (this.copyAction_event);
 			this.DeleteAction.Activated += new global::System.EventHandler (this.deleteAction_event);
 			this.SelectAllAction.Activated += new global::System.EventHandler (this.selectAllAction_event);
 			this.ExportAction.Activated += new global::System.EventHandler (this.exportAction_event);
+			this.StopwatchesAction.Activated += new global::System.EventHandler (this.editStopwatches_event);
+			this.logView.PopupMenu += new global::Gtk.PopupMenuHandler (this.logViewPopup_event);
+			this.logView.ButtonPressEvent += new global::Gtk.ButtonPressEventHandler (this.logViewButtonPress_event);
 		}
 	}
 }

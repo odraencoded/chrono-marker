@@ -30,10 +30,11 @@ namespace Chrono
 		public LoggerWindow(Logger logger) : 
 				base(Gtk.WindowType.Toplevel)
 		{
-			this.Build( );
+			this.Build();
 
 			this.Logger = logger;
 			Logger.WatchAdded += loggerWatchAdded_event;
+			Logger.WatchRemoved += loggerWatchRemoved_event;
 
 			logger.EntryAdded += loggerEntryAdded_event;
 			logger.EntryDeleted += loggerEntryDelete_event;
@@ -72,19 +73,42 @@ namespace Chrono
 			descColumn.SortIndicator = true;
 			timeColumn.SortIndicator = true;
 
-			timeColumn.SortOrder = SortType.Descending;
+			logStore.SetSortColumnId(3,SortType.Descending); 
 
 			logEntryRows = new Dictionary<LogEntry, TreeIter>();
+			logView.Selection.Changed += logViewSelectionChanged_event;
+
+			logViewMenu = new Menu();
+			logViewMenu.Append(CopyAction.CreateMenuItem());
+			logViewMenu.Append(DeleteAction.CreateMenuItem());
+
+			manyWatchWindows = new Dictionary<Watch, StopwatchWindow>();
 		}
 
+		public Logger Logger {get; private set;}
+
+		public void ShowWatch(LoggingHandler logHandler)
+		{
+			StopwatchWindow watchWindow = manyWatchWindows [logHandler.Watch];
+
+			if( watchWindow == null ) {
+				watchWindow = new StopwatchWindow(logHandler);
+				manyWatchWindows [logHandler.Watch] = watchWindow;
+			}
+
+			watchWindow.Show( );
+			watchWindow.Present( );
+		}
+
+		private WatchConfigWindow configWindow;
+
+		private Dictionary<Watch, StopwatchWindow> manyWatchWindows;
 		private Dictionary<LogEntry, TreeIter> logEntryRows;
 
+		private Menu logViewMenu;
 		private ListStore logStore;
-		public Logger Logger {get; private set;}
-		private Watch currentWatch;
-		private StopwatchWindow stopwatchWindow;
 
-		List<LogEntry> GetSelectedLogs()
+		private List<LogEntry> GetSelectedLogs()
 		{
 			List<LogEntry> result = new List<LogEntry>();
 
@@ -105,21 +129,21 @@ namespace Chrono
 			return result;
 		}
 
-		public void ShowWatch()
-		{
-			if( stopwatchWindow == null ) {
-				stopwatchWindow = new StopwatchWindow(currentWatch);
-				stopwatchWindow.DeleteEvent +=  watchWindowClosed_event;
-			}
-			stopwatchWindow.Show();
-		}
-
 		#region Dynamic events
 		private void loggerWatchAdded_event(object sender, LoggerWatchEventArgs e)
 		{
-			currentWatch = e.Watch;
-			stopwatchWindow = new StopwatchWindow(currentWatch);
-			stopwatchWindow.DeleteEvent += watchWindowClosed_event;
+			manyWatchWindows.Add(e.LoggingHandler.Watch, null);
+		}
+
+		private void loggerWatchRemoved_event(object sender, LoggerWatchEventArgs e)
+		{
+			StopwatchWindow watchWindow;
+			Watch watch = e.LoggingHandler.Watch;
+			if( !manyWatchWindows.TryGetValue( watch, out watchWindow ) )
+				return;
+
+			watchWindow.Destroy( );
+			manyWatchWindows.Remove( watch );
 		}
 
 		private void loggerEntryAdded_event(object sender, LoggingEventArgs e)
@@ -142,60 +166,37 @@ namespace Chrono
 
 			logEntryRows.Remove(e.Entry);
 		}
-
-		private void watchWindowClosed_event(object sender, EventArgs e)
-		{
-			stopwatchWindow = null;
-		}
 		#endregion
 
 		#region GUI events
-		protected void viewStopwatch_event(object sender, EventArgs e)
+		#region Log treeview events
+		protected void logViewSelectionChanged_event (object sender, EventArgs e)
 		{
-			ShowWatch();
+			CopyAction.Sensitive = DeleteAction.Sensitive =
+				!(logView.Selection.CountSelectedRows( ) == 0 );
 		}
 
-		protected void copyAction_event(object sender, EventArgs e)
+		protected void logViewPopup_event(object o, PopupMenuArgs args)
 		{
-			List<LogEntry> selectedEntries = GetSelectedLogs();
-
-			selectedEntries.Sort();
-			selectedEntries.Reverse();
-
-			if( selectedEntries.Count == 0 )
-				return;
-
-			string copyData = "";
-
-			for( int i = 0; i<selectedEntries.Count; i++ ) {
-				copyData += 
-					( i > 0? Environment.NewLine : "" )
-					+ selectedEntries [i];
-			}
-
-			logView.GetClipboard( Gdk.Selection.Clipboard ).Text = copyData;
+			logViewShowContextMenu();
 		}
 
-		protected void deleteAction_event(object sender, EventArgs e)
+		protected void logViewButtonPress_event(object o, ButtonPressEventArgs args)
 		{
-			List<LogEntry> selectedEntries = GetSelectedLogs( );
-
-			foreach( LogEntry entry in selectedEntries )
-				Logger.RemoveEntry( entry );
+			logViewShowContextMenu();
+			/*if( args.Event.Button == 3 ) {
+				logViewShowContextMenu();
+			}*/
 		}
 
-		protected void selectAllAction_event (object sender, EventArgs e)
+		private void logViewShowContextMenu()
 		{
-			logView.Selection.SelectAll();
+			logViewMenu.ShowAll();
+			logViewMenu.Popup();
 		}
+		#endregion
 
-		protected void helpAbout_event(object sender, EventArgs e)
-		{
-			AboutDialog about = new AboutDialog();
-
-			about.Show();
-		}
-
+		#region Menu events
 		protected void exportAction_event(object sender, EventArgs e)
 		{
 			FileChooserDialog dialog = new FileChooserDialog(
@@ -216,21 +217,67 @@ namespace Chrono
 
 			dialog.Destroy();
 		}
-
-		protected void editMenuOpen_event(object sender, EventArgs e)
-		{
-			CopyAction.Sensitive = DeleteAction.Sensitive =
-				!(logView.Selection.CountSelectedRows( ) == 0 );
-		}
-
 		protected void actionQuit_event (object sender, EventArgs e)
 		{
-			this.Hide();
+			this.Destroy();
 		}
 
-		protected void windowHidden_event (object sender, EventArgs e)
+		protected void selectAllAction_event (object sender, EventArgs e)
+		{
+			logView.Selection.SelectAll();
+		}
+		protected void copyAction_event(object sender, EventArgs e)
+		{
+			List<LogEntry> selectedEntries = GetSelectedLogs();
+
+			selectedEntries.Sort();
+			selectedEntries.Reverse();
+
+			if( selectedEntries.Count == 0 )
+				return;
+
+			string copyData = "";
+
+			for( int i = 0; i<selectedEntries.Count; i++ ) {
+				copyData += 
+					( i > 0? Environment.NewLine : "" )
+					+ selectedEntries [i];
+			}
+
+			logView.GetClipboard( Gdk.Selection.Clipboard ).Text = copyData;
+		}
+		protected void deleteAction_event(object sender, EventArgs e)
+		{
+			List<LogEntry> selectedEntries = GetSelectedLogs( );
+
+			foreach( LogEntry entry in selectedEntries )
+				Logger.RemoveEntry( entry );
+		}
+		
+		protected void editStopwatches_event(object sender, EventArgs e)
+		{
+			if( configWindow == null ) {
+				configWindow = new WatchConfigWindow(this);
+			}
+
+			configWindow.Show();
+			configWindow.Present();
+		}
+
+		protected void helpAbout_event(object sender, EventArgs e)
+		{
+			AboutDialog about = new AboutDialog();
+
+			about.Run();
+			about.Destroy( );
+		}
+		#endregion
+
+		protected override void OnDestroyed()
 		{
 			Application.Quit();
+
+			base.OnDestroyed();
 		}
 		#endregion
 	}

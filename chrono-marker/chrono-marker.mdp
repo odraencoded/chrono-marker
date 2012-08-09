@@ -1,13 +1,13 @@
 <Project name="chrono-marker" fileversion="2.0" DefaultNamespace="Chrono" language="C#" targetFramework="4.0" ctype="DotNetProject">
   <Configurations active="Debug|x86">
     <Configuration name="Debug|x86" ctype="DotNetProjectConfiguration">
-      <Output directory="bin\Debug" assembly="chrono-marker" />
+      <Output directory="bin/Debug" assembly="chrono-marker" />
       <Build debugmode="True" target="WinExe" />
       <Execution consolepause="False" runwithwarnings="True" runtime="MsNet" />
       <CodeGeneration compiler="Mcs" warninglevel="4" optimize="False" unsafecodeallowed="False" generateoverflowchecks="False" definesymbols="DEBUG;" generatexmldocumentation="False" ctype="CSharpCompilerParameters" />
     </Configuration>
     <Configuration name="Release|x86" ctype="DotNetProjectConfiguration">
-      <Output directory="bin\Release" assembly="chrono-marker" />
+      <Output directory="bin/Release" assembly="chrono-marker" />
       <Build debugmode="False" target="WinExe" />
       <Execution consolepause="False" runwithwarnings="True" runtime="MsNet" />
       <CodeGeneration compiler="Mcs" warninglevel="4" optimize="True" unsafecodeallowed="False" generateoverflowchecks="False" generatexmldocumentation="False" ctype="CSharpCompilerParameters" />
@@ -32,8 +32,10 @@
     <File subtype="Code" buildaction="Compile" name="gtk-gui/Chrono.StopwatchWindow.cs" />
     <File subtype="Code" buildaction="Compile" name="gtk-gui/Chrono.LoggerWindow.cs" />
     <File subtype="Code" buildaction="Compile" name="gtk-gui/Chrono.AboutDialog.cs" />
-    <File subtype="Code" buildaction="Nothing" name="../extra/icon.png" />
-    <File subtype="Code" buildaction="Nothing" name="../extra/icon.ico" />
+    <File subtype="Code" name="launcher.desktop" DeployService.Deploy="True" DeployService.TargetDirectoryId="Linux.DesktopApplications" buildaction="FileCopy" />
+    <File subtype="Code" buildaction="EmbedAsResource" name="../extra/chrono-marker.ico" DeployService.Deploy="True" DeployService.TargetDirectoryId="Linux.DesktopApplications" resource_id="icon.ico" />
+    <File subtype="Code" buildaction="Compile" name="WatchConfigWindow.cs" />
+    <File subtype="Code" buildaction="Compile" name="gtk-gui/Chrono.WatchConfigWindow.cs" />
   </Contents>
   <References>
     <ProjectReference type="Gac" localcopy="True" refto="System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
@@ -45,5 +47,5 @@
     <ProjectReference specificVersion="False" type="Gac" localcopy="True" refto="atk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <ProjectReference type="Gac" localcopy="False" refto="Mono.Posix, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756" />
   </References>
-  <LanguageParameters StartupObject="Chrono.Program" ApplicationIcon="..\extra\icon.ico" ctype="CSharpProjectParameters" />
+  <LanguageParameters StartupObject="Chrono.Program" ApplicationIcon="../extra/icon.ico" ctype="CSharpProjectParameters" />
 </Project>

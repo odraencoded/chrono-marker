@@ -39,18 +39,26 @@ namespace Chrono
 			get { return namedHandlers [name]; }
 		}
 
-		public LoggingHandler AddWatch(Watch watch)
+		public bool TryGetHandler(string name, out LoggingHandler result) {
+			return namedHandlers.TryGetValue(name, out result);
+		}
+
+		public LoggingHandler AddWatch(Watch watch, string name)
 		{
-			if( namedHandlers.ContainsKey( watch.Name ) )
+			if( namedHandlers.ContainsKey( name ) )
 				throw new ArgumentException("The name of this watch was already registered.", "watch");
 
-			LoggingHandler result = new LoggingHandler(this, watch);
-			namedHandlers.Add( watch.Name, result );
+			LoggingHandler result = new LoggingHandler(this, watch, name);
+			namedHandlers.Add( name, result );
 
 			if( WatchAdded != null )
-				WatchAdded( this, new LoggerWatchEventArgs(this, watch) );
+				WatchAdded( this, new LoggerWatchEventArgs(this, result, watch) );
 
 			return result;
+		}
+		public bool HasWatch(string watchName)
+		{
+			return namedHandlers.ContainsKey(watchName);
 		}
 		public void RemoveWatch(string watchName)
 		{
@@ -62,19 +70,27 @@ namespace Chrono
 			namedHandlers.Remove( watchName );
 
 			if( WatchRemoved != null )
-				WatchRemoved( this, new LoggerWatchEventArgs(this, logHandler.Watch) );
+				WatchRemoved( this, new LoggerWatchEventArgs(this, logHandler, logHandler.Watch) );
 		}
 
-		public Watch GetWatch(string name)
+		public LoggingHandler GetWatchHandler(string name)
 		{
 			LoggingHandler result;
 			if( !namedHandlers.TryGetValue( name, out result ) ) {
-				Watch newWatch = new Watch(name);
-
-				result = AddWatch( newWatch );
+				result = AddWatch( new Watch() , name);
 			}
 
-			return result.Watch;
+			return result;
+		}
+
+		public LoggingHandler[] Handlers {
+			get {
+				LoggingHandler[] result = new LoggingHandler[namedHandlers.Count];
+
+				namedHandlers.Values.CopyTo(result, 0);
+
+				return result;
+			}
 		}
         #endregion
 
@@ -132,6 +148,7 @@ namespace Chrono
 			}
 		}
 
+		#region String conversion
 		public static string TimeToString(TimeSpan timespan)
 		{
 			string result = "";
@@ -209,7 +226,7 @@ namespace Chrono
 
 		public static bool IsStringValid(string input)
 		{
-			input = input.Trim( );
+			input = input.Trim();
 
 			if( string.IsNullOrEmpty( input ) )
 				return false;
@@ -262,7 +279,9 @@ namespace Chrono
 				string sectionStr = sections[i];
 				if(string.IsNullOrWhiteSpace(sectionStr))return false;
 
-				int sectionVal = int.Parse(sectionStr);
+				int sectionVal;
+
+				if(!int.TryParse(sectionStr, out sectionVal))return false;
 
 				if(i>0)
 				{
@@ -281,5 +300,6 @@ namespace Chrono
 
 			return true;
 		}
+		#endregion
 	}
 }

@@ -17,6 +17,7 @@ namespace Chrono
 			// Widget Chrono.StopwatchWindow
 			this.Name = "Chrono.StopwatchWindow";
 			this.Title = global::Mono.Unix.Catalog.GetString ("Stopwatch");
+			this.Icon = global::Gdk.Pixbuf.LoadFromResource ("icon.ico");
 			this.WindowPosition = ((global::Gtk.WindowPosition)(4));
 			this.AllowGrow = false;
 			// Container child Chrono.StopwatchWindow.Gtk.Container+ContainerChild

@@ -1,0 +1,12 @@
+
+[Desktop Entry]
+Encoding=UTF-8
+Type=Application
+Name=Chrono Marker
+Exec=chrono-marker
+Terminal=false
+
+GenericName=Stopwatch
+Comment=Counts and logs time
+Icon=chrono-marker.ico
+Categories=Utility;Clock;

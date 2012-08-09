@@ -26,24 +26,27 @@ namespace Chrono
 {
 	public partial class StopwatchWindow : Window
 	{
-		public StopwatchWindow(Watch watch) : 
+		public StopwatchWindow(LoggingHandler logHandler) : 
 				base(Gtk.WindowType.Toplevel)
 		{
-			this.Build();
+			this.Build( );
 
-			this.Watch = watch;
+			Watch = logHandler.Watch;
 
-			watch.Started += WatchStarted_event;
-			watch.Stopped += WatchStopped_event;
+			Watch.Started += WatchStarted_event;
+			Watch.Stopped += WatchStopped_event;
+			Watch.ChangedSpeed += WatchChangeSpeed_event;
 
-			if( watch.IsRunning )
-			{
+
+			if( Watch.IsRunning ) {
 				timedRefreshCaller = new TimedCaller(40);
 				timedRefreshCaller.TimeOut += refreshTimeout_event;
 			}
 
-			isEditValid=true;
-			hasEditedTime=false;
+			Title += " - " + logHandler.Name;
+
+			isEditValid = true;
+			hasEditedTime = false;
 
 			FontDescription timeFont =
 				FontDescription.FromString( "consolas 32" );
@@ -78,6 +81,7 @@ namespace Chrono
 				}
 			}
 		}
+
 		public void RefreshControls()
 		{
 			if( Watch.IsRunning == true ) {
@@ -121,6 +125,11 @@ namespace Chrono
 
 			RefreshControls( );
 		}
+		private void WatchChangeSpeed_event(object sender, WatchEventArgs e)
+		{
+			RefreshControls();
+		}
+
 
 		private void refreshTimeout_event(object sender, TimedCallEventArgs e)
 		{
@@ -133,12 +142,10 @@ namespace Chrono
 		protected void forwardBtn_event(object sender, EventArgs e)
 		{
 			Watch.ChangeSpeed(1.0);
-			RefreshControls();
 		}
 		protected void backwardBtn_event(object sender, EventArgs e)
 		{
 			Watch.ChangeSpeed(-1.0);
-			RefreshControls();
 		}
 
 		protected void startBtn_event(object sender, EventArgs e)
@@ -164,8 +171,9 @@ namespace Chrono
 
 		protected void windowDelete_event(object o, DeleteEventArgs args)
 		{
-			if( timedRefreshCaller != null )
-				timedRefreshCaller.Cancel( );
+			// This should stop the window from being destroyed
+			args.RetVal = true;
+			Hide();
 		}
 
 		protected void displayBoxChanged_event(object sender, EventArgs e)
@@ -178,6 +186,14 @@ namespace Chrono
 			}
 		}
 		#endregion GUI events
+
+		protected override void OnDestroyed()
+		{
+			if( timedRefreshCaller != null )
+				timedRefreshCaller.Cancel( );
+
+			base.OnDestroyed();
+		}
 	}
 }
 

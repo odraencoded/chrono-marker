@@ -18,24 +18,27 @@
 
 using System;
 using Gtk;
+using Gdk;
 
 namespace Chrono
 {
     static class Program
     {
         public static void Main(string[] args)
-        {
-			Application.Init();
+		{
+			Application.Init( );
             
 			Logger timeLogger = new Logger();
 			LoggerWindow window = new LoggerWindow(timeLogger);
 
-			timeLogger.AddWatch(new Watch("Beta Watch"));
+			{
+				LoggingHandler handler = timeLogger.AddWatch( new Watch(), "Beta Watch" );
 
-			window.Show();
-			window.ShowWatch();
+				window.ShowAll( );
+				window.ShowWatch( handler );
+			}
 
 			Application.Run();
         }
-    }
+	}
 }

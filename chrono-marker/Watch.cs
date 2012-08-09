@@ -23,15 +23,14 @@ namespace Chrono
 {
     public sealed class Watch
     {
-        public Watch(string name)
+        public Watch()
         {
-            this.Name = name;
             this.IsRunning = false;
             this.Speed = 1.0;
             startMark = clockedTicks = 0;
         }
 
-        public string Name { get; private set; }
+        //public string Name { get; private set; }
         public bool IsRunning { get; private set; }
         public double Speed { get; private set; }
 
@@ -116,13 +115,9 @@ namespace Chrono
 
         public static readonly double TickRatio = 1.0 / Stopwatch.Frequency;
 
-        public override int GetHashCode()
-        {
-            return Name.GetHashCode();
-        }
         public override string ToString()
         {
-            return Name + (IsRunning ? " watch running at " + Speed.ToString("0.##") + "x" : " stopped watch");
+            return (IsRunning ? "Watch running at " + Speed.ToString("0.##") + "x" : " stopped watch");
         }
     }
 }

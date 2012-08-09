@@ -1,0 +1,30 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="chrono-marker/WatchConfigWindow.cs">
+    <Files>
+      <File FileName="chrono-marker/WatchConfigWindow.cs" Line="89" Column="1" />
+      <File FileName="chrono-marker/LoggerWindow.cs" Line="175" Column="33" />
+      <File FileName="chrono-marker/Program.cs" Line="39" Column="35" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State expanded="True">
+          <Option id="ShowAllFiles" value="True" />
+          <Node name="chrono-marker" expanded="True">
+            <Node name="UserInterface" expanded="True" />
+            <Node name="WatchConfigWindow.cs" selected="True" />
+          </Node>
+        </State>
+      </Pad>
+      <Pad Id="ClassPad">
+        <State selected="True" />
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="/media/Stuff/Codings/chrono-marker/chrono-marker/WatchConfigWindow.cs" line="73" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
