@@ -94,11 +94,15 @@ namespace Chrono
 			if( watchWindow == null ) {
 				watchWindow = new StopwatchWindow(logHandler);
 				manyWatchWindows [logHandler.Watch] = watchWindow;
+
+				watchWindow.FocusInEvent += watchWindowFocus_event;
 			}
 
 			watchWindow.Show( );
 			watchWindow.Present( );
 		}
+
+		public event FocusInEventHandler WatchWindowFocused;
 
 		private WatchConfigWindow configWindow;
 
@@ -134,7 +138,6 @@ namespace Chrono
 		{
 			manyWatchWindows.Add(e.LoggingHandler.Watch, null);
 		}
-
 		private void loggerWatchRemoved_event(object sender, LoggerWatchEventArgs e)
 		{
 			StopwatchWindow watchWindow;
@@ -156,7 +159,6 @@ namespace Chrono
 
 			logEntryRows.Add(e.Entry, entryRow);
 		}
-
 		private void loggerEntryDelete_event(object sender, LoggingEventArgs e)
 		{
 			TreeIter iter;
@@ -165,6 +167,12 @@ namespace Chrono
 			logStore.Remove(ref iter);
 
 			logEntryRows.Remove(e.Entry);
+		}
+
+		private void watchWindowFocus_event(object sender, FocusInEventArgs args)
+		{
+			if(WatchWindowFocused !=null)
+				WatchWindowFocused(sender, args);
 		}
 		#endregion
 
@@ -281,9 +289,9 @@ namespace Chrono
 
 		protected override void OnDestroyed()
 		{
-			Application.Quit();
+			Application.Quit( );
 
-			base.OnDestroyed();
+			base.OnDestroyed( );
 		}
 		#endregion
 	}

@@ -31,7 +31,8 @@ namespace Chrono
 		{
 			this.Build( );
 
-			Watch = logHandler.Watch;
+			this.LogHandler=logHandler;
+			this.Watch = logHandler.Watch;
 
 			Watch.Started += WatchStarted_event;
 			Watch.Stopped += WatchStopped_event;
@@ -58,10 +59,12 @@ namespace Chrono
 			RefreshDisplay( );
 		}
 
-		public TimedCaller timedRefreshCaller;
 		public Watch Watch { get; private set; }
+		public LoggingHandler LogHandler {get; private set;}
+
 		private bool hasEditedTime;
 		private bool isEditValid;
+		private TimedCaller timedRefreshCaller;
 
 		public void RefreshDisplay()
 		{

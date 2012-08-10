@@ -37,24 +37,26 @@ namespace Chrono
 			this.Logger.WatchAdded += loggerWatchAdded_event;
 			this.Logger.WatchRemoved += loggerWatchRemoved_event;
 
+			loggerWindow.WatchWindowFocused += watchWindowFocused_event;
+
 			comboNameIters = new Dictionary<LoggingHandler, TreeIter>();
 
 			LoggingHandler[] manyHandlers = Logger.Handlers;
 
-			ListStore comboNameStore = watchNameEntry.Model as ListStore;
+			comboEntryList = watchNameCombo.Model as ListStore;
 
 			foreach( LoggingHandler handler in manyHandlers ) {
-				TreeIter iter =  comboNameStore.AppendValues(handler.Name);
+				TreeIter iter =  comboEntryList.AppendValues(handler.Name);
 
 				comboNameIters.Add(handler, iter);
 			}
 
-			watchNameEntry.Entry.Changed+= watchNameEntrychanged_event;
+			watchNameCombo.Entry.Changed+= watchNameEntrychanged_event;
 
 			if(manyHandlers.Length > 0)
 			{
 				currentHandler=  manyHandlers[0];
-				watchNameEntry.Active=0;
+				watchNameCombo.Active=0;
 			}
 
 			RefreshControls();
@@ -65,12 +67,12 @@ namespace Chrono
 		private LoggingHandler currentHandler;
 
 		private Dictionary<LoggingHandler, TreeIter> comboNameIters;
+		private ListStore comboEntryList;
 
 		#region Dynamic events
 		private void loggerWatchAdded_event(object sender, LoggerWatchEventArgs e)
 		{
-			TreeIter iter = (watchNameEntry.Model as ListStore)
-				.AppendValues(e.LoggingHandler.Name);
+			TreeIter iter = comboEntryList.AppendValues(e.LoggingHandler.Name);
 
 			comboNameIters.Add(e.LoggingHandler, iter);
 		}
@@ -79,15 +81,27 @@ namespace Chrono
 		{
 			TreeIter removedIter = comboNameIters[e.LoggingHandler];
 
-			(watchNameEntry.Model as ListStore).Remove(ref removedIter);
-			TreeModel model = watchNameEntry.Model;
-
-			model.GetIterFirst( out removedIter );
+			comboEntryList.Remove(ref removedIter);
 
 			if( currentHandler == e.LoggingHandler ) {
 				currentHandler = null;
+
+				TreeIter firstIter;
+				if(comboEntryList.GetIterFirst(out firstIter))
+					watchNameCombo.Entry.Text = comboEntryList.GetValue(firstIter, 0) as String;
+
 				RefreshControls( );
 			}
+		}
+
+		private void watchWindowFocused_event(object sender, FocusInEventArgs args)
+		{
+			StopwatchWindow watchWindow = ( sender as StopwatchWindow );
+
+			if( watchWindow == null )
+				return;
+
+			watchNameCombo.Entry.Text = watchWindow.LogHandler.Name;
 		}
 		#endregion
 
@@ -120,7 +134,7 @@ namespace Chrono
 		#region Watch name handling
 		protected void watchNameEntrychanged_event(object sender, EventArgs e)
 		{
-			string watchName = watchNameEntry.Entry.Text;
+			string watchName = watchNameCombo.Entry.Text;
 
 			if( ! Logger.TryGetHandler( watchName, out currentHandler ) ) {
 				currentHandler=null;
@@ -130,7 +144,7 @@ namespace Chrono
 
 		protected void newBtn_event(object sender, EventArgs e)
 		{
-			string watchName = watchNameEntry.Entry.Text;
+			string watchName = watchNameCombo.Entry.Text;
 
 			if( ! Logger.HasWatch( watchName)) {
 				currentHandler=Logger.AddWatch(new Watch(), watchName);
@@ -202,5 +216,12 @@ namespace Chrono
 			args.RetVal=true;
 		}
 		#endregion
+
+		protected override void OnDestroyed()
+		{
+			loggerWindow.WatchWindowFocused -= watchWindowFocused_event;
+
+			base.OnDestroyed();
+		}
 	}
 }

@@ -8,7 +8,7 @@ namespace Chrono
 		private global::Gtk.VBox vbox2;
 		private global::Gtk.HBox hbox1;
 		private global::Gtk.Label label2;
-		private global::Gtk.ComboBoxEntry watchNameEntry;
+		private global::Gtk.ComboBoxEntry watchNameCombo;
 		private global::Gtk.Button newBtn;
 		private global::Gtk.Notebook detailBook;
 		private global::Gtk.Alignment alignment2;
@@ -71,10 +71,10 @@ namespace Chrono
 			w1.Expand = false;
 			w1.Fill = false;
 			// Container child hbox1.Gtk.Box+BoxChild
-			this.watchNameEntry = global::Gtk.ComboBoxEntry.NewText ();
-			this.watchNameEntry.Name = "watchNameEntry";
-			this.hbox1.Add (this.watchNameEntry);
-			global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.watchNameEntry]));
+			this.watchNameCombo = global::Gtk.ComboBoxEntry.NewText ();
+			this.watchNameCombo.Name = "watchNameCombo";
+			this.hbox1.Add (this.watchNameCombo);
+			global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.watchNameCombo]));
 			w2.Position = 1;
 			w2.Expand = false;
 			w2.Fill = false;
@@ -99,6 +99,7 @@ namespace Chrono
 			this.detailBook.CanFocus = true;
 			this.detailBook.Name = "detailBook";
 			this.detailBook.CurrentPage = 0;
+			this.detailBook.BorderWidth = ((uint)(1));
 			// Container child detailBook.Gtk.Notebook+NotebookChild
 			this.alignment2 = new global::Gtk.Alignment (0.5F, 0.5F, 1F, 1F);
 			this.alignment2.Name = "alignment2";
@@ -331,7 +332,7 @@ namespace Chrono
 				this.Child.ShowAll ();
 			}
 			this.DefaultWidth = 300;
-			this.DefaultHeight = 325;
+			this.DefaultHeight = 303;
 			this.Show ();
 			this.DeleteEvent += new global::Gtk.DeleteEventHandler (this.windowDelete_event);
 			this.newBtn.Clicked += new global::System.EventHandler (this.newBtn_event);

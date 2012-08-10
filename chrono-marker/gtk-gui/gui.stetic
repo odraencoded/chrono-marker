@@ -387,7 +387,7 @@ You should have received a copy of the GNU General Public License along with Chr
       </widget>
     </child>
   </widget>
-  <widget class="Gtk.Window" id="Chrono.WatchConfigWindow" design-size="300 325">
+  <widget class="Gtk.Window" id="Chrono.WatchConfigWindow" design-size="300 303">
     <property name="MemberName" />
     <property name="Title" translatable="yes">Stopwatch Configuration</property>
     <property name="Icon">resource:icon.ico</property>
@@ -422,7 +422,7 @@ You should have received a copy of the GNU General Public License along with Chr
                   </packing>
                 </child>
                 <child>
-                  <widget class="Gtk.ComboBoxEntry" id="watchNameEntry">
+                  <widget class="Gtk.ComboBoxEntry" id="watchNameCombo">
                     <property name="MemberName" />
                     <property name="IsTextCombo">True</property>
                     <property name="Items" translatable="yes" />
@@ -463,6 +463,7 @@ You should have received a copy of the GNU General Public License along with Chr
                 <property name="MemberName" />
                 <property name="CanFocus">True</property>
                 <property name="CurrentPage">0</property>
+                <property name="BorderWidth">1</property>
                 <child>
                   <widget class="Gtk.Alignment" id="alignment2">
                     <property name="MemberName" />
@@ -580,6 +581,7 @@ You should have received a copy of the GNU General Public License along with Chr
                                         <property name="MemberName" />
                                         <property name="CanFocus">True</property>
                                         <property name="Label" translatable="yes">Backward</property>
+                                        <property name="Active">True</property>
                                         <property name="DrawIndicator">True</property>
                                         <property name="HasLabel">True</property>
                                         <property name="UseUnderline">True</property>

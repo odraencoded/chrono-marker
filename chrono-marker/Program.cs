@@ -26,7 +26,7 @@ namespace Chrono
     {
         public static void Main(string[] args)
 		{
-			Application.Init( );
+			Application.Init();
             
 			Logger timeLogger = new Logger();
 			LoggerWindow window = new LoggerWindow(timeLogger);
@@ -39,6 +39,6 @@ namespace Chrono
 			}
 
 			Application.Run();
-        }
+		}
 	}
 }
