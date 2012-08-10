@@ -67,7 +67,7 @@ namespace Chrono
 			this.vbox1 = new global::Gtk.VBox ();
 			this.vbox1.Name = "vbox1";
 			// Container child vbox1.Gtk.Box+BoxChild
-			this.UIManager.AddUiFromString ("<ui><menubar name='menubar1'><menu name='FileAction' action='FileAction'><menuitem name='ExportAction' action='ExportAction'/><separator/><menuitem name='QuitAction' action='QuitAction'/></menu><menu name='EditAction' action='EditAction'><menuitem name='SelectAllAction' action='SelectAllAction'/><menuitem name='CopyAction' action='CopyAction'/><separator/><menuitem name='DeleteAction' action='DeleteAction'/><separator/><menuitem name='StopwatchesAction' action='StopwatchesAction'/></menu><menu name='HelpAction' action='HelpAction'><menuitem name='AboutAction' action='AboutAction'/></menu></menubar></ui>");
+			this.UIManager.AddUiFromString (@"<ui><menubar name='menubar1'><menu name='FileAction' action='FileAction'><menuitem name='ExportAction' action='ExportAction'/><separator/><menuitem name='QuitAction' action='QuitAction'/></menu><menu name='EditAction' action='EditAction'><menuitem name='SelectAllAction' action='SelectAllAction'/><menuitem name='CopyAction' action='CopyAction'/><separator/><menuitem name='DeleteAction' action='DeleteAction'/><separator/><menuitem name='StopwatchesAction' action='StopwatchesAction'/></menu><menu name='HelpAction' action='HelpAction'><menuitem name='AboutAction' action='AboutAction'/></menu></menubar></ui>");
 			this.menubar1 = ((global::Gtk.MenuBar)(this.UIManager.GetWidget ("/menubar1")));
 			this.menubar1.Name = "menubar1";
 			this.vbox1.Add (this.menubar1);

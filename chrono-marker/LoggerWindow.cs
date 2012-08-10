@@ -181,10 +181,21 @@ namespace Chrono
 			logViewShowContextMenu();
 		}
 
+		// This makes this damn event work like it damn should!
+		[GLib.ConnectBefore]
 		protected void logViewButtonPress_event(object o, ButtonPressEventArgs args)
 		{
 			if( args.Event.Button == 3 ) {
-				logViewShowContextMenu();
+
+				TreePath selected_path;
+
+				if( logView.GetPathAtPos( (int)args.Event.X, (int)args.Event.Y, out selected_path ))
+				{
+					if(logView.Selection.PathIsSelected(selected_path))
+						args.RetVal=true;
+				}
+
+				logViewShowContextMenu( );
 			}
 		}
 

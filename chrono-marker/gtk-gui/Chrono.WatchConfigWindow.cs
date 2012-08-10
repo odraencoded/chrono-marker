@@ -158,14 +158,14 @@ namespace Chrono
 			w7.Expand = false;
 			w7.Fill = false;
 			// Container child hbox6.Gtk.Box+BoxChild
-			this.speedEntry = new global::Gtk.SpinButton (0, 60, 1);
+			this.speedEntry = new global::Gtk.SpinButton (0D, 60D, 1D);
 			this.speedEntry.CanFocus = true;
 			this.speedEntry.Name = "speedEntry";
-			this.speedEntry.Adjustment.PageIncrement = 5;
-			this.speedEntry.ClimbRate = 1;
+			this.speedEntry.Adjustment.PageIncrement = 5D;
+			this.speedEntry.ClimbRate = 1D;
 			this.speedEntry.Digits = ((uint)(1));
 			this.speedEntry.Numeric = true;
-			this.speedEntry.Value = 1;
+			this.speedEntry.Value = 1D;
 			this.hbox6.Add (this.speedEntry);
 			global::Gtk.Box.BoxChild w8 = ((global::Gtk.Box.BoxChild)(this.hbox6 [this.speedEntry]));
 			w8.Position = 1;

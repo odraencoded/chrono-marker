@@ -6,7 +6,7 @@
   </configuration>
   <import>
     <widget-library name="glade-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <widget-library name="../bin/Debug/chrono-marker.exe" internal="true" />
+    <widget-library name="../bin/Release/chrono-marker.exe" internal="true" />
   </import>
   <widget class="Gtk.Window" id="Chrono.LoggerWindow" design-size="473 373">
     <action-group name="Default">

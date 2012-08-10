@@ -54,7 +54,9 @@ namespace Chrono
 			// Container child hbox1.Gtk.Box+BoxChild
 			this.label2 = new global::Gtk.Label ();
 			this.label2.Name = "label2";
-			this.label2.LabelProp = global::Mono.Unix.Catalog.GetString ("<span size=\"x-large\" font_weight=\"heavy\">Chrono Marker</span>\nStopwatch and time logger gadget\n\nCopyright &#169; 2012 Leonardo Augusto Pereira");
+			this.label2.LabelProp = global::Mono.Unix.Catalog.GetString ("<span size=\"x-large\" font_weight=\"heavy\">Chrono Marker</span>\nStopwatch and time " +
+				"logger gadget\n\nCopyright &#169; 2012 Leonardo Augusto Pereira"
+			);
 			this.label2.UseMarkup = true;
 			this.label2.Wrap = true;
 			this.label2.Justify = ((global::Gtk.Justification)(2));
@@ -79,7 +81,12 @@ namespace Chrono
 			// Container child GtkAlignment1.Gtk.Container+ContainerChild
 			this.label1 = new global::Gtk.Label ();
 			this.label1.Name = "label1";
-			this.label1.LabelProp = global::Mono.Unix.Catalog.GetString ("Chrono Marker is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.\n\nChrono Marker  is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.\n\nYou should have received a copy of the GNU General Public License along with Chrono Marker. If not, see <http://www.gnu.org/licenses/>.");
+			this.label1.LabelProp = global::Mono.Unix.Catalog.GetString (@"Chrono Marker is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+Chrono Marker  is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with Chrono Marker. If not, see <http://www.gnu.org/licenses/>."
+			);
 			this.label1.Wrap = true;
 			this.GtkAlignment1.Add (this.label1);
 			this.frame2.Add (this.GtkAlignment1);
