@@ -31,7 +31,7 @@ namespace Chrono
 			w1.Add (this.FileAction, null);
 			this.QuitAction = new global::Gtk.Action ("QuitAction", global::Mono.Unix.Catalog.GetString ("Quit"), null, null);
 			this.QuitAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Quit");
-			w1.Add (this.QuitAction, "<Primary><Mod2>q");
+			w1.Add (this.QuitAction, "<Control>q");
 			this.HelpAction = new global::Gtk.Action ("HelpAction", global::Mono.Unix.Catalog.GetString ("Help"), null, null);
 			this.HelpAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Help");
 			w1.Add (this.HelpAction, null);
@@ -62,7 +62,7 @@ namespace Chrono
 			this.AddAccelGroup (this.UIManager.AccelGroup);
 			this.Name = "Chrono.LoggerWindow";
 			this.Title = global::Mono.Unix.Catalog.GetString ("Chrono Marker Logs");
-			this.Icon = global::Gdk.Pixbuf.LoadFromResource ("icon.ico");
+			this.Icon = global::Gdk.Pixbuf.LoadFromResource ("Chrono.icon.ico");
 			// Container child Chrono.LoggerWindow.Gtk.Container+ContainerChild
 			this.vbox1 = new global::Gtk.VBox ();
 			this.vbox1.Name = "vbox1";
@@ -95,9 +95,9 @@ namespace Chrono
 			}
 			this.DefaultWidth = 473;
 			this.DefaultHeight = 373;
-			this.Show ();
-			this.QuitAction.Activated += new global::System.EventHandler (this.actionQuit_event);
-			this.AboutAction.Activated += new global::System.EventHandler (this.helpAbout_event);
+			this.Hide ();
+			this.QuitAction.Activated += new global::System.EventHandler (this.quitAction_event);
+			this.AboutAction.Activated += new global::System.EventHandler (this.aboutAction_event);
 			this.CopyAction.Activated += new global::System.EventHandler (this.copyAction_event);
 			this.DeleteAction.Activated += new global::System.EventHandler (this.deleteAction_event);
 			this.SelectAllAction.Activated += new global::System.EventHandler (this.selectAllAction_event);

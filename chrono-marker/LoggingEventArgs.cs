@@ -1,4 +1,4 @@
-﻿/* Copyright (C) 2012 Leonardo Augusto Pereira
+/* Copyright (C) 2012 Leonardo Augusto Pereira
  * 
  * This file is part of Chrono Marker 
  * 
@@ -26,13 +26,16 @@ namespace Chrono
 
     public class LoggingEventArgs : EventArgs
     {
-        public LoggingEventArgs(Logger logger, LogEntry entry)
+        public LoggingEventArgs(TimeLogger logger, LogEntry entry)
         {
-            this.Logger = logger;
-            this.Entry = entry;
+            _logger = logger;
+            _logEntry = entry;
         }
 
-        public Logger Logger { get; private set; }
-        public LogEntry Entry { get; private set; }
-    }
+		public TimeLogger Logger { get { return _logger; } }
+		public LogEntry Entry { get { return _logEntry; } }
+
+		private readonly TimeLogger _logger;
+		private readonly LogEntry _logEntry;
+	}
 }

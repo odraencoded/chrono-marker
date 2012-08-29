@@ -26,113 +26,210 @@ namespace Chrono
 {
 	public partial class StopwatchWindow : Window
 	{
+		private const int displayRefreshFrequency = 34;
+
 		public StopwatchWindow(LoggingHandler logHandler) : 
 				base(Gtk.WindowType.Toplevel)
 		{
 			this.Build( );
 
-			this.LogHandler=logHandler;
-			this.Watch = logHandler.Watch;
+			_logHandler = logHandler;
 
-			Watch.Started += WatchStarted_event;
-			Watch.Stopped += WatchStopped_event;
-			Watch.ChangedSpeed += WatchChangeSpeed_event;
+			Clock.Started += ClockStarted_event;
+			Clock.Stopped += ClockStopped_event;
+			Clock.SpeedChanged += ClockChangedSpeed_event;
 
+			_logHandler.Renamed += ClockRenamed_event;
 
-			if( Watch.IsRunning ) {
-				timedRefreshCaller = new TimedCaller(40);
-				timedRefreshCaller.TimeOut += refreshTimeout_event;
+			_clockButtonMode = ClockButtonMode.Unset;
+
+			if( Clock.IsTicking ) {
+				_timedRefreshCaller = new TimedCaller(displayRefreshFrequency);
+				_timedRefreshCaller.TimeOut += refreshTimeout_event;
 			}
 
-			Title += " - " + logHandler.Name;
+			_isEditValid = true;
+			_hasEditedTime = false;
 
-			isEditValid = true;
-			hasEditedTime = false;
-
-			FontDescription timeFont =
-				FontDescription.FromString( "consolas 32" );
-
-			timeDisplayBox.ModifyFont( timeFont );
-			timeDisplayBox.Text = Logger.TimeToString( Watch.ElapsedTime );
+			_normalFont = FontDescription.FromString( "consolas 32" );
+			_compactFont = FontDescription.FromString( "consolas 16" );
 
 			RefreshControls( );
 			RefreshDisplay( );
 		}
 
-		public Watch Watch { get; private set; }
-		public LoggingHandler LogHandler {get; private set;}
+		public Clock Clock { get { return _logHandler.Clock; } }
+		public LoggingHandler LogHandler { get { return _logHandler; } }
+		// This is a wrapper around keep above that
+		// stores the current value of "KeepAbove"
+		public bool OnTop {
+			get { return _onTop;}
+			set {
+				_onTop = value;
+				KeepAbove = _onTop;
+			}
+		}
 
-		private bool hasEditedTime;
-		private bool isEditValid;
-		private TimedCaller timedRefreshCaller;
+		public bool Compact {
+			get { return _compact; }
+			set
+			{
+				_compact = value; 
+				RefreshControls();
+			}
+		}
+
+		private readonly LoggingHandler _logHandler;
+		private bool _hasEditedTime;
+		private bool _isEditValid;
+		private TimedCaller _timedRefreshCaller;
+
+		private bool _onTop;
+		private bool _compact;
+
+		private FontDescription _normalFont;
+		private FontDescription _compactFont;
+
+		private static Gdk.Pixbuf _forwardIcon = Gdk.Pixbuf.LoadFromResource("Chrono.forward.png");
+		private static Gdk.Pixbuf _backwardIcon = Gdk.Pixbuf.LoadFromResource("Chrono.backward.png");
+        private static Gdk.Pixbuf _stopIcon = Gdk.Pixbuf.LoadFromResource("Chrono.stop.png");
+    	private static Gdk.Pixbuf _undoIcon = Gdk.Pixbuf.LoadFromResource("Chrono.undo.png");
 
 		public void RefreshDisplay()
 		{
-			if( !hasEditedTime ) {
-				timeDisplayBox.Text = Logger.TimeToString( Watch.ElapsedTime );
+			if( !_hasEditedTime ) {
+				timeDisplayBox.Text = TimeLogger.TimeToString( Clock.ElapsedTime );
 			} else {
-				if(!isEditValid) {
+				if(!_isEditValid) {
 					timeDisplayBox.ModifyText(
 						StateType.Normal, new Gdk.Color(255, 0, 0) );
-
-					startBtn.Label = "Undo";
 				} else{
 					timeDisplayBox.ModifyText(
 						StateType.Normal, new Gdk.Color(0, 0, 0) );
-
-					startBtn.Label = "Start";
 				}
 			}
 		}
 
 		public void RefreshControls()
 		{
-			if( Watch.IsRunning == true ) {
-				startBtn.Label = "Stop";
+			if( Clock.IsTicking == true ) {
+				_clockButtonMode = ClockButtonMode.Stop;
+
 				timeDisplayBox.Sensitive = false;
 			} else {
 				timeDisplayBox.Sensitive = true;
 
-				if( !isEditValid ) {
-					startBtn.Label = "Undo";
+				if( !_isEditValid ) {
+					_clockButtonMode = ClockButtonMode.Undo;
 				
-				} else
-					startBtn.Label = "Start";
+				} else 
+					_clockButtonMode = ClockButtonMode.Start;
 			}
 
-			if( Watch.Speed >= 0 ) {
-				forwardBtn.Sensitive = false;
-				backwardBtn.Sensitive = true;
-			} else {
-				forwardBtn.Sensitive = true;
-				backwardBtn.Sensitive = false;
+			if( _compact ) {
+				forwardBtn.Visible = false;
+				backwardBtn.Visible = false;
+				bottomBtn.Visible = false;
+				compactBtn.Visible = true;
+
+				compactBtn.HasDefault = true;
+
+				timeDisplayBox.ModifyFont( _compactFont );
+
+				switch( _clockButtonMode ) {
+				case ClockButtonMode.Start:
+					if(Clock.Speed >= 0)
+					{
+						compactBtnImage.Pixbuf = _forwardIcon;
+					}else{
+						compactBtnImage.Pixbuf = _backwardIcon;
+					}
+					break;
+				case ClockButtonMode.Stop:
+					compactBtnImage.Pixbuf = _stopIcon;
+					break;
+				case ClockButtonMode.Undo:
+					compactBtnImage.Pixbuf = _undoIcon;
+					break;
+
+				default:
+					break;
+				}
+
+				Title = _logHandler.Name;
+			}
+			else
+			{
+				forwardBtn.Visible = true;
+				backwardBtn.Visible = true;
+				bottomBtn.Visible = true;
+				compactBtn.Visible = false;
+
+				bottomBtn.HasDefault = true;
+
+				timeDisplayBox.ModifyFont( _normalFont );
+
+				if( Clock.Speed >= 0 ) {
+					forwardBtn.Sensitive = false;
+					backwardBtn.Sensitive = true;
+				} else {
+					forwardBtn.Sensitive = true;
+					backwardBtn.Sensitive = false;
+				}
+
+				switch( _clockButtonMode ) {
+				case ClockButtonMode.Start:
+					bottomBtn.Label = "Start";
+					break;
+				case ClockButtonMode.Stop:
+					bottomBtn.Label = "Stop";
+					break;
+				case ClockButtonMode.Undo:
+					bottomBtn.Label = "Undo";
+					break;
+
+				default:
+					break;
+				}
+
+				Title = string.Format("Stopwatch - {0}", _logHandler.Name);
 			}
 		}
+
+		private enum ClockButtonMode
+		{ Unset = -1, Start, Stop, Undo };
+
+		private ClockButtonMode _clockButtonMode;
 
 		#region Dynamic Events
-		private void WatchStarted_event(object sender, WatchEventArgs e)
-		{
-			if( timedRefreshCaller != null ) {
-				timedRefreshCaller.Cancel( );
-			}
-
-			timedRefreshCaller = new TimedCaller(40);
-			timedRefreshCaller.TimeOut += refreshTimeout_event;
-
-			RefreshControls( );
-		}
-		private void WatchStopped_event(object sender, WatchEventArgs e)
-		{
-			timedRefreshCaller.Cancel( );
-			timedRefreshCaller = null;
-
-			RefreshControls( );
-		}
-		private void WatchChangeSpeed_event(object sender, WatchEventArgs e)
+		private void ClockRenamed_event(object sender, EventArgs e)
 		{
 			RefreshControls();
 		}
 
+		private void ClockStarted_event(object sender, ClockEventArgs e)
+		{
+			if( _timedRefreshCaller != null ) {
+				_timedRefreshCaller.Cancel( );
+			}
+
+			_timedRefreshCaller = new TimedCaller(displayRefreshFrequency);
+			_timedRefreshCaller.TimeOut += refreshTimeout_event;
+
+			RefreshControls( );
+		}
+		private void ClockStopped_event(object sender, ClockEventArgs e)
+		{
+			_timedRefreshCaller.Cancel();
+			_timedRefreshCaller = null;
+
+			RefreshDisplay( );
+			RefreshControls( );
+		}
+		private void ClockChangedSpeed_event(object sender, ClockEventArgs e)
+		{
+			RefreshControls();
+		}
 
 		private void refreshTimeout_event(object sender, TimedCallEventArgs e)
 		{
@@ -144,33 +241,62 @@ namespace Chrono
 		#region GUI events
 		protected void forwardBtn_event(object sender, EventArgs e)
 		{
-			Watch.ChangeSpeed(1.0);
+			if( Clock.Speed < 0 )
+				Clock.ChangeSpeed( Clock.Speed * -1 );
+			else
+				RefreshControls( );
 		}
 		protected void backwardBtn_event(object sender, EventArgs e)
 		{
-			Watch.ChangeSpeed(-1.0);
+			if( Clock.Speed >= 0 )
+				Clock.ChangeSpeed( Clock.Speed * -1 );
+			else
+				RefreshControls( );
 		}
 
-		protected void startBtn_event(object sender, EventArgs e)
+		#region Bottom Button handling
+		protected void clockButton_event(object sender, EventArgs e)
 		{
-			if( hasEditedTime ) {
-				if( isEditValid ) {
-					Watch.ElapsedTime = Logger.StringToTime( timeDisplayBox.Text);
-				} else {
-					hasEditedTime = false;
-					isEditValid = true;
-					RefreshDisplay();
-					timeDisplayBox.GrabFocus( );
+			switch( _clockButtonMode ) {
+			case ClockButtonMode.Start:
+				start_event(sender, e);
+				break;
+			case ClockButtonMode.Stop:
+				stop_event(sender, e);
+				break;
+			case ClockButtonMode.Undo:
+				undo_event(sender, e);
+				break;
+			default:
+				break;
+			}
+		}
 
-					return;
-				}
+		protected void start_event(object sender, EventArgs e)
+		{
+			if( _hasEditedTime ) {
+				if( _isEditValid )
+					Clock.ElapsedTime = TimeLogger.StringToTime( timeDisplayBox.Text);
 			}
 
-			hasEditedTime = false;
-			isEditValid = true;
+			_hasEditedTime = false;
+			_isEditValid = true;
 
-			Watch.StartStop( );
+			Clock.Toggle( );
 		}
+		protected void stop_event (object sender, EventArgs e)
+		{
+			Clock.Toggle( );
+		}
+		protected void undo_event (object sender, EventArgs e)
+		{
+			_hasEditedTime = false;
+			_isEditValid = true;
+
+			RefreshDisplay();
+			timeDisplayBox.GrabFocus( );
+		}
+		#endregion
 
 		protected void windowDelete_event(object o, DeleteEventArgs args)
 		{
@@ -182,21 +308,31 @@ namespace Chrono
 		protected void displayBoxChanged_event(object sender, EventArgs e)
 		{
 			// Avoids infinite front and back calling
-			if( Watch.IsRunning == false ) {
-				hasEditedTime = true;
-				isEditValid = Logger.IsStringValid( timeDisplayBox.Text );
+			if( Clock.IsTicking == false ) {
+				_hasEditedTime = true;
+				_isEditValid = TimeLogger.IsStringValid( timeDisplayBox.Text );
 				RefreshDisplay();
+				RefreshControls();
 			}
 		}
-		#endregion GUI events
 
+		#region Overrides
+		protected override void OnShown()
+		{
+			base.OnShown( );
+
+			// Necessary for whatever reason
+			KeepAbove = OnTop;
+		}
 		protected override void OnDestroyed()
 		{
-			if( timedRefreshCaller != null )
-				timedRefreshCaller.Cancel( );
+			if( _timedRefreshCaller != null )
+				_timedRefreshCaller.Cancel();
 
 			base.OnDestroyed();
 		}
+
+		#endregion
+		#endregion
 	}
 }
-

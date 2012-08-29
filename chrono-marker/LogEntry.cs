@@ -22,18 +22,22 @@ using System.Text;
 
 namespace Chrono
 {
-    public class LogEntry : IComparable<LogEntry>
+    public class LogEntry : IComparable<LogEntry>, IEquatable<LogEntry>
     {
-        public LogEntry(DateTime timestamp)
-        {
-            Timestamp = timestamp;
-        }
+        public LogEntry(string clockName, string description, DateTime timestamp)
+		{
+			_clockName = clockName;
+			_description = description;
+			_timestamp = timestamp;
+		}
 
-        public string ClockName { get; set; }
+		public string ClockName { get { return _clockName; } }
+		public string Description { get { return _description; } }
+		public DateTime Timestamp{ get { return _timestamp; } }
 
-        public string Description { get; set; }
-
-        public DateTime Timestamp{get; private set;}
+		private readonly string _clockName;
+		private readonly string _description;
+		private readonly DateTime _timestamp;
 
         public int CompareTo(LogEntry other)
         {
@@ -42,12 +46,19 @@ namespace Chrono
 
         public override int GetHashCode()
         {
-            return Timestamp.GetHashCode();
+            return _timestamp.GetHashCode();
         }
-
         public override string ToString()
         {
-            return "[" + Timestamp.ToString("HH:mm:ss.fff") + "] " + ClockName + " - " + Description;
+            return "[" + _timestamp.ToString("HH:mm:ss.fff") + "] " + _clockName + " - " + _description;
         }
+
+		public bool Equals(LogEntry obj)
+		{
+			return
+				_timestamp.Equals( obj._timestamp ) &&
+				_clockName.Equals( obj._clockName ) &&
+				_description.Equals( obj.Description );
+		}
     }
 }

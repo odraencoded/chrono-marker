@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>10.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C5EBA8E1-1107-4EC4-A184-A06F82FC87E5}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>Chrono</RootNamespace>
+    <StartupObject>Chrono.Program</StartupObject>
+    <ApplicationIcon>..\extra\icon.ico</ApplicationIcon>
+    <AssemblyName>chrono-marker</AssemblyName>
+    <ReleaseVersion>0.4</ReleaseVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="Mono.Posix" />
+    <Reference Include="gdk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="atk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
+      <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="glib-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="gtk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
+      <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="glade-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="pango-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="LogEntry.cs" />
+    <Compile Include="LoggerWindow.cs" />
+    <Compile Include="LoggingEventArgs.cs" />
+    <Compile Include="LoggingHandler.cs" />
+    <Compile Include="AboutDialog.cs" />
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="TimedCaller.cs" />
+    <Compile Include="Clock.cs" />
+    <Compile Include="StopwatchWindow.cs" />
+    <Compile Include="ClockConfigWindow.cs" />
+    <Compile Include="RenameClockDialog.cs" />
+    <Compile Include="LoggerClockEventArgs.cs" />
+    <Compile Include="ClockEventArgs.cs" />
+    <Compile Include="TimeLogger.cs" />
+    <Compile Include="gtk-gui\generated.cs" />
+    <Compile Include="gtk-gui\Chrono.AboutDialog.cs" />
+    <Compile Include="gtk-gui\Chrono.LoggerWindow.cs" />
+    <Compile Include="gtk-gui\Chrono.StopwatchWindow.cs" />
+    <Compile Include="gtk-gui\Chrono.ClockConfigWindow.cs" />
+    <Compile Include="gtk-gui\Chrono.RenameClockDialog.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\extra\icon.ico" />
+    <EmbeddedResource Include="..\extra\backward.png" />
+    <EmbeddedResource Include="..\extra\forward.png" />
+    <EmbeddedResource Include="..\extra\undo.png" />
+    <EmbeddedResource Include="..\extra\stop.png" />
+    <EmbeddedResource Include="gtk-gui\gui.stetic">
+      <LogicalName>gui.stetic</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="launcher.desktop" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+</Project>

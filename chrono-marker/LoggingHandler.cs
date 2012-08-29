@@ -1,4 +1,4 @@
-﻿/* Copyright (C) 2012 Leonardo Augusto Pereira
+/* Copyright (C) 2012 Leonardo Augusto Pereira
  * 
  * This file is part of Chrono Marker 
  * 
@@ -22,26 +22,50 @@ using System.Text;
 
 namespace Chrono
 {
-    /// <summary>Handles event logging and logging data storage</summary>
+    /// <summary>
+    /// This class relays clock events to a time logger
+	/// In the form of LogEntry
+    /// </summary>
     public class LoggingHandler
     {
-        public LoggingHandler(Logger logger, Watch clock, string name)
+        public LoggingHandler(TimeLogger logger, Clock clock, string name)
 		{
-			this.Logger = logger;
-			this.Watch = clock;
-			this.Name = name;
+			_name = name;
+			_clock = clock;
+			_logger = logger;
 
-			clock.Started += clockStarted_event;
-			clock.Stopped += clockStopped_event;
+			_clock.Started += clockStarted_event;
+			_clock.Stopped += clockStopped_event;
 
 			_logStops = true;
 			_logStarts = true;
 		}
 
-        public string Name { get; private set; }
+		/// <summary>
+		/// Gets or sets the name.
+		/// </summary>
+		/// <value>
+		/// The name.
+		/// </value>
+		/// <remarks>Also raises the Renamed event and
+		/// calls Logger.RefreshClock</remarks>
+		public string Name { 
+			get { return _name; } 
+			set
+			{
+				if(value == _name)
+					return;
+				string prevName = _name;
+				_name = value;
+				Logger.RefreshClock(prevName);
 
-        public Logger Logger { get; private set; }
-        public Watch Watch { get; private set; }
+				if(Renamed != null)
+					Renamed(this, null);
+			}
+		}
+
+		public TimeLogger Logger { get { return _logger; } }
+		public Clock Clock { get { return _clock; } }
 
 		public bool LogStarts {
 			get { return _logStarts;}
@@ -49,9 +73,9 @@ namespace Chrono
 				if( value == _logStarts )
 					return;
 				if( value == true ) {
-					Watch.Started += clockStarted_event;
+					Clock.Started += clockStarted_event;
 				} else {
-					Watch.Started -= clockStarted_event;
+					Clock.Started -= clockStarted_event;
 				}
 				_logStarts = value;
 			}
@@ -62,9 +86,9 @@ namespace Chrono
 				if( value == _logStops )
 					return;
 				if( value == true ) {
-					Watch.Stopped += clockStopped_event;
+					Clock.Stopped += clockStopped_event;
 				} else {
-					Watch.Stopped -= clockStopped_event;
+					Clock.Stopped -= clockStopped_event;
 				}
 				_logStops = value;
 			}
@@ -73,45 +97,46 @@ namespace Chrono
 		private bool _logStarts;
 		private bool _logStops;
 
-        void clockStarted_event(object sender, WatchEventArgs e)
+		private string _name;
+		private readonly TimeLogger _logger;
+		private readonly Clock _clock;
+
+        private void clockStarted_event(object sender, ClockEventArgs e)
+		{
+			string logDesc = "Started ";
+
+			if( e.Speed >= 0 )
+				logDesc += "timing";
+			else
+				logDesc += "counting down";
+
+			if( e.DisplayTime != TimeSpan.Zero )
+				logDesc += " with " + TimeLogger.TimeToString( e.DisplayTime );
+			logDesc += ".";
+
+			Logger.AddEntry( new LogEntry(_name, logDesc, e.Timestamp) );
+		}
+        private void clockStopped_event(object sender, ClockEventArgs e)
         {
-            LogEntry logEntry = new LogEntry(e.Timestamp);
-			logEntry.ClockName = Name;
+            string logDesc = "Stopped ";
 
-            string description = "Started ";
+            if (e.Speed >= 0) logDesc += "timing";
+            else logDesc += "counting down";
 
-            if (e.Speed >= 0) description += "timing";
-            else description += "counting down";
+            if (e.DisplayTime != TimeSpan.Zero) logDesc += " with " + TimeLogger.TimeToString(e.DisplayTime);
+            logDesc += ".";
 
-            if (e.DisplayTime != TimeSpan.Zero) description += " with " + Logger.TimeToString(e.DisplayTime);
-            description += ".";
-
-            logEntry.Description = description;
-
-            Logger.AddEntry(logEntry);
+            Logger.AddEntry( new LogEntry(_name, logDesc, e.Timestamp) );
         }
 
-        void clockStopped_event(object sender, WatchEventArgs e)
-        {
-            LogEntry logEntry = new LogEntry(e.Timestamp);
-			logEntry.ClockName = Name;
-
-            string description = "Stopped ";
-
-            if (e.Speed >= 0) description += "timing";
-            else description += "counting down";
-
-            if (e.DisplayTime != TimeSpan.Zero) description += " with " + Logger.TimeToString(e.DisplayTime);
-            description += ".";
-
-            logEntry.Description = description;
-
-            Logger.AddEntry(logEntry);
-        }
+		/// <summary>
+		/// Occurs when the Name property is changed
+		/// </summary>
+		public event EventHandler Renamed;
 
 		public override int GetHashCode()
 		{
-			return Name.GetHashCode();
+			return _clock.GetHashCode( ) ^ _logger.GetHashCode( );
 		}
     }
 }

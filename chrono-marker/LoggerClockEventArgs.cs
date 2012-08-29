@@ -1,4 +1,4 @@
-﻿/* Copyright (C) 2012 Leonardo Augusto Pereira
+/* Copyright (C) 2012 Leonardo Augusto Pereira
  * 
  * This file is part of Chrono Marker 
  * 
@@ -22,19 +22,19 @@ using System.Text;
 
 namespace Chrono
 {
-    public delegate void LoggerWatchEventHandler(object sender, LoggerWatchEventArgs e);
-
-    public class LoggerWatchEventArgs : EventArgs
+    public class LoggerClockEventArgs : EventArgs
     {
-        public LoggerWatchEventArgs(Logger logger, LoggingHandler loggingHandler, Watch watch)
-        {
-            this.Logger = logger;
-            this.Watch = watch;
-			this.LoggingHandler = loggingHandler;
-        }
+        public LoggerClockEventArgs(LoggingHandler loggingHandler)
+		{
+			_loggingHandler = loggingHandler;
+		}
 
-        public Logger Logger { get; private set; }
-        public Watch Watch { get; private set; }
-		public LoggingHandler LoggingHandler {get; private set;}
+		public LoggingHandler LoggingHandler { get { return _loggingHandler; } }
+		public TimeLogger Logger { get { return _loggingHandler.Logger; } }
+		public Clock Watch { get { return _loggingHandler.Clock; } }
+
+		private readonly LoggingHandler _loggingHandler;
     }
+
+	public delegate void LoggerClockEventHandler(object sender, LoggerClockEventArgs e);
 }

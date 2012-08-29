@@ -1,4 +1,4 @@
-﻿/* Copyright (C) 2012 Leonardo Augusto Pereira
+/* Copyright (C) 2012 Leonardo Augusto Pereira
  * 
  * This file is part of Chrono Marker 
  * 
@@ -23,30 +23,37 @@ using System.Text;
 namespace Chrono
 {
     // Stores data about an event raised by a watch
-    public class WatchEventArgs : EventArgs
+    public class ClockEventArgs : EventArgs
     {
-        public WatchEventArgs(Watch watch) : this(watch, watch.ElapsedTime, watch.Speed, DateTime.Now) { }
+        public ClockEventArgs(Clock watch) : this(watch, watch.ElapsedTime, watch.Speed, DateTime.Now) { }
 
-        public WatchEventArgs(Watch watch, TimeSpan displayTime, double speed, DateTime timestamp)
+        public ClockEventArgs(Clock watch, TimeSpan displayTime, double speed, DateTime timestamp)
         {
-            this.Watch = watch;
-            this.DisplayTime = displayTime;
-            this.Timestamp = timestamp;
-            this.Speed = speed;
+            _watch = watch;
+            _displayTime = displayTime;
+            _timestamp = timestamp;
+            _speed = speed;
         }
 
-        // Watch that raised this event</summary>
-        public Watch Watch { get; private set; }
+        // Watch that raised this event
+		public Clock Watch { get { return _watch; } }
 
         // Time on the watch when the event was rised
-        public TimeSpan DisplayTime { get; private set; }
+		public TimeSpan DisplayTime { get { return _displayTime; } }
 
         // Speed of the watch when the event was rised
-		public double Speed { get; private set; }
+		public double Speed { get { return _speed; } }
 
         // Time when the event was raised
-        public DateTime Timestamp { get; private set; }
-    }
+		public DateTime Timestamp { get { return _timestamp; } }
 
-    public delegate void WatchEventHandler(object sender, WatchEventArgs e);
+		#region Detail
+		private Clock _watch;
+		private TimeSpan _displayTime;
+		private double _speed;
+		private DateTime _timestamp;
+		#endregion
+	}
+
+    public delegate void ClockEventHandler(object sender, ClockEventArgs e);
 }

@@ -6,9 +6,12 @@ namespace Chrono
 	{
 		private global::Gtk.HBox hbox1;
 		private global::Gtk.Button backwardBtn;
-		private global::Gtk.VBox vbox2;
+		private global::Gtk.VBox vbox1;
+		private global::Gtk.Button bottomBtn;
+		private global::Gtk.HBox hbox2;
+		private global::Gtk.Button compactBtn;
+		private global::Gtk.Image compactBtnImage;
 		private global::Gtk.Entry timeDisplayBox;
-		private global::Gtk.Button startBtn;
 		private global::Gtk.Button forwardBtn;
 		
 		protected virtual void Build ()
@@ -17,12 +20,12 @@ namespace Chrono
 			// Widget Chrono.StopwatchWindow
 			this.Name = "Chrono.StopwatchWindow";
 			this.Title = global::Mono.Unix.Catalog.GetString ("Stopwatch");
-			this.Icon = global::Gdk.Pixbuf.LoadFromResource ("icon.ico");
+			this.Icon = global::Gdk.Pixbuf.LoadFromResource ("Chrono.icon.ico");
 			this.WindowPosition = ((global::Gtk.WindowPosition)(4));
-			this.AllowGrow = false;
+			this.BorderWidth = ((uint)(2));
+			this.Resizable = false;
 			// Container child Chrono.StopwatchWindow.Gtk.Container+ContainerChild
 			this.hbox1 = new global::Gtk.HBox ();
-			this.hbox1.WidthRequest = 400;
 			this.hbox1.Name = "hbox1";
 			this.hbox1.Spacing = 2;
 			// Container child hbox1.Gtk.Box+BoxChild
@@ -31,68 +34,97 @@ namespace Chrono
 			this.backwardBtn.CanFocus = true;
 			this.backwardBtn.Name = "backwardBtn";
 			this.backwardBtn.UseUnderline = true;
-			this.backwardBtn.Label = global::Mono.Unix.Catalog.GetString ("<");
+			this.backwardBtn.Label = "<";
 			this.hbox1.Add (this.backwardBtn);
 			global::Gtk.Box.BoxChild w1 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.backwardBtn]));
 			w1.Position = 0;
 			w1.Expand = false;
 			w1.Fill = false;
 			// Container child hbox1.Gtk.Box+BoxChild
-			this.vbox2 = new global::Gtk.VBox ();
-			this.vbox2.Name = "vbox2";
-			this.vbox2.Spacing = 1;
-			this.vbox2.BorderWidth = ((uint)(2));
-			// Container child vbox2.Gtk.Box+BoxChild
+			this.vbox1 = new global::Gtk.VBox ();
+			this.vbox1.Name = "vbox1";
+			this.vbox1.Spacing = 2;
+			// Container child vbox1.Gtk.Box+BoxChild
+			this.bottomBtn = new global::Gtk.Button ();
+			this.bottomBtn.HeightRequest = 30;
+			this.bottomBtn.CanDefault = true;
+			this.bottomBtn.CanFocus = true;
+			this.bottomBtn.Name = "bottomBtn";
+			this.bottomBtn.UseUnderline = true;
+			this.bottomBtn.Label = "Button";
+			this.vbox1.Add (this.bottomBtn);
+			global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.bottomBtn]));
+			w2.PackType = ((global::Gtk.PackType)(1));
+			w2.Position = 0;
+			// Container child vbox1.Gtk.Box+BoxChild
+			this.hbox2 = new global::Gtk.HBox ();
+			this.hbox2.Name = "hbox2";
+			this.hbox2.Spacing = 2;
+			// Container child hbox2.Gtk.Box+BoxChild
+			this.compactBtn = new global::Gtk.Button ();
+			this.compactBtn.CanDefault = true;
+			this.compactBtn.CanFocus = true;
+			this.compactBtn.Name = "compactBtn";
+			// Container child compactBtn.Gtk.Container+ContainerChild
+			this.compactBtnImage = new global::Gtk.Image ();
+			this.compactBtnImage.Name = "compactBtnImage";
+			this.compactBtnImage.Pixbuf = global::Gdk.Pixbuf.LoadFromResource ("Chrono.forward.png");
+			this.compactBtn.Add (this.compactBtnImage);
+			this.compactBtn.Label = null;
+			this.hbox2.Add (this.compactBtn);
+			global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.compactBtn]));
+			w4.Position = 0;
+			w4.Expand = false;
+			w4.Fill = false;
+			// Container child hbox2.Gtk.Box+BoxChild
 			this.timeDisplayBox = new global::Gtk.Entry ();
 			this.timeDisplayBox.CanFocus = true;
 			this.timeDisplayBox.Name = "timeDisplayBox";
-			this.timeDisplayBox.Text = global::Mono.Unix.Catalog.GetString ("00:00:00.000");
+			this.timeDisplayBox.Text = "00:00:00.00";
 			this.timeDisplayBox.IsEditable = true;
-			this.timeDisplayBox.WidthChars = 12;
-			this.timeDisplayBox.InvisibleChar = '•';
-			this.timeDisplayBox.Xalign = 0.5F;
-			this.vbox2.Add (this.timeDisplayBox);
-			global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.timeDisplayBox]));
-			w2.Position = 0;
-			w2.Expand = false;
-			w2.Fill = false;
-			// Container child vbox2.Gtk.Box+BoxChild
-			this.startBtn = new global::Gtk.Button ();
-			this.startBtn.CanFocus = true;
-			this.startBtn.Name = "startBtn";
-			this.startBtn.UseUnderline = true;
-			this.startBtn.Label = global::Mono.Unix.Catalog.GetString ("Start");
-			this.vbox2.Add (this.startBtn);
-			global::Gtk.Box.BoxChild w3 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.startBtn]));
-			w3.PackType = ((global::Gtk.PackType)(1));
-			w3.Position = 1;
-			this.hbox1.Add (this.vbox2);
-			global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.vbox2]));
-			w4.Position = 1;
+			this.timeDisplayBox.WidthChars = 13;
+			this.timeDisplayBox.ActivatesDefault = true;
+			this.timeDisplayBox.InvisibleChar = '●';
+			this.timeDisplayBox.Xalign = 1F;
+			this.hbox2.Add (this.timeDisplayBox);
+			global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.timeDisplayBox]));
+			w5.PackType = ((global::Gtk.PackType)(1));
+			w5.Position = 1;
+			this.vbox1.Add (this.hbox2);
+			global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.hbox2]));
+			w6.PackType = ((global::Gtk.PackType)(1));
+			w6.Position = 1;
+			w6.Expand = false;
+			w6.Fill = false;
+			this.hbox1.Add (this.vbox1);
+			global::Gtk.Box.BoxChild w7 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.vbox1]));
+			w7.Position = 1;
 			// Container child hbox1.Gtk.Box+BoxChild
 			this.forwardBtn = new global::Gtk.Button ();
 			this.forwardBtn.WidthRequest = 30;
 			this.forwardBtn.CanFocus = true;
 			this.forwardBtn.Name = "forwardBtn";
 			this.forwardBtn.UseUnderline = true;
-			this.forwardBtn.Label = global::Mono.Unix.Catalog.GetString (">");
+			this.forwardBtn.Label = ">";
 			this.hbox1.Add (this.forwardBtn);
-			global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.forwardBtn]));
-			w5.PackType = ((global::Gtk.PackType)(1));
-			w5.Position = 2;
-			w5.Expand = false;
-			w5.Fill = false;
+			global::Gtk.Box.BoxChild w8 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.forwardBtn]));
+			w8.Position = 2;
+			w8.Expand = false;
+			w8.Fill = false;
 			this.Add (this.hbox1);
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();
 			}
-			this.DefaultWidth = 402;
-			this.DefaultHeight = 90;
+			this.DefaultWidth = 343;
+			this.DefaultHeight = 103;
+			this.bottomBtn.HasDefault = true;
+			this.compactBtn.Hide ();
 			this.Show ();
 			this.DeleteEvent += new global::Gtk.DeleteEventHandler (this.windowDelete_event);
 			this.backwardBtn.Clicked += new global::System.EventHandler (this.backwardBtn_event);
+			this.compactBtn.Clicked += new global::System.EventHandler (this.clockButton_event);
 			this.timeDisplayBox.Changed += new global::System.EventHandler (this.displayBoxChanged_event);
-			this.startBtn.Clicked += new global::System.EventHandler (this.startBtn_event);
+			this.bottomBtn.Clicked += new global::System.EventHandler (this.clockButton_event);
 			this.forwardBtn.Clicked += new global::System.EventHandler (this.forwardBtn_event);
 		}
 	}

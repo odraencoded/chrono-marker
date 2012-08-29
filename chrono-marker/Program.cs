@@ -1,4 +1,4 @@
-﻿/* Copyright (C) 2012 Leonardo Augusto Pereira
+/* Copyright (C) 2012 Leonardo Augusto Pereira
  * 
  * This file is part of Chrono Marker 
  * 
@@ -28,14 +28,14 @@ namespace Chrono
 		{
 			Application.Init();
             
-			Logger timeLogger = new Logger();
+			TimeLogger timeLogger = new TimeLogger();
 			LoggerWindow window = new LoggerWindow(timeLogger);
 
 			{
-				LoggingHandler handler = timeLogger.AddWatch( new Watch(), "Beta Watch" );
+				LoggingHandler handler = timeLogger.CreateClock("Beta Clock" );
 
 				window.ShowAll( );
-				window.ShowWatch( handler );
+				window.ShowWatchWindow( handler );
 			}
 
 			Application.Run();

@@ -1,4 +1,4 @@
-﻿/* Copyright (C) 2012 Leonardo Augusto Pereira
+/* Copyright (C) 2012 Leonardo Augusto Pereira
  * 
  * This file is part of Chrono Marker 
  * 
@@ -24,84 +24,151 @@ using System.IO;
 
 namespace Chrono
 {
-	/// <summary>This class is responsible for logging Sandwatch events</summary>
-	public sealed class Logger
+	/// <summary>
+	/// This class stores log entries containing data about
+	/// stopwatch events. It also stores logging handlers which
+	/// Create the log entries.
+	/// </summary>
+	public sealed class TimeLogger
 	{
-		public Logger()
+		public TimeLogger()
 		{
-			logEntryNodes = new Dictionary<LogEntry, LinkedListNode<LogEntry>>();
-			manyLogEntries = new LinkedList<LogEntry>();
-			namedHandlers = new Dictionary<string, LoggingHandler>();
+			_logEntryNodes = new Dictionary<LogEntry, LinkedListNode<LogEntry>>();
+			_manyLogEntries = new LinkedList<LogEntry>();
+			_namedHandlers = new Dictionary<string, LoggingHandler>(
+				StringComparer.CurrentCultureIgnoreCase);
 		}
 
-        #region Watch list interface
-		public LoggingHandler this [string name] {
-			get { return namedHandlers [name]; }
-		}
-
-		public bool TryGetHandler(string name, out LoggingHandler result) {
-			return namedHandlers.TryGetValue(name, out result);
-		}
-
-		public LoggingHandler AddWatch(Watch watch, string name)
-		{
-			if( namedHandlers.ContainsKey( name ) )
-				throw new ArgumentException("The name of this watch was already registered.", "watch");
-
-			LoggingHandler result = new LoggingHandler(this, watch, name);
-			namedHandlers.Add( name, result );
-
-			if( WatchAdded != null )
-				WatchAdded( this, new LoggerWatchEventArgs(this, result, watch) );
-
-			return result;
-		}
-		public bool HasWatch(string watchName)
-		{
-			return namedHandlers.ContainsKey(watchName);
-		}
-		public void RemoveWatch(string watchName)
-		{
-			LoggingHandler logHandler;
-
-			if( !namedHandlers.TryGetValue( watchName, out logHandler ) )
-				return;
-
-			namedHandlers.Remove( watchName );
-
-			if( WatchRemoved != null )
-				WatchRemoved( this, new LoggerWatchEventArgs(this, logHandler, logHandler.Watch) );
-		}
-
-		public LoggingHandler GetWatchHandler(string name)
-		{
-			LoggingHandler result;
-			if( !namedHandlers.TryGetValue( name, out result ) ) {
-				result = AddWatch( new Watch() , name);
-			}
-
-			return result;
-		}
-
+		#region Properties
 		public LoggingHandler[] Handlers {
 			get {
-				LoggingHandler[] result = new LoggingHandler[namedHandlers.Count];
+				LoggingHandler[] result = new LoggingHandler[_namedHandlers.Count];
 
-				namedHandlers.Values.CopyTo(result, 0);
+				_namedHandlers.Values.CopyTo(result, 0);
 
 				return result;
 			}
+		}
+		#endregion
+
+		#region Fields
+		private Dictionary<string, LoggingHandler> _namedHandlers;
+		private Dictionary<LogEntry, LinkedListNode<LogEntry>> _logEntryNodes;
+		private LinkedList<LogEntry> _manyLogEntries;
+        #endregion
+
+		#region Events
+		public event LoggingEventHandler EntryAdded;
+		public event LoggingEventHandler EntryDeleted;
+        
+		public event LoggerClockEventHandler ClockAdded;
+		public event LoggerClockEventHandler ClockRemoved;
+        #endregion
+
+        #region Clock handler interface
+		/// <summary>
+		/// Creates a new clock logging handler with the given name
+		/// </summary>
+		/// <returns>
+		/// The newly created handler
+		/// </returns>
+		/// <param name='name'>
+		/// Name for the handler
+		/// </param>
+		public LoggingHandler CreateClock(string name)
+		{
+			if( _namedHandlers.ContainsKey( name ) )
+				throw new ArgumentException(string.Format(
+					"Logging handler \"{0}\" already exists", name));
+
+			LoggingHandler result = new LoggingHandler(this, new Clock(), name);
+			_namedHandlers.Add( name, result );
+
+			if( ClockAdded != null )
+				ClockAdded( this, new LoggerClockEventArgs(result) );
+
+			return result;
+		}
+		/// <summary>
+		/// Removes a logging handler with the given name
+		/// </summary>
+		/// <param name='clockName'>
+		/// The handler name
+		/// </param>
+		public void RemoveClock(string clockName)
+		{
+			LoggingHandler logHandler;
+
+			if( !_namedHandlers.TryGetValue( clockName, out logHandler ) )
+				throw new ArgumentException(string.Format(
+					"Logging handler \"{0}\" does not exist", clockName));
+
+			_namedHandlers.Remove( clockName );
+
+			if( ClockRemoved != null )
+				ClockRemoved( this, new LoggerClockEventArgs(logHandler) );
+		}
+
+		/// <summary>
+		/// Determines whether this instance has a clock handler with the specified clockName.
+		/// </summary>
+		/// <returns>
+		/// <c>true</c> if this instance has a clock handler the specified clockName; otherwise, <c>false</c>.
+		/// </returns>
+		/// <param name='clockName'>
+		/// Name of the clock handler to check.
+		/// </param>
+		public bool HasClock(string clockName)
+		{
+			return _namedHandlers.ContainsKey(clockName);
+		}
+
+		public bool TryGetHandler(string name, out LoggingHandler result) {
+			return _namedHandlers.TryGetValue(name, out result);
+		}
+
+		// Tries to move a logHandler from an obsolete key
+		// To the current one
+		public void RefreshClock(string clockName)
+		{
+			LoggingHandler logHandler;
+			if( !_namedHandlers.TryGetValue( clockName, out logHandler ) )
+				throw new ArgumentException(string.Format(
+					"Logging handler \"{0}\" does not exist", clockName )
+				);
+
+			// Nothing to be done
+			if(string.Equals(logHandler.Name, clockName, HandlerNameComparison) )
+				return;
+
+			if( _namedHandlers.ContainsKey( logHandler.Name ) )
+				throw new ArgumentException(string.Format(
+					"Logging handler \"{0}\" already exists", logHandler.Name )
+				);
+
+			_namedHandlers.Remove( clockName );
+			_namedHandlers.Add( logHandler.Name, logHandler );
+		}
+
+		public LoggingHandler GetClockHandler(string name)
+		{
+			LoggingHandler result;
+			if( !_namedHandlers.TryGetValue( name, out result ) ) {
+				result = CreateClock(name);
+			}
+
+			return result;
 		}
         #endregion
 
         #region Log entry manipulation
 		public void AddEntry(LogEntry entry)
 		{
-			if( logEntryNodes.ContainsKey( entry ) )
+			if( _logEntryNodes.ContainsKey( entry ) )
 				throw new ArgumentException("Duplicated entry", "entry");
 
-			LinkedListNode<LogEntry> logNode = manyLogEntries.AddLast( entry );
-			logEntryNodes.Add( entry, logNode );
+			LinkedListNode<LogEntry> logNode = _manyLogEntries.AddLast( entry );
+			_logEntryNodes.Add( entry, logNode );
 
 			if( EntryAdded != null )
 				EntryAdded( this, new LoggingEventArgs(this, entry) );
@@ -110,35 +177,25 @@ namespace Chrono
 		{
 			LinkedListNode<LogEntry> logNode;
 
-			if( !logEntryNodes.TryGetValue( entry, out logNode ) )
+			if( !_logEntryNodes.TryGetValue( entry, out logNode ) )
 				throw new ArgumentException("Entry does not exist on this logger", "entry");
 
-			manyLogEntries.Remove( logNode );
-			logEntryNodes.Remove( entry );
+			_manyLogEntries.Remove( logNode );
+			_logEntryNodes.Remove( entry );
 
 			if( EntryDeleted != null )
 				EntryDeleted( this, new LoggingEventArgs(this, entry) );
 		}
         #endregion
 
-        #region Events
-		public event LoggingEventHandler EntryAdded;
-		public event LoggingEventHandler EntryDeleted;
         
-		public event LoggerWatchEventHandler WatchAdded;
-		public event LoggerWatchEventHandler WatchRemoved;
-        #endregion
 
-        #region Detail
-		private Dictionary<string, LoggingHandler> namedHandlers;
-		private Dictionary<LogEntry, LinkedListNode<LogEntry>> logEntryNodes;
-		private LinkedList<LogEntry> manyLogEntries;
-        #endregion
+        
 
 		public void ExportTo(string filename)
 		{
 			using( StreamWriter writer = new StreamWriter(filename, false, Encoding.Unicode) ) {
-				List<LogEntry> exportEntries = new List<LogEntry>(manyLogEntries);
+				List<LogEntry> exportEntries = new List<LogEntry>(_manyLogEntries);
 
 				exportEntries.Sort( );
 				exportEntries.Reverse( );
@@ -164,7 +221,7 @@ namespace Chrono
 
 		public static TimeSpan StringToTime(string input)
 		{
-			input = input.Trim();
+			input = input.Trim( );
 
 			bool negative;
 
@@ -192,7 +249,8 @@ namespace Chrono
 				negative=true;
 			}
 			else
-			{hourStart=0;
+			{
+				hourStart=0;
 				negative=false;
 			}
 
@@ -226,7 +284,7 @@ namespace Chrono
 
 		public static bool IsStringValid(string input)
 		{
-			input = input.Trim();
+			input = input.Trim( );
 
 			if( string.IsNullOrEmpty( input ) )
 				return false;
@@ -277,7 +335,7 @@ namespace Chrono
 			for(int i =0; i<sections.Length; i++)
 			{
 				string sectionStr = sections[i];
-				if(string.IsNullOrWhiteSpace(sectionStr))return false;
+				if(string.IsNullOrEmpty(sectionStr))return false;
 
 				int sectionVal;
 
@@ -300,6 +358,8 @@ namespace Chrono
 
 			return true;
 		}
+
+		public static StringComparison HandlerNameComparison { get { return StringComparison.CurrentCultureIgnoreCase; } }
 		#endregion
 	}
 }

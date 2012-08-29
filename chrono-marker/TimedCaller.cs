@@ -23,7 +23,9 @@ using GLib;
 
 namespace Chrono
 {
-	/// <summary>This is class handles timed event calls</summary>
+	/// <summary>
+	/// This class handles timed events.
+	/// </summary>
 	public class TimedCaller
 	{
 		/// <summary>
@@ -35,32 +37,37 @@ namespace Chrono
 		/// <param name='delayedStart'>
 		/// When set to true, the TimedOut calls won't start until <see cref="Chrono.TimeCalled.Start()"> is called
 		/// </param>
-		public TimedCaller(uint frequency, bool delayedStart = false)
+
+		public TimedCaller(uint frequency) : this(frequency, false) {}
+		public TimedCaller(uint frequency, bool delayedStart)
 		{
-			this.Frequency = frequency;
-			this.Cancelled = false;
-			this.HasStarted = false;
+			_frequency = frequency;
+			_cancelled = false;
+			_hasStarted = false;
 
 			if(!delayedStart)
 				Start();
 		}
 
-		public uint Frequency { get; private set; }
-		public bool HasStarted { get; private set; }
-		public bool Cancelled { get; private set; }
+		public uint Frequency { get { return _frequency; } }
+		public bool HasStarted { get { return _hasStarted; } }
+		public bool Cancelled { get { return _cancelled; }}
 
+		private readonly uint _frequency;
+		private bool _hasStarted;
+		private bool _cancelled;
 
 		public void Start()
 		{
-			if( !HasStarted ) {
-				HasStarted = true;
+			if( !_hasStarted ) {
+				_hasStarted = true;
 				Timeout.Add( Frequency, new GLib.TimeoutHandler(glibTimeout));
 			}
 		}
 
 		public void Cancel()
 		{
-			Cancelled = true;
+			_cancelled = true;
 		}
 
 		public event TimedCallEventHandler TimeOut;
@@ -85,10 +92,12 @@ namespace Chrono
 	{
 		public TimedCallEventArgs(TimedCaller caller)
 		{
-			this.Caller = caller;
+			_caller = caller;
 		}
 
-		public TimedCaller Caller{get; private set;}
+		public TimedCaller Caller { get { return _caller; } }
+
+		private TimedCaller _caller;
 	}
 }
 

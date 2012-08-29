@@ -7,7 +7,7 @@ namespace Chrono
 		private global::Gtk.Alignment alignment2;
 		private global::Gtk.VBox vbox2;
 		private global::Gtk.HBox hbox1;
-		private global::Gtk.Image image1;
+		private global::Gtk.Image image3;
 		private global::Gtk.Label label2;
 		private global::Gtk.Frame frame2;
 		private global::Gtk.Alignment GtkAlignment1;
@@ -22,7 +22,7 @@ namespace Chrono
 			// Widget Chrono.AboutDialog
 			this.Name = "Chrono.AboutDialog";
 			this.Title = global::Mono.Unix.Catalog.GetString ("About Chrono Marker");
-			this.Icon = global::Gdk.Pixbuf.LoadFromResource ("icon.ico");
+			this.Icon = global::Gdk.Pixbuf.LoadFromResource ("Chrono.icon.ico");
 			this.TypeHint = ((global::Gdk.WindowTypeHint)(1));
 			this.WindowPosition = ((global::Gtk.WindowPosition)(4));
 			this.AllowGrow = false;
@@ -43,13 +43,12 @@ namespace Chrono
 			this.hbox1.Name = "hbox1";
 			this.hbox1.Spacing = 20;
 			// Container child hbox1.Gtk.Box+BoxChild
-			this.image1 = new global::Gtk.Image ();
-			this.image1.WidthRequest = 90;
-			this.image1.HeightRequest = 90;
-			this.image1.Name = "image1";
-			this.image1.Pixbuf = global::Gdk.Pixbuf.LoadFromResource ("icon.ico");
-			this.hbox1.Add (this.image1);
-			global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.image1]));
+			this.image3 = new global::Gtk.Image ();
+			this.image3.Name = "image3";
+			this.image3.Xalign = 1F;
+			this.image3.Pixbuf = global::Gdk.Pixbuf.LoadFromResource ("Chrono.icon.ico");
+			this.hbox1.Add (this.image3);
+			global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.image3]));
 			w2.Position = 0;
 			// Container child hbox1.Gtk.Box+BoxChild
 			this.label2 = new global::Gtk.Label ();
@@ -140,8 +139,8 @@ You should have received a copy of the GNU General Public License along with Chr
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();
 			}
-			this.DefaultWidth = 448;
-			this.DefaultHeight = 457;
+			this.DefaultWidth = 373;
+			this.DefaultHeight = 417;
 			this.Show ();
 			this.buttonCancel.Clicked += new global::System.EventHandler (this.closeClicked_event);
 		}

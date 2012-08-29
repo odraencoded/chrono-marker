@@ -27,22 +27,22 @@ namespace Chrono
 {
 	public partial class LoggerWindow : Window
 	{
-		public LoggerWindow(Logger logger) : 
+		public LoggerWindow(TimeLogger logger) : 
 				base(Gtk.WindowType.Toplevel)
 		{
 			this.Build();
 
-			this.Logger = logger;
-			Logger.WatchAdded += loggerWatchAdded_event;
-			Logger.WatchRemoved += loggerWatchRemoved_event;
+			_logger = logger;
+			_logger.ClockAdded += loggerClockAdded_event;
+			_logger.ClockRemoved += loggerClockRemoved_event;
 
-			logger.EntryAdded += loggerEntryAdded_event;
-			logger.EntryDeleted += loggerEntryDelete_event;
+			_logger.EntryAdded += loggerEntryAdded_event;
+			_logger.EntryDeleted += loggerEntryDelete_event;
 
 			CellRendererText cellRenderer = new CellRendererText();
 
 			TreeViewColumn watchColumn = new TreeViewColumn();
-			watchColumn.Title = "Watch";
+			watchColumn.Title = "Clock";
 			watchColumn.PackStart( cellRenderer, true );
 			watchColumn.AddAttribute( cellRenderer, "text", 1 );
 
@@ -56,7 +56,7 @@ namespace Chrono
 			timeColumn.PackStart( cellRenderer, true );
 			timeColumn.AddAttribute( cellRenderer, "text", 3 );
 
-			logView.Model = logStore = new ListStore(
+			logView.Model = _logStore = new ListStore(
 				typeof( LogEntry ), typeof( string ), typeof( string ), typeof( string ));
 
 			logView.Selection.Mode = SelectionMode.Multiple;
@@ -73,44 +73,54 @@ namespace Chrono
 			descColumn.SortIndicator = true;
 			timeColumn.SortIndicator = true;
 
-			logStore.SetSortColumnId(3,SortType.Descending); 
+			_logStore.SetSortColumnId(3,SortType.Descending); 
 
-			logEntryRows = new Dictionary<LogEntry, TreeIter>();
+			_logEntryRows = new Dictionary<LogEntry, TreeIter>();
 			logView.Selection.Changed += logViewSelectionChanged_event;
 
-			logViewMenu = new Menu();
-			logViewMenu.Append(CopyAction.CreateMenuItem());
-			logViewMenu.Append(DeleteAction.CreateMenuItem());
+			_logViewMenu = new Menu();
+			_logViewMenu.Append(CopyAction.CreateMenuItem());
+			_logViewMenu.Append(DeleteAction.CreateMenuItem());
 
-			manyWatchWindows = new Dictionary<Watch, StopwatchWindow>();
+			_manyClockWindows = new Dictionary<LoggingHandler, StopwatchWindow>();
 		}
 
-		public Logger Logger {get; private set;}
+		public TimeLogger Logger { get { return _logger; } }
+		public event FocusInEventHandler AnyClockWindowFocused;
 
-		public void ShowWatch(LoggingHandler logHandler)
+		private ClockConfigWindow _configWindow;
+
+		private Dictionary<LoggingHandler, StopwatchWindow> _manyClockWindows;
+		private Dictionary<LogEntry, TreeIter> _logEntryRows;
+
+		private Menu _logViewMenu;
+		private ListStore _logStore;
+		private readonly TimeLogger _logger;
+
+		public StopwatchWindow ShowWatchWindow(LoggingHandler logHandler)
 		{
-			StopwatchWindow watchWindow = manyWatchWindows [logHandler.Watch];
-
-			if( watchWindow == null ) {
-				watchWindow = new StopwatchWindow(logHandler);
-				manyWatchWindows [logHandler.Watch] = watchWindow;
-
-				watchWindow.FocusInEvent += watchWindowFocus_event;
-			}
+			StopwatchWindow watchWindow = GetClockWindow(logHandler);
 
 			watchWindow.Show( );
 			watchWindow.Present( );
+
+			return watchWindow;
 		}
 
-		public event FocusInEventHandler WatchWindowFocused;
+		public StopwatchWindow GetClockWindow(LoggingHandler logHandler)
+		{
+			StopwatchWindow clockWindow = _manyClockWindows [logHandler];
 
-		private WatchConfigWindow configWindow;
+			if( clockWindow == null ) {
+				clockWindow = new StopwatchWindow(logHandler);
+				_manyClockWindows [logHandler] = clockWindow;
 
-		private Dictionary<Watch, StopwatchWindow> manyWatchWindows;
-		private Dictionary<LogEntry, TreeIter> logEntryRows;
+				clockWindow.FocusInEvent += clockWindowFocusIn_event;
+				clockWindow.DestroyEvent += clockWindowDestroyed_event;
+			}
 
-		private Menu logViewMenu;
-		private ListStore logStore;
+			return clockWindow;
+		}
 
 		private List<LogEntry> GetSelectedLogs()
 		{
@@ -122,8 +132,8 @@ namespace Chrono
 			foreach( TreePath selectedPath in manyPaths ) {
 				TreeIter iter;
 
-				if( logStore.GetIter( out iter, selectedPath ) ) {
-					LogEntry selectedEntry = logStore.GetValue( iter, 0 ) as LogEntry;
+				if( _logStore.GetIter( out iter, selectedPath ) ) {
+					LogEntry selectedEntry = _logStore.GetValue( iter, 0 ) as LogEntry;
 
 					if( selectedEntry != null )
 						result.Add( selectedEntry );
@@ -134,45 +144,52 @@ namespace Chrono
 		}
 
 		#region Dynamic events
-		private void loggerWatchAdded_event(object sender, LoggerWatchEventArgs e)
+		private void loggerClockAdded_event(object sender, LoggerClockEventArgs e)
 		{
-			manyWatchWindows.Add(e.LoggingHandler.Watch, null);
+			_manyClockWindows.Add(e.LoggingHandler, null);
 		}
-		private void loggerWatchRemoved_event(object sender, LoggerWatchEventArgs e)
+		private void loggerClockRemoved_event(object sender, LoggerClockEventArgs e)
 		{
-			StopwatchWindow watchWindow;
-			Watch watch = e.LoggingHandler.Watch;
-			if( !manyWatchWindows.TryGetValue( watch, out watchWindow ) )
+			StopwatchWindow clockWindow;
+			if( !_manyClockWindows.TryGetValue( e.LoggingHandler, out clockWindow ) )
 				return;
 
-			watchWindow.Destroy( );
-			manyWatchWindows.Remove( watch );
+			clockWindow.Destroy( );
+			_manyClockWindows.Remove( e.LoggingHandler );
 		}
 
 		private void loggerEntryAdded_event(object sender, LoggingEventArgs e)
 		{
-			TreeIter entryRow = logStore.AppendValues(
+			TreeIter entryRow = _logStore.AppendValues(
 				e.Entry,
 				e.Entry.ClockName,
 				e.Entry.Description,
 				e.Entry.Timestamp.ToString("HH:mm:ss.fff"));
 
-			logEntryRows.Add(e.Entry, entryRow);
+			_logEntryRows.Add(e.Entry, entryRow);
 		}
 		private void loggerEntryDelete_event(object sender, LoggingEventArgs e)
 		{
 			TreeIter iter;
-			if(!logEntryRows.TryGetValue(e.Entry, out iter))return;
+			if(!_logEntryRows.TryGetValue(e.Entry, out iter))return;
 
-			logStore.Remove(ref iter);
+			_logStore.Remove(ref iter);
 
-			logEntryRows.Remove(e.Entry);
+			_logEntryRows.Remove(e.Entry);
 		}
 
-		private void watchWindowFocus_event(object sender, FocusInEventArgs args)
+		private void clockWindowFocusIn_event(object sender, FocusInEventArgs args)
 		{
-			if(WatchWindowFocused !=null)
-				WatchWindowFocused(sender, args);
+			if(AnyClockWindowFocused != null)
+				AnyClockWindowFocused(sender, args);
+		}
+
+		private void clockWindowDestroyed_event(object sender, DestroyEventArgs args)
+		{
+			StopwatchWindow clockWindow = sender as StopwatchWindow;
+			if( clockWindow != null ) {
+				clockWindow.FocusInEvent -= clockWindowFocusIn_event;
+			}
 		}
 		#endregion
 
@@ -209,29 +226,30 @@ namespace Chrono
 
 		private void logViewShowContextMenu()
 		{
-			logViewMenu.ShowAll();
-			logViewMenu.Popup();
+			_logViewMenu.ShowAll();
+			_logViewMenu.Popup();
 		}
 		#endregion
 
 		#region Menu events
 		protected void exportAction_event(object sender, EventArgs e)
 		{
-			FileChooserDialog dialog = new FileChooserDialog(
+			FileChooserDialog saveDialog = new FileChooserDialog(
 				"Export Log Text", this, FileChooserAction.Save,
 				Stock.Cancel, ResponseType.Cancel,
 				Stock.Save, ResponseType.Accept,
 				null);
 
-			dialog.DoOverwriteConfirmation = true;
+			saveDialog.TransientFor = this;
+			saveDialog.DoOverwriteConfirmation = true;
 
-			if( dialog.Run( ) == (int)ResponseType.Accept) {
-				Logger.ExportTo(dialog.Filename);
+			if( saveDialog.Run( ) == (int)ResponseType.Accept) {
+				_logger.ExportTo(saveDialog.Filename);
 			}
 
-			dialog.Destroy();
+			saveDialog.Destroy();
 		}
-		protected void actionQuit_event (object sender, EventArgs e)
+		protected void quitAction_event (object sender, EventArgs e)
 		{
 			this.Destroy();
 		}
@@ -242,19 +260,19 @@ namespace Chrono
 		}
 		protected void copyAction_event(object sender, EventArgs e)
 		{
-			List<LogEntry> selectedEntries = GetSelectedLogs();
+			List<LogEntry> selectedEntries = GetSelectedLogs( );
 
-			selectedEntries.Sort();
-			selectedEntries.Reverse();
+			selectedEntries.Sort( );
+			selectedEntries.Reverse( );
 
 			if( selectedEntries.Count == 0 )
 				return;
 
 			string copyData = "";
 
-			for( int i = 0; i<selectedEntries.Count; i++ ) {
+			for( int i = 0; i < selectedEntries.Count; i++ ) {
 				copyData += 
-					( i > 0? Environment.NewLine : "" )
+					( i > 0? "\n" : "" )
 					+ selectedEntries [i];
 			}
 
@@ -265,20 +283,20 @@ namespace Chrono
 			List<LogEntry> selectedEntries = GetSelectedLogs( );
 
 			foreach( LogEntry entry in selectedEntries )
-				Logger.RemoveEntry( entry );
+				_logger.RemoveEntry( entry );
 		}
 		
 		protected void editStopwatches_event(object sender, EventArgs e)
 		{
-			if( configWindow == null ) {
-				configWindow = new WatchConfigWindow(this);
+			if( _configWindow == null ) {
+				_configWindow = new ClockConfigWindow(this);
 			}
 
-			configWindow.Show();
-			configWindow.Present();
+			_configWindow.Show( );
+			_configWindow.Present( );
 		}
 
-		protected void helpAbout_event(object sender, EventArgs e)
+		protected void aboutAction_event(object sender, EventArgs e)
 		{
 			AboutDialog about = new AboutDialog();
 
