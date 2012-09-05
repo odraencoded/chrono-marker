@@ -119,7 +119,7 @@ namespace Chrono
 			this.DefaultHeight = 103;
 			this.bottomBtn.HasDefault = true;
 			this.compactBtn.Hide ();
-			this.Show ();
+			this.Hide ();
 			this.DeleteEvent += new global::Gtk.DeleteEventHandler (this.windowDelete_event);
 			this.backwardBtn.Clicked += new global::System.EventHandler (this.backwardBtn_event);
 			this.compactBtn.Clicked += new global::System.EventHandler (this.clockButton_event);

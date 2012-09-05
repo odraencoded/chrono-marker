@@ -33,6 +33,19 @@ namespace Chrono
 		{
 			this.Build( );
 
+			// Sets the focus chain AKA tab order
+			FocusChain = new Widget[]
+			{
+				timeDisplayBox,
+				bottomBtn,
+				compactBtn,
+				forwardBtn,
+				backwardBtn
+			};
+
+			timeDisplayBox.GrabFocus();
+			timeDisplayBox.SelectRegion(0,0);
+
 			_logHandler = logHandler;
 
 			Clock.Started += ClockStarted_event;
@@ -287,6 +300,8 @@ namespace Chrono
 		protected void stop_event (object sender, EventArgs e)
 		{
 			Clock.Toggle( );
+
+			timeDisplayBox.GrabFocus();
 		}
 		protected void undo_event (object sender, EventArgs e)
 		{
