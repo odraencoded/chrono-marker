@@ -27,32 +27,33 @@ namespace Chrono
 {
 	public partial class LoggerWindow : Window
 	{
-		public LoggerWindow(TimeLogger logger) : 
+		public LoggerWindow(Program program) : 
 				base(Gtk.WindowType.Toplevel)
 		{
+			if(program == null)
+				throw new ArgumentNullException("program");
+
 			this.Build();
 
-			_logger = logger;
-			_logger.ClockAdded += loggerClockAdded_event;
-			_logger.ClockRemoved += loggerClockRemoved_event;
+			Program = program;
 
-			_logger.EntryAdded += loggerEntryAdded_event;
-			_logger.EntryDeleted += loggerEntryDelete_event;
+			Logger.EntryAdded += loggerEntryAdded_event;
+			Logger.EntryDeleted += loggerEntryDelete_event;
 
 			CellRendererText cellRenderer = new CellRendererText();
 
-			TreeViewColumn watchColumn = new TreeViewColumn();
-			watchColumn.Title = "Clock";
-			watchColumn.PackStart( cellRenderer, true );
-			watchColumn.AddAttribute( cellRenderer, "text", 1 );
+			TreeViewColumn clockColumn = new TreeViewColumn();
+			clockColumn.Title = "Source";
+			clockColumn.PackStart( cellRenderer, true );
+			clockColumn.AddAttribute( cellRenderer, "text", 1 );
 
 			TreeViewColumn descColumn = new TreeViewColumn();
-			descColumn.Title = "Description";
+			descColumn.Title = "Event";
 			descColumn.PackStart( cellRenderer, true );
 			descColumn.AddAttribute( cellRenderer, "text", 2 );
 
 			TreeViewColumn timeColumn = new TreeViewColumn();
-			timeColumn.Title = "Time";
+			timeColumn.Title = "Occurred";
 			timeColumn.PackStart( cellRenderer, true );
 			timeColumn.AddAttribute( cellRenderer, "text", 3 );
 
@@ -61,17 +62,21 @@ namespace Chrono
 
 			logView.Selection.Mode = SelectionMode.Multiple;
 
-			logView.AppendColumn( watchColumn );
+			logView.AppendColumn( clockColumn );
 			logView.AppendColumn( descColumn );
 			logView.AppendColumn( timeColumn );
 
-			watchColumn.SortColumnId = 1;
+			clockColumn.SortColumnId = 1;
 			descColumn.SortColumnId = 2;
 			timeColumn.SortColumnId = 3;
 
-			watchColumn.SortIndicator = true;
+			clockColumn.SortIndicator = true;
 			descColumn.SortIndicator = true;
 			timeColumn.SortIndicator = true;
+
+			clockColumn.Resizable = true;
+			descColumn.Resizable = true;
+			timeColumn.Resizable = true;
 
 			_logStore.SetSortColumnId(3,SortType.Descending); 
 
@@ -79,48 +84,17 @@ namespace Chrono
 			logView.Selection.Changed += logViewSelectionChanged_event;
 
 			_logViewMenu = new Menu();
-			_logViewMenu.Append(CopyAction.CreateMenuItem());
-			_logViewMenu.Append(DeleteAction.CreateMenuItem());
-
-			_manyClockWindows = new Dictionary<LoggingHandler, StopwatchWindow>();
+			_logViewMenu.Append(copyAction.CreateMenuItem());
+			_logViewMenu.Append(deleteAction.CreateMenuItem());
 		}
 
-		public TimeLogger Logger { get { return _logger; } }
-		public event FocusInEventHandler AnyClockWindowFocused;
+		public Program Program { get; private set; }
+		public TimeLogger Logger { get { return Program.TimeLogger; } }
 
-		private ClockConfigWindow _configWindow;
-
-		private Dictionary<LoggingHandler, StopwatchWindow> _manyClockWindows;
 		private Dictionary<LogEntry, TreeIter> _logEntryRows;
 
 		private Menu _logViewMenu;
 		private ListStore _logStore;
-		private readonly TimeLogger _logger;
-
-		public StopwatchWindow ShowWatchWindow(LoggingHandler logHandler)
-		{
-			StopwatchWindow watchWindow = GetClockWindow(logHandler);
-
-			watchWindow.Show( );
-			watchWindow.Present( );
-
-			return watchWindow;
-		}
-
-		public StopwatchWindow GetClockWindow(LoggingHandler logHandler)
-		{
-			StopwatchWindow clockWindow = _manyClockWindows [logHandler];
-
-			if( clockWindow == null ) {
-				clockWindow = new StopwatchWindow(logHandler);
-				_manyClockWindows [logHandler] = clockWindow;
-
-				clockWindow.FocusInEvent += clockWindowFocusIn_event;
-				clockWindow.DestroyEvent += clockWindowDestroyed_event;
-			}
-
-			return clockWindow;
-		}
 
 		private List<LogEntry> GetSelectedLogs()
 		{
@@ -144,20 +118,6 @@ namespace Chrono
 		}
 
 		#region Dynamic events
-		private void loggerClockAdded_event(object sender, LoggerClockEventArgs e)
-		{
-			_manyClockWindows.Add(e.LoggingHandler, null);
-		}
-		private void loggerClockRemoved_event(object sender, LoggerClockEventArgs e)
-		{
-			StopwatchWindow clockWindow;
-			if( !_manyClockWindows.TryGetValue( e.LoggingHandler, out clockWindow ) )
-				return;
-
-			clockWindow.Destroy( );
-			_manyClockWindows.Remove( e.LoggingHandler );
-		}
-
 		private void loggerEntryAdded_event(object sender, LoggingEventArgs e)
 		{
 			TreeIter entryRow = _logStore.AppendValues(
@@ -177,27 +137,13 @@ namespace Chrono
 
 			_logEntryRows.Remove(e.Entry);
 		}
-
-		private void clockWindowFocusIn_event(object sender, FocusInEventArgs args)
-		{
-			if(AnyClockWindowFocused != null)
-				AnyClockWindowFocused(sender, args);
-		}
-
-		private void clockWindowDestroyed_event(object sender, DestroyEventArgs args)
-		{
-			StopwatchWindow clockWindow = sender as StopwatchWindow;
-			if( clockWindow != null ) {
-				clockWindow.FocusInEvent -= clockWindowFocusIn_event;
-			}
-		}
 		#endregion
 
 		#region GUI events
 		#region Log treeview events
 		protected void logViewSelectionChanged_event (object sender, EventArgs e)
 		{
-			CopyAction.Sensitive = DeleteAction.Sensitive =
+			copyAction.Sensitive = deleteAction.Sensitive =
 				!(logView.Selection.CountSelectedRows( ) == 0 );
 		}
 
@@ -244,7 +190,7 @@ namespace Chrono
 			saveDialog.DoOverwriteConfirmation = true;
 
 			if( saveDialog.Run( ) == (int)ResponseType.Accept) {
-				_logger.ExportTo(saveDialog.Filename);
+				Logger.ExportTo(saveDialog.Filename);
 			}
 
 			saveDialog.Destroy();
@@ -283,17 +229,17 @@ namespace Chrono
 			List<LogEntry> selectedEntries = GetSelectedLogs( );
 
 			foreach( LogEntry entry in selectedEntries )
-				_logger.RemoveEntry( entry );
+				Logger.RemoveEntry( entry );
 		}
 		
 		protected void editStopwatches_event(object sender, EventArgs e)
 		{
-			if( _configWindow == null ) {
-				_configWindow = new ClockConfigWindow(this);
-			}
+			Program.ClockPropertiesWindow.Present();
+		}
 
-			_configWindow.Show( );
-			_configWindow.Present( );
+		protected void editPreferences_click (object sender, EventArgs e)
+		{
+			Program.PreferencesWindow.Present();
 		}
 
 		protected void aboutAction_event(object sender, EventArgs e)

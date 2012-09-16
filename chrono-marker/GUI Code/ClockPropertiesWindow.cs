@@ -24,14 +24,14 @@ using Gtk;
 
 namespace Chrono
 {
-	public partial class ClockConfigWindow : Gtk.Window
+	public partial class ClockPropertiesWindow : Gtk.Window
 	{
-		public ClockConfigWindow(LoggerWindow loggerWindow) : 
+		public ClockPropertiesWindow(Program program) : 
 				base(Gtk.WindowType.Toplevel)
 		{
-			_loggerWindow = loggerWindow;
+			Program = program;
 
-			_loggerWindow.AnyClockWindowFocused += AnyClockWindowFocused_event;
+			Program.ClockWindowReceivedFocus += AnyClockWindowFocused_event;
 
 			Logger.ClockAdded += loggerClockAdded_event;
 			Logger.ClockRemoved += loggerClockRemoved_event;
@@ -62,9 +62,11 @@ namespace Chrono
 			}
 		}
 
-		public TimeLogger Logger{ get { return _loggerWindow.Logger; } }
+		public Program Program { get; private set; }
 
-		private LoggerWindow _loggerWindow;
+		public TimeLogger Logger { get { return Program.TimeLogger; } }
+		public LoggerWindow LoggerWindow { get { return Program.LoggerWindow; } }
+
 		private LoggingHandler _currentHandler;
 		private StopwatchWindow _clockWindow;
 
@@ -105,11 +107,10 @@ namespace Chrono
 				_currentHandler.Renamed += handlerRenamed_event;
 				_currentHandler.Clock.SpeedChanged += clockSpeedChanged_event;
 
-				_clockWindow = _loggerWindow.GetClockWindow( _currentHandler );
+				Program.GetClockWindow( _currentHandler, out _clockWindow );
 				_clockWindow.Shown += clockWindowVisibilityChanged_event;
 				_clockWindow.Hidden += clockWindowVisibilityChanged_event;
-			} else
-			{
+			} else {
 				_clockWindow = null;
 			}
 		}
@@ -164,13 +165,13 @@ namespace Chrono
 		}
 
 		#region Dynamic events
-		private void loggerClockAdded_event(object sender, LoggerClockEventArgs e)
+		private void loggerClockAdded_event(object sender, ClockHandlerEventArgs e)
 		{
 			TreeIter iter = _comboEntryList.AppendValues(e.LoggingHandler);
 
 			_comboNameIters.Add(e.LoggingHandler, iter);
 		}
-		private void loggerClockRemoved_event(object sender, LoggerClockEventArgs e)
+		private void loggerClockRemoved_event(object sender, ClockHandlerEventArgs e)
 		{
 			TreeIter removedIter = _comboNameIters [e.LoggingHandler];
 
@@ -195,14 +196,10 @@ namespace Chrono
 
 			_refreshing = false;
 		}
-		private void AnyClockWindowFocused_event(object sender, FocusInEventArgs args)
+
+		private void AnyClockWindowFocused_event(object sender, ClockHandlerEventArgs e)
 		{
-			StopwatchWindow clockWindow = ( sender as StopwatchWindow );
-
-			if( clockWindow == null )
-				return;
-
-			clockNameBox.Entry.Text = clockWindow.LogHandler.Name;
+			clockNameBox.Entry.Text = e.LoggingHandler.Name;
 		}
 
 		private void clockSpeedChanged_event(object sender, ClockEventArgs args)
@@ -262,8 +259,12 @@ namespace Chrono
 			if( _currentHandler == null ) {
 				LoggingHandler newHandler = Logger.CreateClock(clockName );
 				ChangeHandler( newHandler );
-				RefreshControls( );
+
+				_clockWindow.Show();
 				Present();
+
+				RefreshControls( );
+
 			} else {
 				RenameClockDialog renameDiag = new RenameClockDialog(_currentHandler.Name);
 

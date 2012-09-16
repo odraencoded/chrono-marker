@@ -54,8 +54,7 @@ namespace Chrono
 			this.label2 = new global::Gtk.Label ();
 			this.label2.Name = "label2";
 			this.label2.LabelProp = global::Mono.Unix.Catalog.GetString ("<span size=\"x-large\" font_weight=\"heavy\">Chrono Marker</span>\nStopwatch and time " +
-				"logger gadget\n\nCopyright &#169; 2012 Leonardo Augusto Pereira"
-			);
+				"logger gadget\n\nCopyright &#169; 2012 Leonardo Augusto Pereira");
 			this.label2.UseMarkup = true;
 			this.label2.Wrap = true;
 			this.label2.Justify = ((global::Gtk.Justification)(2));
@@ -139,8 +138,8 @@ You should have received a copy of the GNU General Public License along with Chr
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();
 			}
-			this.DefaultWidth = 373;
-			this.DefaultHeight = 417;
+			this.DefaultWidth = 448;
+			this.DefaultHeight = 442;
 			this.Show ();
 			this.buttonCancel.Clicked += new global::System.EventHandler (this.closeClicked_event);
 		}

@@ -24,6 +24,7 @@ namespace Chrono
 			this.WindowPosition = ((global::Gtk.WindowPosition)(4));
 			this.BorderWidth = ((uint)(2));
 			this.Resizable = false;
+			this.AllowGrow = false;
 			// Container child Chrono.StopwatchWindow.Gtk.Container+ContainerChild
 			this.hbox1 = new global::Gtk.HBox ();
 			this.hbox1.Name = "hbox1";
@@ -83,6 +84,7 @@ namespace Chrono
 			this.timeDisplayBox.Text = "00:00:00.00";
 			this.timeDisplayBox.IsEditable = true;
 			this.timeDisplayBox.WidthChars = 13;
+			this.timeDisplayBox.MaxLength = 25;
 			this.timeDisplayBox.ActivatesDefault = true;
 			this.timeDisplayBox.InvisibleChar = '●';
 			this.timeDisplayBox.Xalign = 1F;

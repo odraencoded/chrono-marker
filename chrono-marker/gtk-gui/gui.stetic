@@ -6,166 +6,8 @@
   </configuration>
   <import>
     <widget-library name="glade-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <widget-library name="../bin/Release/chrono-marker.exe" internal="true" />
+    <widget-library name="../bin/Debug/chrono-marker.exe" internal="true" />
   </import>
-  <widget class="Gtk.Dialog" id="Chrono.AboutDialog" design-size="373 417">
-    <property name="MemberName" />
-    <property name="Title" translatable="yes">About Chrono Marker</property>
-    <property name="Icon">resource:Chrono.icon.ico</property>
-    <property name="TypeHint">Dialog</property>
-    <property name="WindowPosition">CenterOnParent</property>
-    <property name="AllowGrow">False</property>
-    <property name="Buttons">1</property>
-    <property name="HelpButton">False</property>
-    <child internal-child="VBox">
-      <widget class="Gtk.VBox" id="dialog1_VBox">
-        <property name="MemberName" />
-        <child>
-          <widget class="Gtk.Alignment" id="alignment2">
-            <property name="MemberName" />
-            <property name="LeftPadding">10</property>
-            <property name="RightPadding">10</property>
-            <child>
-              <widget class="Gtk.VBox" id="vbox2">
-                <property name="MemberName" />
-                <property name="Spacing">6</property>
-                <child>
-                  <widget class="Gtk.HBox" id="hbox1">
-                    <property name="MemberName" />
-                    <property name="Spacing">20</property>
-                    <child>
-                      <widget class="Gtk.Image" id="image3">
-                        <property name="MemberName" />
-                        <property name="Xalign">1</property>
-                        <property name="Pixbuf">resource:Chrono.icon.ico</property>
-                      </widget>
-                      <packing>
-                        <property name="Position">0</property>
-                        <property name="AutoSize">False</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="Gtk.Label" id="label2">
-                        <property name="MemberName" />
-                        <property name="LabelProp" translatable="yes">&lt;span size="x-large" font_weight="heavy"&gt;Chrono Marker&lt;/span&gt;
-Stopwatch and time logger gadget
-
-Copyright &amp;#169; 2012 Leonardo Augusto Pereira</property>
-                        <property name="UseMarkup">True</property>
-                        <property name="Wrap">True</property>
-                        <property name="Justify">Center</property>
-                      </widget>
-                      <packing>
-                        <property name="Position">1</property>
-                        <property name="AutoSize">False</property>
-                      </packing>
-                    </child>
-                  </widget>
-                  <packing>
-                    <property name="Position">0</property>
-                    <property name="AutoSize">True</property>
-                    <property name="Expand">False</property>
-                    <property name="Fill">False</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="Gtk.Frame" id="frame2">
-                    <property name="MemberName" />
-                    <child>
-                      <widget class="Gtk.Alignment" id="GtkAlignment1">
-                        <property name="MemberName" />
-                        <property name="Xalign">0</property>
-                        <property name="Yalign">0</property>
-                        <property name="LeftPadding">5</property>
-                        <property name="RightPadding">5</property>
-                        <property name="BottomPadding">5</property>
-                        <property name="BorderWidth">3</property>
-                        <child>
-                          <widget class="Gtk.Label" id="label1">
-                            <property name="MemberName" />
-                            <property name="LabelProp" translatable="yes">Chrono Marker is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-
-Chrono Marker  is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License along with Chrono Marker. If not, see &lt;http://www.gnu.org/licenses/&gt;.</property>
-                            <property name="Wrap">True</property>
-                          </widget>
-                        </child>
-                      </widget>
-                    </child>
-                    <child>
-                      <widget class="Gtk.Label" id="GtkLabel1">
-                        <property name="MemberName" />
-                        <property name="LabelProp" translatable="yes">License</property>
-                        <property name="UseMarkup">True</property>
-                      </widget>
-                      <packing>
-                        <property name="type">label_item</property>
-                      </packing>
-                    </child>
-                  </widget>
-                  <packing>
-                    <property name="Position">1</property>
-                    <property name="AutoSize">True</property>
-                    <property name="Expand">False</property>
-                    <property name="Fill">False</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="Gtk.Label" id="label3">
-                    <property name="MemberName" />
-                    <property name="LabelProp" translatable="yes">http://code.google.com/p/chrono-marker/</property>
-                    <property name="UseMarkup">True</property>
-                    <property name="UseUnderline">True</property>
-                    <property name="Selectable">True</property>
-                    <property name="SingleLineMode">True</property>
-                  </widget>
-                  <packing>
-                    <property name="Position">2</property>
-                    <property name="AutoSize">True</property>
-                    <property name="Expand">False</property>
-                    <property name="Fill">False</property>
-                  </packing>
-                </child>
-              </widget>
-            </child>
-          </widget>
-          <packing>
-            <property name="Position">0</property>
-            <property name="AutoSize">True</property>
-            <property name="Expand">False</property>
-            <property name="Fill">False</property>
-          </packing>
-        </child>
-      </widget>
-    </child>
-    <child internal-child="ActionArea">
-      <widget class="Gtk.HButtonBox" id="dialog1_ActionArea">
-        <property name="MemberName" />
-        <property name="Spacing">10</property>
-        <property name="BorderWidth">5</property>
-        <property name="Size">1</property>
-        <property name="LayoutStyle">End</property>
-        <child>
-          <widget class="Gtk.Button" id="buttonCancel">
-            <property name="MemberName" />
-            <property name="CanDefault">True</property>
-            <property name="CanFocus">True</property>
-            <property name="UseStock">True</property>
-            <property name="Type">StockItem</property>
-            <property name="StockId">gtk-close</property>
-            <property name="ResponseId">-7</property>
-            <signal name="Clicked" handler="closeClicked_event" />
-            <property name="label">gtk-close</property>
-          </widget>
-          <packing>
-            <property name="Expand">False</property>
-            <property name="Fill">False</property>
-          </packing>
-        </child>
-      </widget>
-    </child>
-  </widget>
   <widget class="Gtk.Window" id="Chrono.LoggerWindow" design-size="473 373">
     <action-group name="Default">
       <action id="FileAction">
@@ -173,47 +15,51 @@ You should have received a copy of the GNU General Public License along with Chr
         <property name="Label" translatable="yes">File</property>
         <property name="ShortLabel" translatable="yes">File</property>
       </action>
-      <action id="QuitAction">
+      <action id="quitAction">
         <property name="Type">Action</property>
         <property name="Accelerator">&lt;Control&gt;q</property>
         <property name="Label" translatable="yes">Quit</property>
         <property name="ShortLabel" translatable="yes">Quit</property>
+        <property name="StockId">gtk-quit</property>
         <signal name="Activated" handler="quitAction_event" />
       </action>
-      <action id="HelpAction">
+      <action id="helpAction">
         <property name="Type">Action</property>
         <property name="Label" translatable="yes">Help</property>
         <property name="ShortLabel" translatable="yes">Help</property>
       </action>
-      <action id="AboutAction">
+      <action id="aboutAction">
         <property name="Type">Action</property>
         <property name="Accelerator">F1</property>
         <property name="Label" translatable="yes">About</property>
         <property name="ShortLabel" translatable="yes">About</property>
+        <property name="StockId">gtk-about</property>
         <signal name="Activated" handler="aboutAction_event" />
       </action>
-      <action id="EditAction">
+      <action id="editAction">
         <property name="Type">Action</property>
         <property name="Label" translatable="yes">Edit</property>
         <property name="ShortLabel" translatable="yes">Edit</property>
       </action>
-      <action id="CopyAction">
+      <action id="copyAction">
         <property name="Type">Action</property>
         <property name="Accelerator">&lt;Control&gt;c</property>
         <property name="Label" translatable="yes">Copy</property>
         <property name="Sensitive">False</property>
         <property name="ShortLabel" translatable="yes">Copy</property>
+        <property name="StockId">gtk-copy</property>
         <signal name="Activated" handler="copyAction_event" />
       </action>
-      <action id="DeleteAction">
+      <action id="deleteAction">
         <property name="Type">Action</property>
         <property name="Accelerator">Delete</property>
         <property name="Label" translatable="yes">Delete</property>
         <property name="Sensitive">False</property>
         <property name="ShortLabel" translatable="yes">Delete</property>
+        <property name="StockId">gtk-delete</property>
         <signal name="Activated" handler="deleteAction_event" />
       </action>
-      <action id="SelectAllAction">
+      <action id="selectAllAction">
         <property name="Type">Action</property>
         <property name="Accelerator">&lt;Control&gt;a</property>
         <property name="Label" translatable="yes">Select all</property>
@@ -226,17 +72,26 @@ You should have received a copy of the GNU General Public License along with Chr
         <property name="ShortLabel" translatable="yes">Export</property>
         <signal name="Activated" handler="exportAction_event" />
       </action>
-      <action id="StopwatchesAction">
+      <action id="stopwatchesAction">
         <property name="Type">Action</property>
         <property name="Label" translatable="yes">Stopwatches...</property>
-        <property name="ShortLabel" translatable="yes">Stopwatches</property>
+        <property name="ShortLabel" translatable="yes">Stopwatches...</property>
+        <property name="StockId">gtk-properties</property>
         <signal name="Activated" handler="editStopwatches_event" />
+      </action>
+      <action id="preferencesAction">
+        <property name="Type">Action</property>
+        <property name="Label" translatable="yes">Preferences...</property>
+        <property name="ShortLabel" translatable="yes">Preferences...</property>
+        <property name="StockId">gtk-preferences</property>
+        <signal name="Activated" handler="editPreferences_click" />
       </action>
     </action-group>
     <property name="MemberName" />
     <property name="Visible">False</property>
     <property name="Title" translatable="yes">Chrono Marker Logs</property>
     <property name="Icon">resource:Chrono.icon.ico</property>
+    <property name="WindowPosition">Center</property>
     <child>
       <widget class="Gtk.VBox" id="vbox1">
         <property name="MemberName" />
@@ -247,18 +102,20 @@ You should have received a copy of the GNU General Public License along with Chr
               <node type="Menu" action="FileAction">
                 <node type="Menuitem" action="ExportAction" />
                 <node type="Separator" />
-                <node type="Menuitem" action="QuitAction" />
+                <node type="Menuitem" action="quitAction" />
               </node>
-              <node type="Menu" action="EditAction">
-                <node type="Menuitem" action="SelectAllAction" />
-                <node type="Menuitem" action="CopyAction" />
+              <node type="Menu" action="editAction">
+                <node type="Menuitem" action="selectAllAction" />
+                <node type="Menuitem" action="copyAction" />
                 <node type="Separator" />
-                <node type="Menuitem" action="DeleteAction" />
+                <node type="Menuitem" action="deleteAction" />
                 <node type="Separator" />
-                <node type="Menuitem" action="StopwatchesAction" />
+                <node type="Menuitem" action="stopwatchesAction" />
+                <node type="Separator" />
+                <node type="Menuitem" action="preferencesAction" />
               </node>
-              <node type="Menu" action="HelpAction">
-                <node type="Menuitem" action="AboutAction" />
+              <node type="Menu" action="helpAction">
+                <node type="Menuitem" action="aboutAction" />
               </node>
             </node>
           </widget>
@@ -301,6 +158,7 @@ You should have received a copy of the GNU General Public License along with Chr
     <property name="WindowPosition">CenterOnParent</property>
     <property name="BorderWidth">2</property>
     <property name="Resizable">False</property>
+    <property name="AllowGrow">False</property>
     <signal name="DeleteEvent" handler="windowDelete_event" />
     <child>
       <widget class="Gtk.HBox" id="hbox1">
@@ -378,6 +236,7 @@ You should have received a copy of the GNU General Public License along with Chr
                     <property name="Text">00:00:00.00</property>
                     <property name="IsEditable">True</property>
                     <property name="WidthChars">13</property>
+                    <property name="MaxLength">25</property>
                     <property name="ActivatesDefault">True</property>
                     <property name="InvisibleChar">●</property>
                     <property name="Xalign">1</property>
@@ -424,8 +283,715 @@ You should have received a copy of the GNU General Public License along with Chr
       </widget>
     </child>
   </widget>
-  <widget class="Gtk.Window" id="Chrono.ClockConfigWindow" design-size="332 425">
+  <widget class="Gtk.Dialog" id="Chrono.RenameClockDialog" design-size="290 113">
     <property name="MemberName" />
+    <property name="Title">Rename Clock</property>
+    <property name="Icon">resource:Chrono.icon.ico</property>
+    <property name="TypeHint">Dialog</property>
+    <property name="WindowPosition">CenterOnParent</property>
+    <property name="Modal">True</property>
+    <property name="BorderWidth">2</property>
+    <property name="Resizable">False</property>
+    <property name="AllowGrow">False</property>
+    <property name="DestroyWithParent">True</property>
+    <property name="Buttons">2</property>
+    <property name="HelpButton">False</property>
+    <child internal-child="VBox">
+      <widget class="Gtk.VBox" id="dialog1_VBox">
+        <property name="MemberName" />
+        <property name="BorderWidth">2</property>
+        <child>
+          <widget class="Gtk.HBox" id="hbox2">
+            <property name="MemberName" />
+            <property name="Spacing">6</property>
+            <child>
+              <widget class="Gtk.Label" id="messageLabel">
+                <property name="MemberName" />
+                <property name="LabelProp" translatable="yes">New name</property>
+              </widget>
+              <packing>
+                <property name="Position">0</property>
+                <property name="AutoSize">True</property>
+                <property name="Expand">False</property>
+                <property name="Fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.Entry" id="newNameEntry">
+                <property name="MemberName" />
+                <property name="CanFocus">True</property>
+                <property name="IsEditable">True</property>
+                <property name="ActivatesDefault">True</property>
+                <property name="InvisibleChar">●</property>
+              </widget>
+              <packing>
+                <property name="Position">1</property>
+                <property name="AutoSize">True</property>
+              </packing>
+            </child>
+          </widget>
+          <packing>
+            <property name="Position">0</property>
+            <property name="AutoSize">False</property>
+            <property name="Expand">False</property>
+            <property name="Fill">False</property>
+            <property name="Padding">2</property>
+          </packing>
+        </child>
+      </widget>
+    </child>
+    <child internal-child="ActionArea">
+      <widget class="Gtk.HButtonBox" id="dialog1_ActionArea">
+        <property name="MemberName" />
+        <property name="Spacing">10</property>
+        <property name="BorderWidth">5</property>
+        <property name="Size">2</property>
+        <property name="LayoutStyle">End</property>
+        <child>
+          <widget class="Gtk.Button" id="buttonCancel">
+            <property name="MemberName" />
+            <property name="CanDefault">True</property>
+            <property name="CanFocus">True</property>
+            <property name="UseStock">True</property>
+            <property name="Type">StockItem</property>
+            <property name="StockId">gtk-cancel</property>
+            <property name="ResponseId">-6</property>
+            <property name="label">gtk-cancel</property>
+          </widget>
+          <packing>
+            <property name="Expand">False</property>
+            <property name="Fill">False</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="Gtk.Button" id="buttonOk">
+            <property name="MemberName" />
+            <property name="CanDefault">True</property>
+            <property name="HasDefault">True</property>
+            <property name="CanFocus">True</property>
+            <property name="UseStock">True</property>
+            <property name="Type">StockItem</property>
+            <property name="StockId">gtk-ok</property>
+            <property name="ResponseId">-5</property>
+            <property name="label">gtk-ok</property>
+          </widget>
+          <packing>
+            <property name="Position">1</property>
+            <property name="Expand">False</property>
+            <property name="Fill">False</property>
+          </packing>
+        </child>
+      </widget>
+    </child>
+  </widget>
+  <widget class="Gtk.Window" id="Chrono.PreferencesWindow" design-size="459 440">
+    <property name="MemberName" />
+    <property name="Visible">False</property>
+    <property name="Title" translatable="yes">Preferences</property>
+    <property name="Icon">resource:Chrono.icon.ico</property>
+    <property name="WindowPosition">CenterOnParent</property>
+    <property name="BorderWidth">6</property>
+    <property name="Resizable">False</property>
+    <signal name="DeleteEvent" handler="WindowDelete_event" />
+    <signal name="Shown" handler="WindowShown_event" />
+    <child>
+      <widget class="Gtk.VBox" id="vbox2">
+        <property name="MemberName" />
+        <property name="Spacing">6</property>
+        <child>
+          <widget class="Gtk.Notebook" id="notebook2">
+            <property name="MemberName" />
+            <property name="CanFocus">True</property>
+            <property name="CurrentPage">1</property>
+            <property name="BorderWidth">1</property>
+            <child>
+              <widget class="Gtk.Alignment" id="alignment2">
+                <property name="MemberName" />
+                <property name="LeftPadding">24</property>
+                <property name="TopPadding">16</property>
+                <property name="RightPadding">24</property>
+                <property name="BottomPadding">16</property>
+                <child>
+                  <widget class="Gtk.VBox" id="vbox10">
+                    <property name="MemberName" />
+                    <property name="Spacing">6</property>
+                    <child>
+                      <widget class="Gtk.CheckButton" id="createClockOnStartupCheck">
+                        <property name="MemberName" />
+                        <property name="CanFocus">True</property>
+                        <property name="Label" translatable="yes">Create a stopwatch on startup</property>
+                        <property name="Active">True</property>
+                        <property name="DrawIndicator">True</property>
+                        <property name="HasLabel">True</property>
+                        <property name="UseUnderline">True</property>
+                      </widget>
+                      <packing>
+                        <property name="Position">0</property>
+                        <property name="AutoSize">True</property>
+                        <property name="Expand">False</property>
+                        <property name="Fill">False</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="Gtk.Alignment" id="alignment4">
+                        <property name="MemberName" />
+                        <property name="LeftPadding">20</property>
+                        <property name="TopPadding">5</property>
+                        <child>
+                          <widget class="Gtk.VBox" id="vbox12">
+                            <property name="MemberName" />
+                            <property name="Spacing">6</property>
+                            <child>
+                              <widget class="Gtk.HBox" id="hbox6">
+                                <property name="MemberName" />
+                                <property name="Spacing">20</property>
+                                <child>
+                                  <widget class="Gtk.Label" id="label5">
+                                    <property name="MemberName" />
+                                    <property name="LabelProp" translatable="yes">Name</property>
+                                  </widget>
+                                  <packing>
+                                    <property name="Position">0</property>
+                                    <property name="AutoSize">True</property>
+                                    <property name="Expand">False</property>
+                                    <property name="Fill">False</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <widget class="Gtk.Entry" id="firstClockNameEntry">
+                                    <property name="MemberName" />
+                                    <property name="CanFocus">True</property>
+                                    <property name="Text" translatable="yes">Sundial</property>
+                                    <property name="IsEditable">True</property>
+                                    <property name="InvisibleChar">●</property>
+                                  </widget>
+                                  <packing>
+                                    <property name="Position">1</property>
+                                    <property name="AutoSize">True</property>
+                                  </packing>
+                                </child>
+                              </widget>
+                              <packing>
+                                <property name="Position">0</property>
+                                <property name="AutoSize">True</property>
+                                <property name="Expand">False</property>
+                                <property name="Fill">False</property>
+                              </packing>
+                            </child>
+                          </widget>
+                        </child>
+                      </widget>
+                      <packing>
+                        <property name="Position">1</property>
+                        <property name="AutoSize">True</property>
+                        <property name="Expand">False</property>
+                        <property name="Fill">False</property>
+                      </packing>
+                    </child>
+                  </widget>
+                </child>
+              </widget>
+            </child>
+            <child>
+              <widget class="Gtk.Label" id="label4">
+                <property name="MemberName" />
+                <property name="LabelProp" translatable="yes">Startup</property>
+              </widget>
+              <packing>
+                <property name="type">tab</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.Alignment" id="alignment1">
+                <property name="MemberName" />
+                <property name="LeftPadding">24</property>
+                <property name="TopPadding">16</property>
+                <property name="RightPadding">24</property>
+                <property name="BottomPadding">16</property>
+                <child>
+                  <widget class="Gtk.VBox" id="vbox3">
+                    <property name="MemberName" />
+                    <property name="Spacing">6</property>
+                    <child>
+                      <widget class="Gtk.Label" id="label7">
+                        <property name="MemberName" />
+                        <property name="Xalign">0</property>
+                        <property name="LabelProp" translatable="yes">Show the following on the time display box</property>
+                      </widget>
+                      <packing>
+                        <property name="Position">0</property>
+                        <property name="AutoSize">True</property>
+                        <property name="Expand">False</property>
+                        <property name="Fill">False</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="Gtk.Alignment" id="alignment5">
+                        <property name="MemberName" />
+                        <property name="LeftPadding">20</property>
+                        <property name="TopPadding">5</property>
+                        <child>
+                          <widget class="Gtk.Table" id="table1">
+                            <property name="MemberName" />
+                            <property name="NRows">4</property>
+                            <property name="NColumns">3</property>
+                            <property name="RowSpacing">6</property>
+                            <property name="ColumnSpacing">20</property>
+                            <child>
+                              <placeholder />
+                            </child>
+                            <child>
+                              <widget class="Gtk.HBox" id="hbox1">
+                                <property name="MemberName" />
+                                <property name="Spacing">20</property>
+                                <child>
+                                  <widget class="Gtk.Label" id="label3">
+                                    <property name="MemberName" />
+                                    <property name="Xalign">0</property>
+                                    <property name="LabelProp" translatable="yes">Preview</property>
+                                  </widget>
+                                  <packing>
+                                    <property name="Position">0</property>
+                                    <property name="AutoSize">True</property>
+                                    <property name="Expand">False</property>
+                                    <property name="Fill">False</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <widget class="Gtk.Entry" id="previewDisplayBox">
+                                    <property name="MemberName" />
+                                    <property name="Sensitive">False</property>
+                                    <property name="CanFocus">True</property>
+                                    <property name="Text">03:14:15.926</property>
+                                    <property name="IsEditable">False</property>
+                                    <property name="WidthChars">16</property>
+                                    <property name="InvisibleChar">●</property>
+                                    <property name="Xalign">1</property>
+                                  </widget>
+                                  <packing>
+                                    <property name="Position">1</property>
+                                    <property name="AutoSize">True</property>
+                                  </packing>
+                                </child>
+                              </widget>
+                              <packing>
+                                <property name="TopAttach">3</property>
+                                <property name="BottomAttach">4</property>
+                                <property name="RightAttach">2</property>
+                                <property name="AutoSize">True</property>
+                                <property name="YOptions">Fill</property>
+                                <property name="XExpand">True</property>
+                                <property name="XFill">True</property>
+                                <property name="XShrink">False</property>
+                                <property name="YExpand">False</property>
+                                <property name="YFill">True</property>
+                                <property name="YShrink">False</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="Gtk.RadioButton" id="showAbbreviationsOption">
+                                <property name="MemberName" />
+                                <property name="CanFocus">True</property>
+                                <property name="Label" translatable="yes">Abbreviations</property>
+                                <property name="Active">True</property>
+                                <property name="DrawIndicator">True</property>
+                                <property name="HasLabel">True</property>
+                                <property name="UseUnderline">True</property>
+                                <property name="Group">unitDisplayModeGroup</property>
+                                <signal name="Toggled" handler="displayCheckToggled_event" />
+                              </widget>
+                              <packing>
+                                <property name="TopAttach">2</property>
+                                <property name="BottomAttach">3</property>
+                                <property name="LeftAttach">1</property>
+                                <property name="RightAttach">2</property>
+                                <property name="AutoSize">True</property>
+                                <property name="YOptions">Fill</property>
+                                <property name="XExpand">True</property>
+                                <property name="XFill">True</property>
+                                <property name="XShrink">False</property>
+                                <property name="YExpand">False</property>
+                                <property name="YFill">True</property>
+                                <property name="YShrink">False</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="Gtk.CheckButton" id="showHoursCheck">
+                                <property name="MemberName" />
+                                <property name="CanFocus">True</property>
+                                <property name="Label" translatable="yes">Hours</property>
+                                <property name="Active">True</property>
+                                <property name="DrawIndicator">True</property>
+                                <property name="HasLabel">True</property>
+                                <property name="UseUnderline">True</property>
+                                <signal name="Toggled" handler="displayCheckToggled_event" />
+                              </widget>
+                              <packing>
+                                <property name="LeftAttach">2</property>
+                                <property name="RightAttach">3</property>
+                                <property name="AutoSize">True</property>
+                                <property name="YOptions">Fill</property>
+                                <property name="XExpand">True</property>
+                                <property name="XFill">True</property>
+                                <property name="XShrink">False</property>
+                                <property name="YExpand">False</property>
+                                <property name="YFill">True</property>
+                                <property name="YShrink">False</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="Gtk.CheckButton" id="showLeadingZeroCheck">
+                                <property name="MemberName" />
+                                <property name="CanFocus">True</property>
+                                <property name="Label" translatable="yes">Leading Zero</property>
+                                <property name="Active">True</property>
+                                <property name="DrawIndicator">True</property>
+                                <property name="HasLabel">True</property>
+                                <property name="UseUnderline">True</property>
+                                <signal name="Toggled" handler="displayCheckToggled_event" />
+                              </widget>
+                              <packing>
+                                <property name="LeftAttach">1</property>
+                                <property name="RightAttach">2</property>
+                                <property name="AutoSize">True</property>
+                                <property name="YOptions">Fill</property>
+                                <property name="XExpand">True</property>
+                                <property name="XFill">True</property>
+                                <property name="XShrink">False</property>
+                                <property name="YExpand">False</property>
+                                <property name="YFill">True</property>
+                                <property name="YShrink">False</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="Gtk.CheckButton" id="showMilisecondsCheck">
+                                <property name="MemberName" />
+                                <property name="CanFocus">True</property>
+                                <property name="Label" translatable="yes">Miliseconds</property>
+                                <property name="Active">True</property>
+                                <property name="DrawIndicator">True</property>
+                                <property name="HasLabel">True</property>
+                                <property name="UseUnderline">True</property>
+                                <signal name="Toggled" handler="displayCheckToggled_event" />
+                              </widget>
+                              <packing>
+                                <property name="TopAttach">3</property>
+                                <property name="BottomAttach">4</property>
+                                <property name="LeftAttach">2</property>
+                                <property name="RightAttach">3</property>
+                                <property name="AutoSize">True</property>
+                                <property name="YOptions">Fill</property>
+                                <property name="XExpand">True</property>
+                                <property name="XFill">True</property>
+                                <property name="XShrink">False</property>
+                                <property name="YExpand">False</property>
+                                <property name="YFill">True</property>
+                                <property name="YShrink">False</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="Gtk.CheckButton" id="showMinusSymbolCheck">
+                                <property name="MemberName" />
+                                <property name="CanFocus">True</property>
+                                <property name="Label" translatable="yes">Minus Symbol</property>
+                                <property name="Active">True</property>
+                                <property name="DrawIndicator">True</property>
+                                <property name="HasLabel">True</property>
+                                <property name="UseUnderline">True</property>
+                                <signal name="Toggled" handler="displayCheckToggled_event" />
+                              </widget>
+                              <packing>
+                                <property name="TopAttach">1</property>
+                                <property name="BottomAttach">2</property>
+                                <property name="AutoSize">True</property>
+                                <property name="YOptions">Fill</property>
+                                <property name="XExpand">True</property>
+                                <property name="XFill">True</property>
+                                <property name="XShrink">False</property>
+                                <property name="YExpand">False</property>
+                                <property name="YFill">True</property>
+                                <property name="YShrink">False</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="Gtk.CheckButton" id="showMinutesCheck">
+                                <property name="MemberName" />
+                                <property name="CanFocus">True</property>
+                                <property name="Label" translatable="yes">Minutes</property>
+                                <property name="Active">True</property>
+                                <property name="DrawIndicator">True</property>
+                                <property name="HasLabel">True</property>
+                                <property name="UseUnderline">True</property>
+                                <signal name="Toggled" handler="displayCheckToggled_event" />
+                              </widget>
+                              <packing>
+                                <property name="TopAttach">1</property>
+                                <property name="BottomAttach">2</property>
+                                <property name="LeftAttach">2</property>
+                                <property name="RightAttach">3</property>
+                                <property name="AutoSize">True</property>
+                                <property name="YOptions">Fill</property>
+                                <property name="XExpand">True</property>
+                                <property name="XFill">True</property>
+                                <property name="XShrink">False</property>
+                                <property name="YExpand">False</property>
+                                <property name="YFill">True</property>
+                                <property name="YShrink">False</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="Gtk.CheckButton" id="showPlusSymbolCheck">
+                                <property name="MemberName" />
+                                <property name="CanFocus">True</property>
+                                <property name="Label" translatable="yes">Plus Symbol</property>
+                                <property name="DrawIndicator">True</property>
+                                <property name="HasLabel">True</property>
+                                <property name="UseUnderline">True</property>
+                                <signal name="Toggled" handler="displayCheckToggled_event" />
+                              </widget>
+                              <packing>
+                                <property name="AutoSize">True</property>
+                                <property name="YOptions">Fill</property>
+                                <property name="XExpand">True</property>
+                                <property name="XFill">True</property>
+                                <property name="XShrink">False</property>
+                                <property name="YExpand">False</property>
+                                <property name="YFill">True</property>
+                                <property name="YShrink">False</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="Gtk.CheckButton" id="showSecondsCheck">
+                                <property name="MemberName" />
+                                <property name="CanFocus">True</property>
+                                <property name="Label" translatable="yes">Seconds</property>
+                                <property name="Active">True</property>
+                                <property name="DrawIndicator">True</property>
+                                <property name="HasLabel">True</property>
+                                <property name="UseUnderline">True</property>
+                                <signal name="Toggled" handler="displayCheckToggled_event" />
+                              </widget>
+                              <packing>
+                                <property name="TopAttach">2</property>
+                                <property name="BottomAttach">3</property>
+                                <property name="LeftAttach">2</property>
+                                <property name="RightAttach">3</property>
+                                <property name="AutoSize">True</property>
+                                <property name="YOptions">Fill</property>
+                                <property name="XExpand">True</property>
+                                <property name="XFill">True</property>
+                                <property name="XShrink">False</property>
+                                <property name="YExpand">False</property>
+                                <property name="YFill">True</property>
+                                <property name="YShrink">False</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="Gtk.RadioButton" id="showSeparatorsOption">
+                                <property name="MemberName" />
+                                <property name="CanFocus">True</property>
+                                <property name="Label" translatable="yes">Separators</property>
+                                <property name="DrawIndicator">True</property>
+                                <property name="HasLabel">True</property>
+                                <property name="UseUnderline">True</property>
+                                <property name="Group">unitDisplayModeGroup</property>
+                                <signal name="Toggled" handler="displayCheckToggled_event" />
+                              </widget>
+                              <packing>
+                                <property name="TopAttach">1</property>
+                                <property name="BottomAttach">2</property>
+                                <property name="LeftAttach">1</property>
+                                <property name="RightAttach">2</property>
+                                <property name="AutoSize">True</property>
+                                <property name="YOptions">Fill</property>
+                                <property name="XExpand">True</property>
+                                <property name="XFill">True</property>
+                                <property name="XShrink">False</property>
+                                <property name="YExpand">False</property>
+                                <property name="YFill">True</property>
+                                <property name="YShrink">False</property>
+                              </packing>
+                            </child>
+                          </widget>
+                        </child>
+                      </widget>
+                      <packing>
+                        <property name="Position">1</property>
+                        <property name="AutoSize">True</property>
+                        <property name="Expand">False</property>
+                        <property name="Fill">False</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="Gtk.HSeparator" id="hseparator3">
+                        <property name="MemberName" />
+                      </widget>
+                      <packing>
+                        <property name="Position">2</property>
+                        <property name="AutoSize">True</property>
+                        <property name="Expand">False</property>
+                        <property name="Fill">False</property>
+                        <property name="Padding">5</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="Gtk.Label" id="label8">
+                        <property name="MemberName" />
+                        <property name="Xalign">0</property>
+                        <property name="LabelProp" translatable="yes">When created, stopwatch windows are</property>
+                      </widget>
+                      <packing>
+                        <property name="Position">3</property>
+                        <property name="AutoSize">True</property>
+                        <property name="Expand">False</property>
+                        <property name="Fill">False</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="Gtk.Alignment" id="alignment7">
+                        <property name="MemberName" />
+                        <property name="LeftPadding">20</property>
+                        <child>
+                          <widget class="Gtk.VBox" id="vbox14">
+                            <property name="MemberName" />
+                            <property name="Spacing">6</property>
+                            <child>
+                              <widget class="Gtk.RadioButton" id="normalModeOption">
+                                <property name="MemberName" />
+                                <property name="CanFocus">True</property>
+                                <property name="Label" translatable="yes">Normal, with buttons for toggling countdown</property>
+                                <property name="Active">True</property>
+                                <property name="DrawIndicator">True</property>
+                                <property name="HasLabel">True</property>
+                                <property name="UseUnderline">True</property>
+                                <property name="Group">windowModeGroup</property>
+                              </widget>
+                              <packing>
+                                <property name="Position">0</property>
+                                <property name="AutoSize">True</property>
+                                <property name="Expand">False</property>
+                                <property name="Fill">False</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="Gtk.RadioButton" id="compactModeOption">
+                                <property name="MemberName" />
+                                <property name="CanFocus">True</property>
+                                <property name="Label" translatable="yes">Compact, with smaller display and icon buttons</property>
+                                <property name="DrawIndicator">True</property>
+                                <property name="HasLabel">True</property>
+                                <property name="UseUnderline">True</property>
+                                <property name="Group">windowModeGroup</property>
+                              </widget>
+                              <packing>
+                                <property name="Position">1</property>
+                                <property name="AutoSize">True</property>
+                                <property name="Expand">False</property>
+                                <property name="Fill">False</property>
+                              </packing>
+                            </child>
+                          </widget>
+                        </child>
+                      </widget>
+                      <packing>
+                        <property name="Position">4</property>
+                        <property name="AutoSize">True</property>
+                        <property name="Expand">False</property>
+                        <property name="Fill">False</property>
+                      </packing>
+                    </child>
+                  </widget>
+                </child>
+              </widget>
+              <packing>
+                <property name="Position">1</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.Label" id="label2">
+                <property name="MemberName" />
+                <property name="LabelProp" translatable="yes">Stopwatch</property>
+              </widget>
+              <packing>
+                <property name="type">tab</property>
+              </packing>
+            </child>
+          </widget>
+          <packing>
+            <property name="Position">0</property>
+            <property name="AutoSize">True</property>
+            <property name="Expand">False</property>
+            <property name="Fill">False</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="Gtk.HButtonBox" id="hbuttonbox2">
+            <property name="MemberName" />
+            <property name="Spacing">4</property>
+            <property name="BorderWidth">4</property>
+            <property name="Size">3</property>
+            <property name="LayoutStyle">End</property>
+            <child>
+              <widget class="Gtk.Button" id="button133">
+                <property name="MemberName" />
+                <property name="CanFocus">True</property>
+                <property name="UseStock">True</property>
+                <property name="Type">StockItem</property>
+                <property name="StockId">gtk-apply</property>
+                <signal name="Clicked" handler="apply_event" />
+                <property name="label">gtk-apply</property>
+              </widget>
+              <packing>
+                <property name="Expand">False</property>
+                <property name="Fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.Button" id="button32">
+                <property name="MemberName" />
+                <property name="CanFocus">True</property>
+                <property name="UseStock">True</property>
+                <property name="Type">StockItem</property>
+                <property name="StockId">gtk-cancel</property>
+                <signal name="Clicked" handler="cancel_event" />
+                <property name="label">gtk-cancel</property>
+              </widget>
+              <packing>
+                <property name="Position">1</property>
+                <property name="Expand">False</property>
+                <property name="Fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.Button" id="button19">
+                <property name="MemberName" />
+                <property name="CanFocus">True</property>
+                <property name="UseStock">True</property>
+                <property name="Type">StockItem</property>
+                <property name="StockId">gtk-ok</property>
+                <signal name="Clicked" handler="ok_event" />
+                <property name="label">gtk-ok</property>
+              </widget>
+              <packing>
+                <property name="Position">2</property>
+                <property name="Expand">False</property>
+                <property name="Fill">False</property>
+              </packing>
+            </child>
+          </widget>
+          <packing>
+            <property name="Position">1</property>
+            <property name="AutoSize">True</property>
+            <property name="Expand">False</property>
+            <property name="Fill">False</property>
+          </packing>
+        </child>
+      </widget>
+    </child>
+  </widget>
+  <widget class="Gtk.Window" id="Chrono.ClockPropertiesWindow" design-size="332 425">
+    <property name="MemberName" />
+    <property name="Visible">False</property>
     <property name="Title" translatable="yes">Stopwatch Properties</property>
     <property name="Icon">resource:Chrono.icon.ico</property>
     <property name="WindowPosition">CenterOnParent</property>
@@ -602,6 +1168,7 @@ You should have received a copy of the GNU General Public License along with Chr
                                         <property name="MemberName" />
                                         <property name="CanFocus">True</property>
                                         <property name="Label" translatable="yes">Forward</property>
+                                        <property name="Active">True</property>
                                         <property name="DrawIndicator">True</property>
                                         <property name="HasLabel">True</property>
                                         <property name="UseUnderline">True</property>
@@ -758,6 +1325,7 @@ You should have received a copy of the GNU General Public License along with Chr
                                         <property name="MemberName" />
                                         <property name="CanFocus">True</property>
                                         <property name="Label" translatable="yes">Normal</property>
+                                        <property name="Active">True</property>
                                         <property name="DrawIndicator">True</property>
                                         <property name="HasLabel">True</property>
                                         <property name="UseUnderline">True</property>
@@ -949,59 +1517,133 @@ You should have received a copy of the GNU General Public License along with Chr
       </widget>
     </child>
   </widget>
-  <widget class="Gtk.Dialog" id="Chrono.RenameClockDialog" design-size="290 113">
+  <widget class="Gtk.Dialog" id="Chrono.AboutDialog" design-size="448 442">
     <property name="MemberName" />
-    <property name="Title">Rename Clock</property>
+    <property name="Title" translatable="yes">About Chrono Marker</property>
     <property name="Icon">resource:Chrono.icon.ico</property>
     <property name="TypeHint">Dialog</property>
     <property name="WindowPosition">CenterOnParent</property>
-    <property name="Modal">True</property>
-    <property name="BorderWidth">2</property>
-    <property name="Resizable">False</property>
     <property name="AllowGrow">False</property>
-    <property name="DestroyWithParent">True</property>
-    <property name="Buttons">2</property>
+    <property name="Buttons">1</property>
     <property name="HelpButton">False</property>
     <child internal-child="VBox">
       <widget class="Gtk.VBox" id="dialog1_VBox">
         <property name="MemberName" />
-        <property name="BorderWidth">2</property>
         <child>
-          <widget class="Gtk.HBox" id="hbox2">
+          <widget class="Gtk.Alignment" id="alignment2">
             <property name="MemberName" />
-            <property name="Spacing">6</property>
+            <property name="LeftPadding">10</property>
+            <property name="RightPadding">10</property>
             <child>
-              <widget class="Gtk.Label" id="messageLabel">
+              <widget class="Gtk.VBox" id="vbox2">
                 <property name="MemberName" />
-                <property name="LabelProp" translatable="yes">New name</property>
+                <property name="Spacing">6</property>
+                <child>
+                  <widget class="Gtk.HBox" id="hbox1">
+                    <property name="MemberName" />
+                    <property name="Spacing">20</property>
+                    <child>
+                      <widget class="Gtk.Image" id="image3">
+                        <property name="MemberName" />
+                        <property name="Xalign">1</property>
+                        <property name="Pixbuf">resource:Chrono.icon.ico</property>
+                      </widget>
+                      <packing>
+                        <property name="Position">0</property>
+                        <property name="AutoSize">False</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="Gtk.Label" id="label2">
+                        <property name="MemberName" />
+                        <property name="LabelProp" translatable="yes">&lt;span size="x-large" font_weight="heavy"&gt;Chrono Marker&lt;/span&gt;
+Stopwatch and time logger gadget
+
+Copyright &amp;#169; 2012 Leonardo Augusto Pereira</property>
+                        <property name="UseMarkup">True</property>
+                        <property name="Wrap">True</property>
+                        <property name="Justify">Center</property>
+                      </widget>
+                      <packing>
+                        <property name="Position">1</property>
+                        <property name="AutoSize">False</property>
+                      </packing>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="Position">0</property>
+                    <property name="AutoSize">True</property>
+                    <property name="Expand">False</property>
+                    <property name="Fill">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Frame" id="frame2">
+                    <property name="MemberName" />
+                    <child>
+                      <widget class="Gtk.Alignment" id="GtkAlignment1">
+                        <property name="MemberName" />
+                        <property name="Xalign">0</property>
+                        <property name="Yalign">0</property>
+                        <property name="LeftPadding">5</property>
+                        <property name="RightPadding">5</property>
+                        <property name="BottomPadding">5</property>
+                        <property name="BorderWidth">3</property>
+                        <child>
+                          <widget class="Gtk.Label" id="label1">
+                            <property name="MemberName" />
+                            <property name="LabelProp" translatable="yes">Chrono Marker is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+Chrono Marker  is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with Chrono Marker. If not, see &lt;http://www.gnu.org/licenses/&gt;.</property>
+                            <property name="Wrap">True</property>
+                          </widget>
+                        </child>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="Gtk.Label" id="GtkLabel1">
+                        <property name="MemberName" />
+                        <property name="LabelProp" translatable="yes">License</property>
+                        <property name="UseMarkup">True</property>
+                      </widget>
+                      <packing>
+                        <property name="type">label_item</property>
+                      </packing>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="Position">1</property>
+                    <property name="AutoSize">True</property>
+                    <property name="Expand">False</property>
+                    <property name="Fill">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Label" id="label3">
+                    <property name="MemberName" />
+                    <property name="LabelProp" translatable="yes">http://code.google.com/p/chrono-marker/</property>
+                    <property name="UseMarkup">True</property>
+                    <property name="UseUnderline">True</property>
+                    <property name="Selectable">True</property>
+                    <property name="SingleLineMode">True</property>
+                  </widget>
+                  <packing>
+                    <property name="Position">2</property>
+                    <property name="AutoSize">True</property>
+                    <property name="Expand">False</property>
+                    <property name="Fill">False</property>
+                  </packing>
+                </child>
               </widget>
-              <packing>
-                <property name="Position">0</property>
-                <property name="AutoSize">True</property>
-                <property name="Expand">False</property>
-                <property name="Fill">False</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="Gtk.Entry" id="newNameEntry">
-                <property name="MemberName" />
-                <property name="CanFocus">True</property>
-                <property name="IsEditable">True</property>
-                <property name="ActivatesDefault">True</property>
-                <property name="InvisibleChar">●</property>
-              </widget>
-              <packing>
-                <property name="Position">1</property>
-                <property name="AutoSize">True</property>
-              </packing>
             </child>
           </widget>
           <packing>
             <property name="Position">0</property>
-            <property name="AutoSize">False</property>
+            <property name="AutoSize">True</property>
             <property name="Expand">False</property>
             <property name="Fill">False</property>
-            <property name="Padding">2</property>
           </packing>
         </child>
       </widget>
@@ -1011,7 +1653,7 @@ You should have received a copy of the GNU General Public License along with Chr
         <property name="MemberName" />
         <property name="Spacing">10</property>
         <property name="BorderWidth">5</property>
-        <property name="Size">2</property>
+        <property name="Size">1</property>
         <property name="LayoutStyle">End</property>
         <child>
           <widget class="Gtk.Button" id="buttonCancel">
@@ -1020,29 +1662,12 @@ You should have received a copy of the GNU General Public License along with Chr
             <property name="CanFocus">True</property>
             <property name="UseStock">True</property>
             <property name="Type">StockItem</property>
-            <property name="StockId">gtk-cancel</property>
-            <property name="ResponseId">-6</property>
-            <property name="label">gtk-cancel</property>
+            <property name="StockId">gtk-close</property>
+            <property name="ResponseId">-7</property>
+            <signal name="Clicked" handler="closeClicked_event" />
+            <property name="label">gtk-close</property>
           </widget>
           <packing>
-            <property name="Expand">False</property>
-            <property name="Fill">False</property>
-          </packing>
-        </child>
-        <child>
-          <widget class="Gtk.Button" id="buttonOk">
-            <property name="MemberName" />
-            <property name="CanDefault">True</property>
-            <property name="HasDefault">True</property>
-            <property name="CanFocus">True</property>
-            <property name="UseStock">True</property>
-            <property name="Type">StockItem</property>
-            <property name="StockId">gtk-ok</property>
-            <property name="ResponseId">-5</property>
-            <property name="label">gtk-ok</property>
-          </widget>
-          <packing>
-            <property name="Position">1</property>
             <property name="Expand">False</property>
             <property name="Fill">False</property>
           </packing>

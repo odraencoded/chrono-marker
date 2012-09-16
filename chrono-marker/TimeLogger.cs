@@ -31,12 +31,14 @@ namespace Chrono
 	/// </summary>
 	public sealed class TimeLogger
 	{
-		public TimeLogger()
+		public TimeLogger(TimeFormatSettings defaultFormat)
 		{
 			_logEntryNodes = new Dictionary<LogEntry, LinkedListNode<LogEntry>>();
 			_manyLogEntries = new LinkedList<LogEntry>();
 			_namedHandlers = new Dictionary<string, LoggingHandler>(
 				StringComparer.CurrentCultureIgnoreCase);
+
+			DefaultFormatSettings = defaultFormat;
 		}
 
 		#region Properties
@@ -49,9 +51,9 @@ namespace Chrono
 				return result;
 			}
 		}
-		#endregion
 
-		#region Fields
+		public TimeFormatSettings DefaultFormatSettings { get; set; }
+
 		private Dictionary<string, LoggingHandler> _namedHandlers;
 		private Dictionary<LogEntry, LinkedListNode<LogEntry>> _logEntryNodes;
 		private LinkedList<LogEntry> _manyLogEntries;
@@ -61,8 +63,8 @@ namespace Chrono
 		public event LoggingEventHandler EntryAdded;
 		public event LoggingEventHandler EntryDeleted;
         
-		public event LoggerClockEventHandler ClockAdded;
-		public event LoggerClockEventHandler ClockRemoved;
+		public event ClockHandlerEventHandler ClockAdded;
+		public event ClockHandlerEventHandler ClockRemoved;
         #endregion
 
         #region Clock handler interface
@@ -85,7 +87,7 @@ namespace Chrono
 			_namedHandlers.Add( name, result );
 
 			if( ClockAdded != null )
-				ClockAdded( this, new LoggerClockEventArgs(result) );
+				ClockAdded( this, new ClockHandlerEventArgs(result) );
 
 			return result;
 		}
@@ -106,7 +108,7 @@ namespace Chrono
 			_namedHandlers.Remove( clockName );
 
 			if( ClockRemoved != null )
-				ClockRemoved( this, new LoggerClockEventArgs(logHandler) );
+				ClockRemoved( this, new ClockHandlerEventArgs(logHandler) );
 		}
 
 		/// <summary>
@@ -188,10 +190,6 @@ namespace Chrono
 		}
         #endregion
 
-        
-
-        
-
 		public void ExportTo(string filename)
 		{
 			using( StreamWriter writer = new StreamWriter(filename, false, Encoding.Unicode) ) {
@@ -206,6 +204,7 @@ namespace Chrono
 		}
 
 		#region String conversion
+		/*
 		public static string TimeToString(TimeSpan timespan)
 		{
 			string result = "";
@@ -358,7 +357,7 @@ namespace Chrono
 
 			return true;
 		}
-
+		*/
 		public static StringComparison HandlerNameComparison { get { return StringComparison.CurrentCultureIgnoreCase; } }
 		#endregion
 	}

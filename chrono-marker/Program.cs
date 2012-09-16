@@ -17,28 +17,136 @@
  */
 
 using System;
+using System.Collections.Generic;
+using System.IO;
 using Gtk;
 using Gdk;
 
 namespace Chrono
 {
-    static class Program
+	/// <summary>
+	/// The whole thing.
+	/// <remarks>Also a SPOF.</remarks>
+	/// </summary>
+    public sealed class Program
     {
+		private const string settingsFilename = "config.ini";
+
+		private Program()
+		{
+			clockWindows = new Dictionary<LoggingHandler, StopwatchWindow>();
+
+			LoadPreferences();
+
+			TimeLogger = new TimeLogger(Settings.TimeDisplaySettings);
+
+			TimeLogger.ClockAdded += loggerClockAdded_event;
+			TimeLogger.ClockRemoved += loggerClockRemoved_event;
+
+			LoggerWindow = new LoggerWindow(this); // This
+			ClockPropertiesWindow = new ClockPropertiesWindow(this); // And this
+			PreferencesWindow = new PreferencesWindow(this); // And this too
+
+			if(Settings.Startup.CreateClock)
+			{
+				LoggingHandler firstClockHandler =
+					TimeLogger.CreateClock(Settings.Startup.FirstClockName);
+
+				clockWindows[firstClockHandler].Present();
+			}
+		}
+
+		/// <summary>
+		/// The entry point of the program, where the program control starts and ends.
+		/// </summary>
+		/// <remarks>Yo dawg, I herd u liek programs...</remarks>
         public static void Main(string[] args)
 		{
 			Application.Init();
-            
-			TimeLogger timeLogger = new TimeLogger();
-			LoggerWindow window = new LoggerWindow(timeLogger);
 
+			Program myself = new Program();
+
+			try
 			{
-				LoggingHandler handler = timeLogger.CreateClock("Beta Clock" );
+				myself.LoggerWindow.ShowAll();
 
-				window.ShowAll( );
-				window.ShowWatchWindow( handler );
+				Application.Run();
+			}
+			finally
+			{
+				myself.Settings.SaveTo(settingsFilename);
+			}
+		}
+
+		#region Properties & Fields
+		public Preferences Settings { get; private set; }
+		public TimeLogger TimeLogger { get; private set; }
+
+		public ClockPropertiesWindow ClockPropertiesWindow { get; private set; }
+		public LoggerWindow LoggerWindow { get; private set; }
+		public PreferencesWindow PreferencesWindow { get; private set; }
+
+		private Dictionary<LoggingHandler, StopwatchWindow> clockWindows;
+
+		public bool GetClockWindow(LoggingHandler handler, out StopwatchWindow window)
+		{
+			return clockWindows.TryGetValue(handler, out window);
+		}
+		#endregion
+
+		private void LoadPreferences()
+		{
+			bool loadedFromFile = false;
+
+			if( File.Exists( settingsFilename ) ) {
+				try
+				{
+					Settings = Preferences.Load(settingsFilename);
+					loadedFromFile = true;
+				}
+				catch(IOException)
+				{
+					Console.Write("There was an error loading the preferences, creating defaults");
+				}
 			}
 
-			Application.Run();
+			if(!loadedFromFile)
+				Settings = Preferences.CreateDefault();
+		}	
+
+		#region Events
+		public event ClockHandlerEventHandler ClockWindowReceivedFocus;
+
+		private void StopwatchFocusIn_event(object sender, FocusInEventArgs e)
+		{
+			// This relays a focus in event of a window to the rest of the application
+			StopwatchWindow clockWindow = sender as StopwatchWindow;
+
+			if(clockWindow != null && ClockWindowReceivedFocus != null)
+				ClockWindowReceivedFocus(clockWindow, new ClockHandlerEventArgs(clockWindow.LogHandler));
 		}
+
+		void loggerClockAdded_event(object sender, ClockHandlerEventArgs e)
+		{
+			StopwatchWindow newWindow = new StopwatchWindow(this, e.LoggingHandler);
+
+			newWindow.Compact = Settings.ClockCompactByDefault;
+			newWindow.FocusInEvent += StopwatchFocusIn_event;
+
+			clockWindows.Add(e.LoggingHandler, newWindow);
+		}
+
+		void loggerClockRemoved_event(object sender, ClockHandlerEventArgs e)
+		{
+			StopwatchWindow obsoleteWindow;
+
+			if(!clockWindows.TryGetValue(e.LoggingHandler, out obsoleteWindow))
+				return;
+
+			obsoleteWindow.Destroy();
+			obsoleteWindow.FocusInEvent -= StopwatchFocusIn_event;
+			clockWindows.Remove(e.LoggingHandler);
+		}
+		#endregion
 	}
 }

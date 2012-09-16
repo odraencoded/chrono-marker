@@ -67,6 +67,17 @@ namespace Chrono
 		public TimeLogger Logger { get { return _logger; } }
 		public Clock Clock { get { return _clock; } }
 
+		public TimeFormatSettings TimeFormatSettings {
+			get
+			{
+				return _timeFormatSettings == null ?
+					Logger.DefaultFormatSettings : _timeFormatSettings;
+			}
+			set { _timeFormatSettings = value; }
+		}
+
+		private TimeFormatSettings _timeFormatSettings;
+
 		public bool LogStarts {
 			get { return _logStarts;}
 			set {
@@ -106,24 +117,52 @@ namespace Chrono
 			string logDesc = "Started ";
 
 			if( e.Speed >= 0 )
-				logDesc += "timing";
+				logDesc += "ticking";
 			else
 				logDesc += "counting down";
 
-			if( e.DisplayTime != TimeSpan.Zero )
-				logDesc += " with " + TimeLogger.TimeToString( e.DisplayTime );
+			TimeSpan displayTime = e.DisplayTime;
+			if( displayTime != TimeSpan.Zero ) 
+			{
+				TimeSpan weekCap = new TimeSpan(7, 0, 0, 0, 0);
+
+				if( displayTime.Duration( ) > weekCap ) {
+					if( displayTime.Ticks >= 0 )
+						displayTime = weekCap;
+					else
+						displayTime = weekCap.Negate( );
+				}
+
+				logDesc += " with " + TimeFormatSettings.ToString( displayTime );
+			}
 			logDesc += ".";
 
 			Logger.AddEntry( new LogEntry(_name, logDesc, e.Timestamp) );
 		}
         private void clockStopped_event(object sender, ClockEventArgs e)
-        {
-            string logDesc = "Stopped ";
+		{
+			string logDesc = "Stopped ";
 
-            if (e.Speed >= 0) logDesc += "timing";
-            else logDesc += "counting down";
+			if( e.Speed >= 0 )
+				logDesc += "ticking";
+			else
+				logDesc += "counting down";
 
-            if (e.DisplayTime != TimeSpan.Zero) logDesc += " with " + TimeLogger.TimeToString(e.DisplayTime);
+			TimeSpan displayTime = e.DisplayTime;
+
+			if( displayTime != TimeSpan.Zero ) 
+			{
+				TimeSpan weekCap = new TimeSpan(7, 0, 0, 0, 0);
+			
+				if( displayTime.Duration( ) > weekCap ) {
+					if( displayTime.Ticks >= 0 )
+						displayTime = weekCap;
+					else
+						displayTime = weekCap.Negate( );
+				}
+				logDesc += " with " + TimeFormatSettings.ToString( displayTime );
+			}
+
             logDesc += ".";
 
             Logger.AddEntry( new LogEntry(_name, logDesc, e.Timestamp) );

@@ -28,14 +28,13 @@ namespace Chrono
     {
         public Clock()
         {
-            _isTicking = false;
-            _speed = 1.0;
+            IsTicking = false;
+            Speed = 1.0;
             _startMark = _clockedTicks = 0;
         }
 
-        //public string Name { get; private set; }
-		public bool IsTicking { get { return _isTicking; } }
-		public double Speed { get { return _speed; } }
+		public bool IsTicking { get; private set; }
+		public double Speed { get; private set; }
 
 		public TimeSpan ElapsedTime {
 			get {
@@ -49,9 +48,9 @@ namespace Chrono
 
 		public long ElapsedTicks {
 			get {
-				if( _isTicking )
+				if( IsTicking )
 					return _clockedTicks + ( long )Math.Round(
-                    ( Stopwatch.GetTimestamp( ) - _startMark ) * _speed );
+                    ( Stopwatch.GetTimestamp( ) - _startMark ) * Speed );
 				else
 					return _clockedTicks;
 			}
@@ -60,7 +59,7 @@ namespace Chrono
 
 				if( IsTicking )
 					_clockedTicks -= (long)Math.Round(
-						( Stopwatch.GetTimestamp() - _startMark) * _speed);
+						( Stopwatch.GetTimestamp() - _startMark) * Speed);
 			}
 		}
         
@@ -70,8 +69,6 @@ namespace Chrono
 
 		#region Fields
         private long _startMark, _clockedTicks;
-		private bool _isTicking;
-		private double _speed;
 		#endregion
 		
         #region Main stopwatch interface
@@ -83,34 +80,59 @@ namespace Chrono
 		/// </returns>
 		public bool Toggle()
 		{
-			// Cache time
-			long timeStamp = Stopwatch.GetTimestamp(); 
-			DateTime eventTime = DateTime.Now;
-			TimeSpan displayTime;
-
-			if( _isTicking ) {
-				_isTicking = false; // Watch is running, stop it.
-
-				_clockedTicks += ( long )Math.Round( ( timeStamp - _startMark ) * Speed );
-				displayTime = ElapsedTime;
-
-				// Creating it here solves possible miliseconds differences
-				// in the event creation due to clockedTicks set lag
-				if( Stopped != null )
-					Stopped( this, new ClockEventArgs(this, displayTime, _speed, eventTime) );
-			} else {
-				// Setting displayTime here to avoid milisecond differences
-				// between setting _isTicking and ElapsedTime.Get
-				displayTime = ElapsedTime;
-
-				_isTicking = true; // Watch is stopped, start it.
-				_startMark = timeStamp;
-
-				if( Started != null )
-					Started( this, new ClockEventArgs(this, displayTime, _speed, eventTime));
+			// The following statements are beautiful.
+			if( Start() ) return true;
+			else
+			{
+				Stop();
+				return false;
 			}
+		}
 
-			return IsTicking;
+		public bool Stop()
+		{
+			// Can't stop the stopped.
+			if(!IsTicking)
+				return false;
+
+			// Haha! In your face, stopped!
+			// Oh wait...
+			IsTicking = false;
+			DateTime eventTime = DateTime.Now;
+
+			long timeStamp = Stopwatch.GetTimestamp(); 
+
+			_clockedTicks += ( long )Math.Round( ( timeStamp - _startMark ) * Speed );
+			TimeSpan displayTime = ElapsedTime;
+			// The order of the previous events must be preserved.
+
+			if( Stopped != null )
+				Stopped( this, new ClockEventArgs(this, displayTime, Speed, eventTime) );
+
+			return true;
+		}
+
+		public bool Start()
+		{
+			// Can't start the started.
+			if(IsTicking)
+				return false;
+
+			DateTime eventTime = DateTime.Now;
+
+			long timeStamp = Stopwatch.GetTimestamp(); 
+
+			// First get the elapsed time
+			TimeSpan displayTime = ElapsedTime;
+
+			// Then you start ticking
+			IsTicking = true;
+			_startMark = timeStamp;
+			
+			if( Started != null )
+				Started( this, new ClockEventArgs(this, displayTime, Speed, eventTime));
+
+			return true;
 		}
 
 		/// <summary>
@@ -121,14 +143,16 @@ namespace Chrono
 		/// </param>
 		public void ChangeSpeed(double value)
 		{
-			if( _isTicking ) {
-				_clockedTicks += ( long )Math.Round( ( Stopwatch.GetTimestamp( ) - _startMark ) * _speed );
-				_startMark=Stopwatch.GetTimestamp();
-                _speed = value;
+			if( IsTicking ) {
+				long timeStamp = Stopwatch.GetTimestamp();
+
+				_clockedTicks += ( long )Math.Round( ( timeStamp - _startMark ) * Speed );
+				_startMark = timeStamp;
+                Speed = value;
 			}
             else
             {
-                _speed = value;
+				Speed = value;
 			}
 
 			if( SpeedChanged != null )
@@ -140,7 +164,7 @@ namespace Chrono
 
         public override string ToString()
         {
-            return (IsTicking ? "Watch running at " + Speed.ToString("0.##") + "x" : " stopped watch");
+            return (IsTicking ? "Clock ticking at " + Speed.ToString("0.##") + "x" : "A stopped clock");
         }
 	}
 }

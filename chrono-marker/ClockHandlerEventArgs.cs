@@ -22,9 +22,9 @@ using System.Text;
 
 namespace Chrono
 {
-    public class LoggerClockEventArgs : EventArgs
+    public class ClockHandlerEventArgs : EventArgs
     {
-        public LoggerClockEventArgs(LoggingHandler loggingHandler)
+        public ClockHandlerEventArgs(LoggingHandler loggingHandler)
 		{
 			_loggingHandler = loggingHandler;
 		}
@@ -36,5 +36,5 @@ namespace Chrono
 		private readonly LoggingHandler _loggingHandler;
     }
 
-	public delegate void LoggerClockEventHandler(object sender, LoggerClockEventArgs e);
+	public delegate void ClockHandlerEventHandler(object sender, ClockHandlerEventArgs e);
 }
