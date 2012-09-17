@@ -68,6 +68,15 @@ namespace Chrono
         #endregion
 
         #region Clock handler interface
+		public bool CanCreateClock(string name)
+		{
+			if( string.IsNullOrWhiteSpace( name ) ) return false;
+
+			if(HasClock(name)) return false;
+
+			return true;
+		}
+
 		/// <summary>
 		/// Creates a new clock logging handler with the given name
 		/// </summary>
@@ -79,9 +88,12 @@ namespace Chrono
 		/// </param>
 		public LoggingHandler CreateClock(string name)
 		{
+
+			if(string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Blank name");
+
 			if( _namedHandlers.ContainsKey( name ) )
 				throw new ArgumentException(string.Format(
-					"Logging handler \"{0}\" already exists", name));
+					"Handler \"{0}\" already exists", name));
 
 			LoggingHandler result = new LoggingHandler(this, new Clock(), name);
 			_namedHandlers.Add( name, result );
@@ -103,7 +115,7 @@ namespace Chrono
 
 			if( !_namedHandlers.TryGetValue( clockName, out logHandler ) )
 				throw new ArgumentException(string.Format(
-					"Logging handler \"{0}\" does not exist", clockName));
+					"Handler \"{0}\" does not exist", clockName));
 
 			_namedHandlers.Remove( clockName );
 

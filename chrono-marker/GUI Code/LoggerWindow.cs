@@ -35,6 +35,15 @@ namespace Chrono
 
 			this.Build();
 
+			dockExpanderVBox = new VBox();
+			vbox1.Add(dockExpanderVBox);
+
+			Box.BoxChild vboxChild = (Box.BoxChild) vbox1[dockExpanderVBox];
+			vboxChild.Expand = false;
+			vboxChild.Fill = false;
+
+			dockExpanderVBox.Show();
+
 			Program = program;
 
 			Logger.EntryAdded += loggerEntryAdded_event;
@@ -78,6 +87,14 @@ namespace Chrono
 			descColumn.Resizable = true;
 			timeColumn.Resizable = true;
 
+			clockColumn.Reorderable = true;
+			descColumn.Reorderable = true;
+			timeColumn.Reorderable = true;
+
+			clockColumn.MinWidth = 40;
+			descColumn.MinWidth = 120;
+			timeColumn.MinWidth = 40;
+
 			_logStore.SetSortColumnId(3,SortType.Descending); 
 
 			_logEntryRows = new Dictionary<LogEntry, TreeIter>();
@@ -96,6 +113,8 @@ namespace Chrono
 		private Menu _logViewMenu;
 		private ListStore _logStore;
 
+		private VBox dockExpanderVBox;
+
 		private List<LogEntry> GetSelectedLogs()
 		{
 			List<LogEntry> result = new List<LogEntry>();
@@ -113,6 +132,18 @@ namespace Chrono
 						result.Add( selectedEntry );
 				}
 			}
+
+			return result;
+		}
+
+		public Expander CreateDockExpander()
+		{
+			Expander result = new Expander("Docked thing");
+			dockExpanderVBox.Add(result);
+			Box.BoxChild resultBoxChild = (Box.BoxChild)dockExpanderVBox[result];
+
+			resultBoxChild.Expand = false;
+			resultBoxChild.Fill = false;
 
 			return result;
 		}

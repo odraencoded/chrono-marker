@@ -26,6 +26,7 @@ namespace Chrono
 	{
 		public bool CreateClock;
 		public String FirstClockName;
+		public bool StartDocked;
 	}
 }
 

@@ -14,6 +14,7 @@ namespace Chrono
 		private global::Gtk.HBox hbox6;
 		private global::Gtk.Label label5;
 		private global::Gtk.Entry firstClockNameEntry;
+		private global::Gtk.CheckButton startDockedCheck;
 		private global::Gtk.Label label4;
 		private global::Gtk.Alignment alignment1;
 		private global::Gtk.VBox vbox3;
@@ -62,7 +63,7 @@ namespace Chrono
 			this.notebook2 = new global::Gtk.Notebook ();
 			this.notebook2.CanFocus = true;
 			this.notebook2.Name = "notebook2";
-			this.notebook2.CurrentPage = 1;
+			this.notebook2.CurrentPage = 0;
 			this.notebook2.BorderWidth = ((uint)(1));
 			// Container child notebook2.Gtk.Notebook+NotebookChild
 			this.alignment2 = new global::Gtk.Alignment (0.5F, 0.5F, 1F, 1F);
@@ -125,12 +126,24 @@ namespace Chrono
 			w4.Position = 0;
 			w4.Expand = false;
 			w4.Fill = false;
+			// Container child vbox12.Gtk.Box+BoxChild
+			this.startDockedCheck = new global::Gtk.CheckButton ();
+			this.startDockedCheck.CanFocus = true;
+			this.startDockedCheck.Name = "startDockedCheck";
+			this.startDockedCheck.Label = global::Mono.Unix.Catalog.GetString ("Start docked in the log window");
+			this.startDockedCheck.DrawIndicator = true;
+			this.startDockedCheck.UseUnderline = true;
+			this.vbox12.Add (this.startDockedCheck);
+			global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.vbox12 [this.startDockedCheck]));
+			w5.Position = 1;
+			w5.Expand = false;
+			w5.Fill = false;
 			this.alignment4.Add (this.vbox12);
 			this.vbox10.Add (this.alignment4);
-			global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(this.vbox10 [this.alignment4]));
-			w6.Position = 1;
-			w6.Expand = false;
-			w6.Fill = false;
+			global::Gtk.Box.BoxChild w7 = ((global::Gtk.Box.BoxChild)(this.vbox10 [this.alignment4]));
+			w7.Position = 1;
+			w7.Expand = false;
+			w7.Fill = false;
 			this.alignment2.Add (this.vbox10);
 			this.notebook2.Add (this.alignment2);
 			// Notebook tab
@@ -156,10 +169,10 @@ namespace Chrono
 			this.label7.Xalign = 0F;
 			this.label7.LabelProp = global::Mono.Unix.Catalog.GetString ("Show the following on the time display box");
 			this.vbox3.Add (this.label7);
-			global::Gtk.Box.BoxChild w9 = ((global::Gtk.Box.BoxChild)(this.vbox3 [this.label7]));
-			w9.Position = 0;
-			w9.Expand = false;
-			w9.Fill = false;
+			global::Gtk.Box.BoxChild w10 = ((global::Gtk.Box.BoxChild)(this.vbox3 [this.label7]));
+			w10.Position = 0;
+			w10.Expand = false;
+			w10.Fill = false;
 			// Container child vbox3.Gtk.Box+BoxChild
 			this.alignment5 = new global::Gtk.Alignment (0.5F, 0.5F, 1F, 1F);
 			this.alignment5.Name = "alignment5";
@@ -180,10 +193,10 @@ namespace Chrono
 			this.label3.Xalign = 0F;
 			this.label3.LabelProp = global::Mono.Unix.Catalog.GetString ("Preview");
 			this.hbox1.Add (this.label3);
-			global::Gtk.Box.BoxChild w10 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.label3]));
-			w10.Position = 0;
-			w10.Expand = false;
-			w10.Fill = false;
+			global::Gtk.Box.BoxChild w11 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.label3]));
+			w11.Position = 0;
+			w11.Expand = false;
+			w11.Fill = false;
 			// Container child hbox1.Gtk.Box+BoxChild
 			this.previewDisplayBox = new global::Gtk.Entry ();
 			this.previewDisplayBox.Sensitive = false;
@@ -195,28 +208,29 @@ namespace Chrono
 			this.previewDisplayBox.InvisibleChar = '●';
 			this.previewDisplayBox.Xalign = 1F;
 			this.hbox1.Add (this.previewDisplayBox);
-			global::Gtk.Box.BoxChild w11 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.previewDisplayBox]));
-			w11.Position = 1;
+			global::Gtk.Box.BoxChild w12 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.previewDisplayBox]));
+			w12.Position = 1;
 			this.table1.Add (this.hbox1);
-			global::Gtk.Table.TableChild w12 = ((global::Gtk.Table.TableChild)(this.table1 [this.hbox1]));
-			w12.TopAttach = ((uint)(3));
-			w12.BottomAttach = ((uint)(4));
-			w12.RightAttach = ((uint)(2));
-			w12.YOptions = ((global::Gtk.AttachOptions)(4));
+			global::Gtk.Table.TableChild w13 = ((global::Gtk.Table.TableChild)(this.table1 [this.hbox1]));
+			w13.TopAttach = ((uint)(3));
+			w13.BottomAttach = ((uint)(4));
+			w13.RightAttach = ((uint)(2));
+			w13.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table1.Gtk.Table+TableChild
 			this.showAbbreviationsOption = new global::Gtk.RadioButton (global::Mono.Unix.Catalog.GetString ("Abbreviations"));
 			this.showAbbreviationsOption.CanFocus = true;
 			this.showAbbreviationsOption.Name = "showAbbreviationsOption";
+			this.showAbbreviationsOption.Active = true;
 			this.showAbbreviationsOption.DrawIndicator = true;
 			this.showAbbreviationsOption.UseUnderline = true;
 			this.showAbbreviationsOption.Group = new global::GLib.SList (global::System.IntPtr.Zero);
 			this.table1.Add (this.showAbbreviationsOption);
-			global::Gtk.Table.TableChild w13 = ((global::Gtk.Table.TableChild)(this.table1 [this.showAbbreviationsOption]));
-			w13.TopAttach = ((uint)(2));
-			w13.BottomAttach = ((uint)(3));
-			w13.LeftAttach = ((uint)(1));
-			w13.RightAttach = ((uint)(2));
-			w13.YOptions = ((global::Gtk.AttachOptions)(4));
+			global::Gtk.Table.TableChild w14 = ((global::Gtk.Table.TableChild)(this.table1 [this.showAbbreviationsOption]));
+			w14.TopAttach = ((uint)(2));
+			w14.BottomAttach = ((uint)(3));
+			w14.LeftAttach = ((uint)(1));
+			w14.RightAttach = ((uint)(2));
+			w14.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table1.Gtk.Table+TableChild
 			this.showHoursCheck = new global::Gtk.CheckButton ();
 			this.showHoursCheck.CanFocus = true;
@@ -226,10 +240,10 @@ namespace Chrono
 			this.showHoursCheck.DrawIndicator = true;
 			this.showHoursCheck.UseUnderline = true;
 			this.table1.Add (this.showHoursCheck);
-			global::Gtk.Table.TableChild w14 = ((global::Gtk.Table.TableChild)(this.table1 [this.showHoursCheck]));
-			w14.LeftAttach = ((uint)(2));
-			w14.RightAttach = ((uint)(3));
-			w14.YOptions = ((global::Gtk.AttachOptions)(4));
+			global::Gtk.Table.TableChild w15 = ((global::Gtk.Table.TableChild)(this.table1 [this.showHoursCheck]));
+			w15.LeftAttach = ((uint)(2));
+			w15.RightAttach = ((uint)(3));
+			w15.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table1.Gtk.Table+TableChild
 			this.showLeadingZeroCheck = new global::Gtk.CheckButton ();
 			this.showLeadingZeroCheck.CanFocus = true;
@@ -239,10 +253,10 @@ namespace Chrono
 			this.showLeadingZeroCheck.DrawIndicator = true;
 			this.showLeadingZeroCheck.UseUnderline = true;
 			this.table1.Add (this.showLeadingZeroCheck);
-			global::Gtk.Table.TableChild w15 = ((global::Gtk.Table.TableChild)(this.table1 [this.showLeadingZeroCheck]));
-			w15.LeftAttach = ((uint)(1));
-			w15.RightAttach = ((uint)(2));
-			w15.YOptions = ((global::Gtk.AttachOptions)(4));
+			global::Gtk.Table.TableChild w16 = ((global::Gtk.Table.TableChild)(this.table1 [this.showLeadingZeroCheck]));
+			w16.LeftAttach = ((uint)(1));
+			w16.RightAttach = ((uint)(2));
+			w16.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table1.Gtk.Table+TableChild
 			this.showMilisecondsCheck = new global::Gtk.CheckButton ();
 			this.showMilisecondsCheck.CanFocus = true;
@@ -252,12 +266,12 @@ namespace Chrono
 			this.showMilisecondsCheck.DrawIndicator = true;
 			this.showMilisecondsCheck.UseUnderline = true;
 			this.table1.Add (this.showMilisecondsCheck);
-			global::Gtk.Table.TableChild w16 = ((global::Gtk.Table.TableChild)(this.table1 [this.showMilisecondsCheck]));
-			w16.TopAttach = ((uint)(3));
-			w16.BottomAttach = ((uint)(4));
-			w16.LeftAttach = ((uint)(2));
-			w16.RightAttach = ((uint)(3));
-			w16.YOptions = ((global::Gtk.AttachOptions)(4));
+			global::Gtk.Table.TableChild w17 = ((global::Gtk.Table.TableChild)(this.table1 [this.showMilisecondsCheck]));
+			w17.TopAttach = ((uint)(3));
+			w17.BottomAttach = ((uint)(4));
+			w17.LeftAttach = ((uint)(2));
+			w17.RightAttach = ((uint)(3));
+			w17.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table1.Gtk.Table+TableChild
 			this.showMinusSymbolCheck = new global::Gtk.CheckButton ();
 			this.showMinusSymbolCheck.CanFocus = true;
@@ -267,10 +281,10 @@ namespace Chrono
 			this.showMinusSymbolCheck.DrawIndicator = true;
 			this.showMinusSymbolCheck.UseUnderline = true;
 			this.table1.Add (this.showMinusSymbolCheck);
-			global::Gtk.Table.TableChild w17 = ((global::Gtk.Table.TableChild)(this.table1 [this.showMinusSymbolCheck]));
-			w17.TopAttach = ((uint)(1));
-			w17.BottomAttach = ((uint)(2));
-			w17.YOptions = ((global::Gtk.AttachOptions)(4));
+			global::Gtk.Table.TableChild w18 = ((global::Gtk.Table.TableChild)(this.table1 [this.showMinusSymbolCheck]));
+			w18.TopAttach = ((uint)(1));
+			w18.BottomAttach = ((uint)(2));
+			w18.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table1.Gtk.Table+TableChild
 			this.showMinutesCheck = new global::Gtk.CheckButton ();
 			this.showMinutesCheck.CanFocus = true;
@@ -280,12 +294,12 @@ namespace Chrono
 			this.showMinutesCheck.DrawIndicator = true;
 			this.showMinutesCheck.UseUnderline = true;
 			this.table1.Add (this.showMinutesCheck);
-			global::Gtk.Table.TableChild w18 = ((global::Gtk.Table.TableChild)(this.table1 [this.showMinutesCheck]));
-			w18.TopAttach = ((uint)(1));
-			w18.BottomAttach = ((uint)(2));
-			w18.LeftAttach = ((uint)(2));
-			w18.RightAttach = ((uint)(3));
-			w18.YOptions = ((global::Gtk.AttachOptions)(4));
+			global::Gtk.Table.TableChild w19 = ((global::Gtk.Table.TableChild)(this.table1 [this.showMinutesCheck]));
+			w19.TopAttach = ((uint)(1));
+			w19.BottomAttach = ((uint)(2));
+			w19.LeftAttach = ((uint)(2));
+			w19.RightAttach = ((uint)(3));
+			w19.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table1.Gtk.Table+TableChild
 			this.showPlusSymbolCheck = new global::Gtk.CheckButton ();
 			this.showPlusSymbolCheck.CanFocus = true;
@@ -294,8 +308,8 @@ namespace Chrono
 			this.showPlusSymbolCheck.DrawIndicator = true;
 			this.showPlusSymbolCheck.UseUnderline = true;
 			this.table1.Add (this.showPlusSymbolCheck);
-			global::Gtk.Table.TableChild w19 = ((global::Gtk.Table.TableChild)(this.table1 [this.showPlusSymbolCheck]));
-			w19.YOptions = ((global::Gtk.AttachOptions)(4));
+			global::Gtk.Table.TableChild w20 = ((global::Gtk.Table.TableChild)(this.table1 [this.showPlusSymbolCheck]));
+			w20.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table1.Gtk.Table+TableChild
 			this.showSecondsCheck = new global::Gtk.CheckButton ();
 			this.showSecondsCheck.CanFocus = true;
@@ -305,12 +319,12 @@ namespace Chrono
 			this.showSecondsCheck.DrawIndicator = true;
 			this.showSecondsCheck.UseUnderline = true;
 			this.table1.Add (this.showSecondsCheck);
-			global::Gtk.Table.TableChild w20 = ((global::Gtk.Table.TableChild)(this.table1 [this.showSecondsCheck]));
-			w20.TopAttach = ((uint)(2));
-			w20.BottomAttach = ((uint)(3));
-			w20.LeftAttach = ((uint)(2));
-			w20.RightAttach = ((uint)(3));
-			w20.YOptions = ((global::Gtk.AttachOptions)(4));
+			global::Gtk.Table.TableChild w21 = ((global::Gtk.Table.TableChild)(this.table1 [this.showSecondsCheck]));
+			w21.TopAttach = ((uint)(2));
+			w21.BottomAttach = ((uint)(3));
+			w21.LeftAttach = ((uint)(2));
+			w21.RightAttach = ((uint)(3));
+			w21.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table1.Gtk.Table+TableChild
 			this.showSeparatorsOption = new global::Gtk.RadioButton (global::Mono.Unix.Catalog.GetString ("Separators"));
 			this.showSeparatorsOption.CanFocus = true;
@@ -319,37 +333,37 @@ namespace Chrono
 			this.showSeparatorsOption.UseUnderline = true;
 			this.showSeparatorsOption.Group = this.showAbbreviationsOption.Group;
 			this.table1.Add (this.showSeparatorsOption);
-			global::Gtk.Table.TableChild w21 = ((global::Gtk.Table.TableChild)(this.table1 [this.showSeparatorsOption]));
-			w21.TopAttach = ((uint)(1));
-			w21.BottomAttach = ((uint)(2));
-			w21.LeftAttach = ((uint)(1));
-			w21.RightAttach = ((uint)(2));
-			w21.YOptions = ((global::Gtk.AttachOptions)(4));
+			global::Gtk.Table.TableChild w22 = ((global::Gtk.Table.TableChild)(this.table1 [this.showSeparatorsOption]));
+			w22.TopAttach = ((uint)(1));
+			w22.BottomAttach = ((uint)(2));
+			w22.LeftAttach = ((uint)(1));
+			w22.RightAttach = ((uint)(2));
+			w22.YOptions = ((global::Gtk.AttachOptions)(4));
 			this.alignment5.Add (this.table1);
 			this.vbox3.Add (this.alignment5);
-			global::Gtk.Box.BoxChild w23 = ((global::Gtk.Box.BoxChild)(this.vbox3 [this.alignment5]));
-			w23.Position = 1;
-			w23.Expand = false;
-			w23.Fill = false;
+			global::Gtk.Box.BoxChild w24 = ((global::Gtk.Box.BoxChild)(this.vbox3 [this.alignment5]));
+			w24.Position = 1;
+			w24.Expand = false;
+			w24.Fill = false;
 			// Container child vbox3.Gtk.Box+BoxChild
 			this.hseparator3 = new global::Gtk.HSeparator ();
 			this.hseparator3.Name = "hseparator3";
 			this.vbox3.Add (this.hseparator3);
-			global::Gtk.Box.BoxChild w24 = ((global::Gtk.Box.BoxChild)(this.vbox3 [this.hseparator3]));
-			w24.Position = 2;
-			w24.Expand = false;
-			w24.Fill = false;
-			w24.Padding = ((uint)(5));
+			global::Gtk.Box.BoxChild w25 = ((global::Gtk.Box.BoxChild)(this.vbox3 [this.hseparator3]));
+			w25.Position = 2;
+			w25.Expand = false;
+			w25.Fill = false;
+			w25.Padding = ((uint)(5));
 			// Container child vbox3.Gtk.Box+BoxChild
 			this.label8 = new global::Gtk.Label ();
 			this.label8.Name = "label8";
 			this.label8.Xalign = 0F;
 			this.label8.LabelProp = global::Mono.Unix.Catalog.GetString ("When created, stopwatch windows are");
 			this.vbox3.Add (this.label8);
-			global::Gtk.Box.BoxChild w25 = ((global::Gtk.Box.BoxChild)(this.vbox3 [this.label8]));
-			w25.Position = 3;
-			w25.Expand = false;
-			w25.Fill = false;
+			global::Gtk.Box.BoxChild w26 = ((global::Gtk.Box.BoxChild)(this.vbox3 [this.label8]));
+			w26.Position = 3;
+			w26.Expand = false;
+			w26.Fill = false;
 			// Container child vbox3.Gtk.Box+BoxChild
 			this.alignment7 = new global::Gtk.Alignment (0.5F, 0.5F, 1F, 1F);
 			this.alignment7.Name = "alignment7";
@@ -362,14 +376,15 @@ namespace Chrono
 			this.normalModeOption = new global::Gtk.RadioButton (global::Mono.Unix.Catalog.GetString ("Normal, with buttons for toggling countdown"));
 			this.normalModeOption.CanFocus = true;
 			this.normalModeOption.Name = "normalModeOption";
+			this.normalModeOption.Active = true;
 			this.normalModeOption.DrawIndicator = true;
 			this.normalModeOption.UseUnderline = true;
 			this.normalModeOption.Group = new global::GLib.SList (global::System.IntPtr.Zero);
 			this.vbox14.Add (this.normalModeOption);
-			global::Gtk.Box.BoxChild w26 = ((global::Gtk.Box.BoxChild)(this.vbox14 [this.normalModeOption]));
-			w26.Position = 0;
-			w26.Expand = false;
-			w26.Fill = false;
+			global::Gtk.Box.BoxChild w27 = ((global::Gtk.Box.BoxChild)(this.vbox14 [this.normalModeOption]));
+			w27.Position = 0;
+			w27.Expand = false;
+			w27.Fill = false;
 			// Container child vbox14.Gtk.Box+BoxChild
 			this.compactModeOption = new global::Gtk.RadioButton (global::Mono.Unix.Catalog.GetString ("Compact, with smaller display and icon buttons"));
 			this.compactModeOption.CanFocus = true;
@@ -378,20 +393,20 @@ namespace Chrono
 			this.compactModeOption.UseUnderline = true;
 			this.compactModeOption.Group = this.normalModeOption.Group;
 			this.vbox14.Add (this.compactModeOption);
-			global::Gtk.Box.BoxChild w27 = ((global::Gtk.Box.BoxChild)(this.vbox14 [this.compactModeOption]));
-			w27.Position = 1;
-			w27.Expand = false;
-			w27.Fill = false;
+			global::Gtk.Box.BoxChild w28 = ((global::Gtk.Box.BoxChild)(this.vbox14 [this.compactModeOption]));
+			w28.Position = 1;
+			w28.Expand = false;
+			w28.Fill = false;
 			this.alignment7.Add (this.vbox14);
 			this.vbox3.Add (this.alignment7);
-			global::Gtk.Box.BoxChild w29 = ((global::Gtk.Box.BoxChild)(this.vbox3 [this.alignment7]));
-			w29.Position = 4;
-			w29.Expand = false;
-			w29.Fill = false;
+			global::Gtk.Box.BoxChild w30 = ((global::Gtk.Box.BoxChild)(this.vbox3 [this.alignment7]));
+			w30.Position = 4;
+			w30.Expand = false;
+			w30.Fill = false;
 			this.alignment1.Add (this.vbox3);
 			this.notebook2.Add (this.alignment1);
-			global::Gtk.Notebook.NotebookChild w31 = ((global::Gtk.Notebook.NotebookChild)(this.notebook2 [this.alignment1]));
-			w31.Position = 1;
+			global::Gtk.Notebook.NotebookChild w32 = ((global::Gtk.Notebook.NotebookChild)(this.notebook2 [this.alignment1]));
+			w32.Position = 1;
 			// Notebook tab
 			this.label2 = new global::Gtk.Label ();
 			this.label2.Name = "label2";
@@ -399,10 +414,10 @@ namespace Chrono
 			this.notebook2.SetTabLabel (this.alignment1, this.label2);
 			this.label2.ShowAll ();
 			this.vbox2.Add (this.notebook2);
-			global::Gtk.Box.BoxChild w32 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.notebook2]));
-			w32.Position = 0;
-			w32.Expand = false;
-			w32.Fill = false;
+			global::Gtk.Box.BoxChild w33 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.notebook2]));
+			w33.Position = 0;
+			w33.Expand = false;
+			w33.Fill = false;
 			// Container child vbox2.Gtk.Box+BoxChild
 			this.hbuttonbox2 = new global::Gtk.HButtonBox ();
 			this.hbuttonbox2.Name = "hbuttonbox2";
@@ -417,9 +432,9 @@ namespace Chrono
 			this.button133.UseUnderline = true;
 			this.button133.Label = "gtk-apply";
 			this.hbuttonbox2.Add (this.button133);
-			global::Gtk.ButtonBox.ButtonBoxChild w33 = ((global::Gtk.ButtonBox.ButtonBoxChild)(this.hbuttonbox2 [this.button133]));
-			w33.Expand = false;
-			w33.Fill = false;
+			global::Gtk.ButtonBox.ButtonBoxChild w34 = ((global::Gtk.ButtonBox.ButtonBoxChild)(this.hbuttonbox2 [this.button133]));
+			w34.Expand = false;
+			w34.Fill = false;
 			// Container child hbuttonbox2.Gtk.ButtonBox+ButtonBoxChild
 			this.button32 = new global::Gtk.Button ();
 			this.button32.CanFocus = true;
@@ -428,10 +443,10 @@ namespace Chrono
 			this.button32.UseUnderline = true;
 			this.button32.Label = "gtk-cancel";
 			this.hbuttonbox2.Add (this.button32);
-			global::Gtk.ButtonBox.ButtonBoxChild w34 = ((global::Gtk.ButtonBox.ButtonBoxChild)(this.hbuttonbox2 [this.button32]));
-			w34.Position = 1;
-			w34.Expand = false;
-			w34.Fill = false;
+			global::Gtk.ButtonBox.ButtonBoxChild w35 = ((global::Gtk.ButtonBox.ButtonBoxChild)(this.hbuttonbox2 [this.button32]));
+			w35.Position = 1;
+			w35.Expand = false;
+			w35.Fill = false;
 			// Container child hbuttonbox2.Gtk.ButtonBox+ButtonBoxChild
 			this.button19 = new global::Gtk.Button ();
 			this.button19.CanFocus = true;
@@ -440,20 +455,20 @@ namespace Chrono
 			this.button19.UseUnderline = true;
 			this.button19.Label = "gtk-ok";
 			this.hbuttonbox2.Add (this.button19);
-			global::Gtk.ButtonBox.ButtonBoxChild w35 = ((global::Gtk.ButtonBox.ButtonBoxChild)(this.hbuttonbox2 [this.button19]));
-			w35.Position = 2;
-			w35.Expand = false;
-			w35.Fill = false;
-			this.vbox2.Add (this.hbuttonbox2);
-			global::Gtk.Box.BoxChild w36 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.hbuttonbox2]));
-			w36.Position = 1;
+			global::Gtk.ButtonBox.ButtonBoxChild w36 = ((global::Gtk.ButtonBox.ButtonBoxChild)(this.hbuttonbox2 [this.button19]));
+			w36.Position = 2;
 			w36.Expand = false;
 			w36.Fill = false;
+			this.vbox2.Add (this.hbuttonbox2);
+			global::Gtk.Box.BoxChild w37 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.hbuttonbox2]));
+			w37.Position = 1;
+			w37.Expand = false;
+			w37.Fill = false;
 			this.Add (this.vbox2);
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();
 			}
-			this.DefaultWidth = 459;
+			this.DefaultWidth = 474;
 			this.DefaultHeight = 440;
 			this.Hide ();
 			this.DeleteEvent += new global::Gtk.DeleteEventHandler (this.WindowDelete_event);

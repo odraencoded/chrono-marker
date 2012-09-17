@@ -44,65 +44,53 @@ namespace Chrono
 
 			startupSection.SetValue("Create Clock", Startup.CreateClock);
 			startupSection.SetValue("First Clock Name", Startup.FirstClockName);
+			startupSection.SetValue("Start Docked", Startup.StartDocked);
 
-			ConfigSection timeFormatSection = configFile["Time Format"];
+			ConfigSection clockDefaultsSection = configFile["Clock Defaults"];
 
-			timeFormatSection.SetValue("Show Hours", TimeDisplaySettings.ShowHours);
-			timeFormatSection.SetValue("Show Minutes", TimeDisplaySettings.ShowMinutes);
-			timeFormatSection.SetValue("Show Seconds", TimeDisplaySettings.ShowSeconds);
-			timeFormatSection.SetValue("Show Milliseconds", TimeDisplaySettings.ShowMilliseconds);
-			timeFormatSection.SetValue("Show Plus Symbol", TimeDisplaySettings.ShowPlusSymbol);
-			timeFormatSection.SetValue("Show Minus Symbol", TimeDisplaySettings.ShowMinusSymbol);
-			timeFormatSection.SetValue("Show Leading Zero", TimeDisplaySettings.ShowLeadingZero);
-			timeFormatSection.SetValue("Show Separators", TimeDisplaySettings.ShowSeparators);
+			clockDefaultsSection.SetValue("Show Hours", TimeDisplaySettings.ShowHours);
+			clockDefaultsSection.SetValue("Show Minutes", TimeDisplaySettings.ShowMinutes);
+			clockDefaultsSection.SetValue("Show Seconds", TimeDisplaySettings.ShowSeconds);
+			clockDefaultsSection.SetValue("Show Milliseconds", TimeDisplaySettings.ShowMilliseconds);
+			clockDefaultsSection.SetValue("Show Plus Symbol", TimeDisplaySettings.ShowPlusSymbol);
+			clockDefaultsSection.SetValue("Show Minus Symbol", TimeDisplaySettings.ShowMinusSymbol);
+			clockDefaultsSection.SetValue("Show Leading Zero", TimeDisplaySettings.ShowLeadingZero);
+			clockDefaultsSection.SetValue("Show Separators", TimeDisplaySettings.ShowSeparators);
+			clockDefaultsSection.SetValue("Starts Compact", ClockCompactByDefault);
 
 			configFile.Save(filename);
 		}
 
 		public static Preferences Load(string filename)
 		{
+			// Due to how these classes are structured
+			// Any kind of "normal" failure will result in default settings
 			Preferences result = new Preferences();
 
 			ConfigFile configFile = new ConfigFile();
 
-			configFile.Load( filename );
+			if(File.Exists(filename))
+				configFile.Load( filename );
 
 			ConfigSection startupSection = configFile["Startup"];
 
 			result.Startup.CreateClock = startupSection.GetBoolean("Create Clock", true);
 			result.Startup.FirstClockName = startupSection.GetString("First Clock Name", "Sundial");
+			result.Startup.StartDocked = startupSection.GetBoolean("Start Docked", true);
 
 			result.TimeDisplaySettings = new TimeFormatSettings(TimeFormatFlags.Nothing);
 
-			ConfigSection timeFormatSection = configFile["Time Format"];
+			ConfigSection clockDefaultsSection = configFile["Clock Defaults"];
 
-			result.TimeDisplaySettings.ShowHours = timeFormatSection.GetBoolean("Show Hours", true);
-			result.TimeDisplaySettings.ShowMinutes = timeFormatSection.GetBoolean("Show Minutes", true);
-			result.TimeDisplaySettings.ShowSeconds = timeFormatSection.GetBoolean("Show Seconds", true);
-			result.TimeDisplaySettings.ShowMilliseconds = timeFormatSection.GetBoolean("Show Milliseconds", true);
-			result.TimeDisplaySettings.ShowPlusSymbol = timeFormatSection.GetBoolean("Show Plus Symbol", false);
-			result.TimeDisplaySettings.ShowMinusSymbol = timeFormatSection.GetBoolean("Show Minus Symbol", true);
-			result.TimeDisplaySettings.ShowLeadingZero = timeFormatSection.GetBoolean("Show Leading Zero", true);
-			result.TimeDisplaySettings.ShowSeparators = timeFormatSection.GetBoolean("Show Separators", true);
-
-			return result;
-		}
-
-		public static Preferences CreateDefault()
-		{
-			Preferences result = new Preferences();
-
-			result.TimeDisplaySettings = 
-				new TimeFormatSettings(TimeFormatFlags.AllTimeUnits |
-				                       TimeFormatFlags.MinusSymbol |
-				                       TimeFormatFlags.LeadingZero |
-				                       TimeFormatFlags.Separators);
-
-			result.Startup = new StartupSettings()
-			{
-				CreateClock = true,
-				FirstClockName = "Sundial",
-			};
+			result.TimeDisplaySettings.ShowHours = clockDefaultsSection.GetBoolean("Show Hours", true);
+			result.TimeDisplaySettings.ShowMinutes = clockDefaultsSection.GetBoolean("Show Minutes", true);
+			result.TimeDisplaySettings.ShowSeconds = clockDefaultsSection.GetBoolean("Show Seconds", true);
+			result.TimeDisplaySettings.ShowMilliseconds = clockDefaultsSection.GetBoolean("Show Milliseconds", true);
+			result.TimeDisplaySettings.ShowPlusSymbol = clockDefaultsSection.GetBoolean("Show Plus Symbol", false);
+			result.TimeDisplaySettings.ShowMinusSymbol = clockDefaultsSection.GetBoolean("Show Minus Symbol", true);
+			result.TimeDisplaySettings.ShowLeadingZero = clockDefaultsSection.GetBoolean("Show Leading Zero", true);
+			result.TimeDisplaySettings.ShowSeparators = clockDefaultsSection.GetBoolean("Show Separators", true);
+			result.ClockCompactByDefault = clockDefaultsSection.GetBoolean("Starts Compact", false);
 
 			return result;
 		}

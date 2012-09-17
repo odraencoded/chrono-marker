@@ -123,6 +123,8 @@ namespace Chrono
 			this.compactBtn.Hide ();
 			this.Hide ();
 			this.DeleteEvent += new global::Gtk.DeleteEventHandler (this.windowDelete_event);
+			this.Hidden += new global::System.EventHandler (this.visibilityChanged_event);
+			this.Shown += new global::System.EventHandler (this.visibilityChanged_event);
 			this.backwardBtn.Clicked += new global::System.EventHandler (this.backwardBtn_event);
 			this.compactBtn.Clicked += new global::System.EventHandler (this.clockButton_event);
 			this.timeDisplayBox.Changed += new global::System.EventHandler (this.displayBoxChanged_event);

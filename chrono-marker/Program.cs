@@ -36,7 +36,7 @@ namespace Chrono
 		{
 			clockWindows = new Dictionary<LoggingHandler, StopwatchWindow>();
 
-			LoadPreferences();
+			Settings = Preferences.Load(settingsFilename);
 
 			TimeLogger = new TimeLogger(Settings.TimeDisplaySettings);
 
@@ -47,12 +47,17 @@ namespace Chrono
 			ClockPropertiesWindow = new ClockPropertiesWindow(this); // And this
 			PreferencesWindow = new PreferencesWindow(this); // And this too
 
-			if(Settings.Startup.CreateClock)
+			StartupSettings onStartup = Settings.Startup;
+
+			if(onStartup.CreateClock && TimeLogger.CanCreateClock(onStartup.FirstClockName))
 			{
 				LoggingHandler firstClockHandler =
-					TimeLogger.CreateClock(Settings.Startup.FirstClockName);
+					TimeLogger.CreateClock(onStartup.FirstClockName);
 
-				clockWindows[firstClockHandler].Present();
+				StopwatchWindow clockWindow = clockWindows[firstClockHandler];
+
+				clockWindow.Present();
+				clockWindow.Docked = onStartup.StartDocked;
 			}
 		}
 
@@ -68,7 +73,7 @@ namespace Chrono
 
 			try
 			{
-				myself.LoggerWindow.ShowAll();
+				myself.LoggerWindow.Present();
 
 				Application.Run();
 			}
@@ -93,26 +98,6 @@ namespace Chrono
 			return clockWindows.TryGetValue(handler, out window);
 		}
 		#endregion
-
-		private void LoadPreferences()
-		{
-			bool loadedFromFile = false;
-
-			if( File.Exists( settingsFilename ) ) {
-				try
-				{
-					Settings = Preferences.Load(settingsFilename);
-					loadedFromFile = true;
-				}
-				catch(IOException)
-				{
-					Console.Write("There was an error loading the preferences, creating defaults");
-				}
-			}
-
-			if(!loadedFromFile)
-				Settings = Preferences.CreateDefault();
-		}	
 
 		#region Events
 		public event ClockHandlerEventHandler ClockWindowReceivedFocus;

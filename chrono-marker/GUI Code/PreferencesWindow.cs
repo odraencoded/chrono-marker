@@ -67,6 +67,7 @@ namespace Chrono
 
 			firstClockNameEntry.Text = Preferences.Startup.FirstClockName;
 			createClockOnStartupCheck.Active = Preferences.Startup.CreateClock;
+			startDockedCheck.Active = Preferences.Startup.StartDocked;
 
 			supressValidation = false;
 
@@ -90,6 +91,7 @@ namespace Chrono
 
 			startupSettings.CreateClock = createClockOnStartupCheck.Active;
 			startupSettings.FirstClockName = firstClockNameEntry.Text;
+			startupSettings.StartDocked = startDockedCheck.Active;
 
 			Preferences.Startup = startupSettings;
 

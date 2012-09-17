@@ -98,8 +98,7 @@ namespace Chrono
 				_currentHandler.Renamed -= handlerRenamed_event;
 				_currentHandler.Clock.SpeedChanged -= clockSpeedChanged_event;
 
-				_clockWindow.Shown -= clockWindowVisibilityChanged_event;
-				_clockWindow.Hidden -= clockWindowVisibilityChanged_event;
+				_clockWindow.DisplayVisibleChanged -= clockWindowDisplayChanged_event;
 			}
 
 			_currentHandler = newHandler;
@@ -108,8 +107,7 @@ namespace Chrono
 				_currentHandler.Clock.SpeedChanged += clockSpeedChanged_event;
 
 				Program.GetClockWindow( _currentHandler, out _clockWindow );
-				_clockWindow.Shown += clockWindowVisibilityChanged_event;
-				_clockWindow.Hidden += clockWindowVisibilityChanged_event;
+				_clockWindow.DisplayVisibleChanged += clockWindowDisplayChanged_event;
 			} else {
 				_clockWindow = null;
 			}
@@ -142,11 +140,12 @@ namespace Chrono
 				else normalWindowOption.Active = true;
 
 				onTopCheck.Active = _clockWindow.OnTop;
-				displayStopwatchBtn.Active = _clockWindow.Visible;
+				dockedCheck.Active = _clockWindow.Docked;
+				displayStopwatchBtn.Active = _clockWindow.DisplayVisible;
 
 				// When the name is valid, createBtn becomes renameBtn!!!
 				clockNameBtn.Label = "Rename";
-			}else {
+			} else {
 				logStartsCheck.Active = false;
 				logStopsCheck.Active = false;
 
@@ -156,9 +155,12 @@ namespace Chrono
 				normalWindowOption.Active = true;
 
 				onTopCheck.Active = false;
+				dockedCheck.Active = false;
 				displayStopwatchBtn.Active = false;
 
 				clockNameBtn.Label = "Create";
+
+				clockNameBtn.Sensitive = Logger.CanCreateClock(clockNameBox.Entry.Text);
 			}
 
 			_refreshing = false;
@@ -214,10 +216,10 @@ namespace Chrono
 			_refreshing = false;
 		}
 
-		private void clockWindowVisibilityChanged_event(object sender, EventArgs args)
+		private void clockWindowDisplayChanged_event(object sender, EventArgs args)
 		{
 			_refreshing = true;
-			displayStopwatchBtn.Active = _clockWindow.Visible;
+			displayStopwatchBtn.Active = _clockWindow.DisplayVisible;
 			_refreshing = false;
 		}
 		#endregion
@@ -275,13 +277,26 @@ namespace Chrono
 					string newName = renameDiag.NewName;
 					if(newName != _currentHandler.Name)
 					{
-						if(!string.Equals(newName, _currentHandler.Name, TimeLogger.HandlerNameComparison)
+						string errorMessage = null;
+
+						if(string.IsNullOrWhiteSpace(newName))
+						{
+							errorMessage = "Blank names are not valid.";
+						}
+						// This name comparison allows the user to rename a clock using different casing
+						else if(!string.Equals(newName, _currentHandler.Name, TimeLogger.HandlerNameComparison)
 						   && _currentHandler.Logger.HasClock( newName ) ) {
 
-							MessageDialog errorDiag =  new MessageDialog(
-								this, DialogFlags.DestroyWithParent, MessageType.Error, ButtonsType.Ok,
-								"A clock with the name \"{0}\" already exists!"
-								+Environment.NewLine+"Please choose another name.", newName);
+							errorMessage = string.Format("A clock with the name \"{0}\" already exists!\n"
+							                             +"Please choose another name.", newName);
+						}
+
+						if(errorMessage != null)
+						{
+							MessageDialog errorDiag = 
+								new MessageDialog(this, DialogFlags.DestroyWithParent,
+								                  MessageType.Error, ButtonsType.Ok,
+								                  errorMessage);
 
 							errorDiag.TransientFor = renameDiag;
 							errorDiag.Run();
@@ -339,7 +354,7 @@ namespace Chrono
 
 		protected void windowMode_event(object sender, EventArgs e)
 		{
-			if(_refreshing || _clockWindow == null)
+			if( _refreshing || _clockWindow == null )
 				return;
 
 			_clockWindow.Compact = compactWindowOption.Active;
@@ -353,16 +368,20 @@ namespace Chrono
 			_clockWindow.OnTop = onTopCheck.Active;
 		}
 
+		protected void docked_event(object sender, EventArgs e)
+		{
+			if(_refreshing || _clockWindow == null)
+				return;
+
+			_clockWindow.Docked = dockedCheck.Active;
+		}
+
 		protected void displayStopwatch_event(object sender, EventArgs e)
 		{
 			if(_refreshing || _clockWindow == null )
 				return;
 
-			if( displayStopwatchBtn.Active ) {
-				_clockWindow.Show( );
-			} else {
-				_clockWindow.Hide( );
-			}
+			_clockWindow.DisplayVisible = displayStopwatchBtn.Active;
 		}
 		#endregion
 
@@ -396,8 +415,6 @@ namespace Chrono
 
 			base.OnDestroyed();
 		}
-
-
 		#endregion
 	}
 }

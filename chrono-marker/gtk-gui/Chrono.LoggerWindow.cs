@@ -72,7 +72,7 @@ namespace Chrono
 			this.vbox1 = new global::Gtk.VBox ();
 			this.vbox1.Name = "vbox1";
 			// Container child vbox1.Gtk.Box+BoxChild
-			this.UIManager.AddUiFromString (@"<ui><menubar name='menubar1'><menu name='FileAction' action='FileAction'><menuitem name='ExportAction' action='ExportAction'/><separator/><menuitem name='quitAction' action='quitAction'/></menu><menu name='editAction' action='editAction'><menuitem name='selectAllAction' action='selectAllAction'/><menuitem name='copyAction' action='copyAction'/><separator/><menuitem name='deleteAction' action='deleteAction'/><separator/><menuitem name='stopwatchesAction' action='stopwatchesAction'/><separator/><menuitem name='preferencesAction' action='preferencesAction'/></menu><menu name='helpAction' action='helpAction'><menuitem name='aboutAction' action='aboutAction'/></menu></menubar></ui>");
+			this.UIManager.AddUiFromString ("<ui><menubar name='menubar1'><menu name='FileAction' action='FileAction'><menuitem name='ExportAction' action='ExportAction'/><separator/><menuitem name='quitAction' action='quitAction'/></menu><menu name='editAction' action='editAction'><menuitem name='selectAllAction' action='selectAllAction'/><menuitem name='copyAction' action='copyAction'/><separator/><menuitem name='deleteAction' action='deleteAction'/><separator/><menuitem name='stopwatchesAction' action='stopwatchesAction'/><separator/><menuitem name='preferencesAction' action='preferencesAction'/></menu><menu name='helpAction' action='helpAction'><menuitem name='aboutAction' action='aboutAction'/></menu></menubar></ui>");
 			this.menubar1 = ((global::Gtk.MenuBar)(this.UIManager.GetWidget ("/menubar1")));
 			this.menubar1.Name = "menubar1";
 			this.vbox1.Add (this.menubar1);
@@ -86,6 +86,8 @@ namespace Chrono
 			this.GtkScrolledWindow.ShadowType = ((global::Gtk.ShadowType)(1));
 			// Container child GtkScrolledWindow.Gtk.Container+ContainerChild
 			this.logView = new global::Gtk.TreeView ();
+			this.logView.WidthRequest = 200;
+			this.logView.HeightRequest = 200;
 			this.logView.CanFocus = true;
 			this.logView.Name = "logView";
 			this.logView.EnableSearch = false;
@@ -93,6 +95,7 @@ namespace Chrono
 			this.GtkScrolledWindow.Add (this.logView);
 			this.vbox1.Add (this.GtkScrolledWindow);
 			global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.GtkScrolledWindow]));
+			w4.PackType = ((global::Gtk.PackType)(1));
 			w4.Position = 1;
 			this.Add (this.vbox1);
 			if ((this.Child != null)) {

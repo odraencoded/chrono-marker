@@ -97,6 +97,63 @@ namespace Chrono
 			}
 		}
 
+		public bool Docked {
+			get
+			{
+				return _docked;
+			}
+			set
+			{
+				if(_docked == value) return;
+
+				if(value == true)
+				{
+					if(_dockExpander == null)
+					{
+						_dockExpander = Program.LoggerWindow.CreateDockExpander();
+						_dockExpander.Activated += visibilityChanged_event;
+					}
+
+					_dockExpander.Expanded = DisplayVisible;
+
+					_docked = value;
+
+					_dockExpander.Visible = true;
+					this.Visible = false;
+
+					Children[0].Reparent(_dockExpander);
+				}
+				else
+				{
+					Visible = DisplayVisible;
+
+					_docked = value;
+
+					_dockExpander.Visible = false;
+					_dockExpander.Children[0].Reparent(this);
+				
+				}
+
+				RefreshControls();
+			}
+		}
+
+		public bool DisplayVisible {
+			get
+			{
+				if(_docked) return _dockExpander.Expanded;
+				else return Visible;
+			}
+			set
+			{
+				if(_docked) _dockExpander.Expanded = value;
+				else Visible = value;
+
+				if(DisplayVisibleChanged != null)
+					DisplayVisibleChanged(this, new ChangedArgs());
+			}
+		}
+
 		private bool _hasEditedTime;
 		private bool _isEditValid;
 		private TimeSpan _timeInput;
@@ -105,9 +162,10 @@ namespace Chrono
 
 		private bool _onTop;
 		private bool _compact;
+		private bool _docked;
+		private Expander _dockExpander;
+
 		private bool _supressBoxValidation;
-
-
 
 		private FontDescription _normalFont;
 		private FontDescription _compactFont;
@@ -116,6 +174,8 @@ namespace Chrono
 		private static Gdk.Pixbuf _backwardIcon = Gdk.Pixbuf.LoadFromResource("Chrono.backward.png");
         private static Gdk.Pixbuf _stopIcon = Gdk.Pixbuf.LoadFromResource("Chrono.stop.png");
     	private static Gdk.Pixbuf _undoIcon = Gdk.Pixbuf.LoadFromResource("Chrono.undo.png");
+
+		public event ChangedHandler DisplayVisibleChanged;
 
 		public void RefreshTimeDisplay()
 		{
@@ -228,6 +288,8 @@ namespace Chrono
 
 				Title = string.Format("Stopwatch - {0}", LogHandler.Name);
 			}
+
+			if(_docked) _dockExpander.Label = LogHandler.Name;
 		}
 
 		private enum ClockButtonMode
@@ -267,7 +329,7 @@ namespace Chrono
 
 		private void refreshTimeout_event(object sender, TimedCallEventArgs e)
 		{
-			if( Visible )
+			if( DisplayVisible )
 				RefreshTimeDisplay( );
 		}
 		#endregion
@@ -367,6 +429,12 @@ namespace Chrono
 			RefreshControls();
 		}
 
+		protected void visibilityChanged_event(object sender, EventArgs e)
+		{
+			if(DisplayVisibleChanged != null)
+				DisplayVisibleChanged(this, new ChangedArgs());
+		}
+
 		protected void windowDelete_event(object o, DeleteEventArgs args)
 		{
 			// This should stop the window from being destroyed
@@ -376,7 +444,7 @@ namespace Chrono
 		#region Overrides
 		protected override void OnShown()
 		{
-			base.OnShown( );
+			base.OnShown();
 
 			// Necessary for whatever reason
 			KeepAbove = OnTop;
@@ -386,6 +454,9 @@ namespace Chrono
 		{
 			if( _timedRefreshCaller != null )
 				_timedRefreshCaller.Cancel();
+
+			if(_dockExpander != null)
+				_dockExpander.Destroy();
 
 			base.OnDestroyed();
 		}
