@@ -11,53 +11,45 @@
     <StartupObject>Chrono.Program</StartupObject>
     <ApplicationIcon>..\extra\icon.ico</ApplicationIcon>
     <AssemblyName>chrono-marker</AssemblyName>
-    <ReleaseVersion>0.4</ReleaseVersion>
+    <ReleaseVersion>0.5</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <DebugSymbols>true</DebugSymbols>
+    <DebugSymbols>True</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>False</Optimize>
     <OutputPath>bin\Debug</OutputPath>
     <DefineConstants>DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
+    <ConsolePause>False</ConsolePause>
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>none</DebugType>
-    <Optimize>true</Optimize>
+    <Optimize>True</Optimize>
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
+    <ConsolePause>False</ConsolePause>
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="Mono.Posix" />
     <Reference Include="gdk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
-      <Package>gtk-sharp-2.0</Package>
+      <Private>False</Private>
     </Reference>
     <Reference Include="atk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
       <Private>False</Private>
-      <Package>gtk-sharp-2.0</Package>
     </Reference>
     <Reference Include="glib-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
       <Private>False</Private>
-      <Package>glib-sharp-2.0</Package>
     </Reference>
     <Reference Include="gtk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
       <Private>False</Private>
-      <Package>gtk-sharp-2.0</Package>
-    </Reference>
-    <Reference Include="glade-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
-      <Private>False</Private>
-      <Package>glade-sharp-2.0</Package>
     </Reference>
     <Reference Include="pango-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
       <Private>False</Private>
-      <Package>gtk-sharp-2.0</Package>
     </Reference>
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -70,6 +62,19 @@
     <Compile Include="GUI Code\PreferencesWindow.cs" />
     <Compile Include="GUI Code\RenameClockDialog.cs" />
     <Compile Include="GUI Code\StopwatchWindow.cs" />
+    <Compile Include="Clock.cs" />
+    <Compile Include="TimedCaller.cs" />
+    <Compile Include="Preferences.cs" />
+    <Compile Include="StartupSettings.cs" />
+    <Compile Include="TimeFormatSettings.cs" />
+    <Compile Include="LogEntry.cs" />
+    <Compile Include="LoggingHandler.cs" />
+    <Compile Include="TimeLogger.cs" />
+    <Compile Include="ConfigFile.cs" />
+    <Compile Include="ConfigSection.cs" />
+    <Compile Include="History\Doable.cs" />
+    <Compile Include="History\History.cs" />
+    <Compile Include="History\DeleteLogsDoable.cs" />
     <Compile Include="gtk-gui\generated.cs" />
     <Compile Include="gtk-gui\Chrono.LoggerWindow.cs" />
     <Compile Include="gtk-gui\Chrono.StopwatchWindow.cs" />
@@ -77,41 +82,55 @@
     <Compile Include="gtk-gui\Chrono.PreferencesWindow.cs" />
     <Compile Include="gtk-gui\Chrono.ClockPropertiesWindow.cs" />
     <Compile Include="gtk-gui\Chrono.AboutDialog.cs" />
-    <Compile Include="Clock.cs" />
-    <Compile Include="ClockEventArgs.cs" />
-    <Compile Include="ClockHandlerEventArgs.cs" />
-    <Compile Include="LoggingEventArgs.cs" />
-    <Compile Include="TimedCaller.cs" />
-    <Compile Include="Preferences.cs" />
-    <Compile Include="StartupSettings.cs" />
-    <Compile Include="TimeFormatFlags.cs" />
-    <Compile Include="TimeFormatSettings.cs" />
-    <Compile Include="LogEntry.cs" />
-    <Compile Include="LoggingHandler.cs" />
-    <Compile Include="TimeLogger.cs" />
-    <Compile Include="ConfigFile.cs" />
-    <Compile Include="ConfigSection.cs" />
+    <Compile Include="Events\HistoryChangedEvent.cs" />
+    <Compile Include="Events\ClockEvent.cs" />
+    <Compile Include="Events\LoggingEvent.cs" />
+    <Compile Include="Events\ClockHandlerEvent.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\extra\icon.ico">
-      <Link>Resources\icon.ico</Link>
-      <LogicalName>Chrono.icon.ico</LogicalName>
-    </EmbeddedResource>
     <EmbeddedResource Include="..\extra\backward.png">
+      <DeployService-UseProjectRelativePath>True</DeployService-UseProjectRelativePath>
       <Link>Resources\backward.png</Link>
       <LogicalName>Chrono.backward.png</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="..\extra\forward.png">
+      <DeployService-UseProjectRelativePath>True</DeployService-UseProjectRelativePath>
       <Link>Resources\forward.png</Link>
       <LogicalName>Chrono.forward.png</LogicalName>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\extra\pause.png">
+      <DeployService-UseProjectRelativePath>True</DeployService-UseProjectRelativePath>
+      <Link>Resources\pause.png</Link>
+      <LogicalName>Chrono.pause.png</LogicalName>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\extra\undo.png">
+      <DeployService-UseProjectRelativePath>True</DeployService-UseProjectRelativePath>
       <Link>Resources\undo.png</Link>
       <LogicalName>Chrono.undo.png</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\extra\stop.png">
-      <Link>Resources\stop.png</Link>
-      <LogicalName>Chrono.stop.png</LogicalName>
+    <EmbeddedResource Include="..\extra\chrono-marker-16.png">
+      <DeployService-UseProjectRelativePath>True</DeployService-UseProjectRelativePath>
+      <Link>Resources\chrono-marker-16.png</Link>
+      <LogicalName>Chrono.chrono-marker-16.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\extra\chrono-marker-24.png">
+      <DeployService-UseProjectRelativePath>True</DeployService-UseProjectRelativePath>
+      <Link>Resources\chrono-marker-24.png</Link>
+      <LogicalName>Chrono.chrono-marker-24.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\extra\chrono-marker-32.png">
+      <DeployService-UseProjectRelativePath>True</DeployService-UseProjectRelativePath>
+      <Link>Resources\chrono-marker-32.png</Link>
+      <LogicalName>Chrono.chrono-marker-32.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\extra\chrono-marker-64.png">
+      <DeployService-UseProjectRelativePath>True</DeployService-UseProjectRelativePath>
+      <Link>Resources\chrono-marker-64.png</Link>
+      <LogicalName>Chrono.chrono-marker-64.png</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\extra\chrono-marker-48.png">
+      <Link>Resources\chrono-marker-48.png</Link>
+      <LogicalName>Chrono.chrono-marker-48.png</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="gtk-gui\gui.stetic">
       <LogicalName>gui.stetic</LogicalName>
@@ -124,5 +143,7 @@
   <ItemGroup />
   <ItemGroup>
     <Folder Include="GUI Code\" />
+    <Folder Include="History\" />
+    <Folder Include="Events\" />
   </ItemGroup>
 </Project>

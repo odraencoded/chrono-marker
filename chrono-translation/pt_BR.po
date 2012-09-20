@@ -1,0 +1,289 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: chrono-marker 0.5\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-09-18 01:08:20-0300\n"
+"PO-Revision-Date: 2012-09-18 01:13:17-0300\n"
+"Last-Translator: Leonardo Augusto Pereira\n"
+"Language-Team: \n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: MonoDevelop Gettext addin\n"
+
+#: ../chrono-marker/GUI Code/ClockPropertiesWindow.cs:34
+msgid "Rename"
+msgstr "Renomear"
+
+#: ../chrono-marker/GUI Code/ClockPropertiesWindow.cs:38
+#: ../chrono-marker/gtk-gui/Chrono.ClockPropertiesWindow.cs:1
+msgid "Create"
+msgstr "Criar"
+
+#: ../chrono-marker/GUI Code/ClockPropertiesWindow.cs:64
+msgid "Blank names are not valid."
+msgstr "Nomes em branco não são válidos."
+
+#: ../chrono-marker/GUI Code/ClockPropertiesWindow.cs:65
+msgid ""
+"A clock with named \"{0}\" already exists!\n"
+"Please choose another name."
+msgstr ""
+"Um cronômetro chamado \"{0}\" já existe!\n"
+"Favor escolher outro nome."
+
+#: ../chrono-marker/GUI Code/RenameClockDialog.cs:2
+msgid "Rename {0}"
+msgstr "Renomear {0}"
+
+#: ../chrono-marker/GUI Code/StopwatchWindow.cs:40
+msgid "Stopwatch - {0}"
+msgstr "Cronômetro - {0}"
+
+#: ../chrono-marker/GUI Code/StopwatchWindow.cs:54
+msgid "Start"
+msgstr "Contar"
+
+#: ../chrono-marker/GUI Code/StopwatchWindow.cs:55
+msgid "Begins counting forward"
+msgstr "Começa a contar para frente"
+
+#: ../chrono-marker/GUI Code/StopwatchWindow.cs:55
+msgid "Begins counting backward"
+msgstr "Começa contar para trás"
+
+#: ../chrono-marker/GUI Code/StopwatchWindow.cs:56
+msgid "Stop"
+msgstr "Parar"
+
+#: ../chrono-marker/GUI Code/StopwatchWindow.cs:56
+msgid "Stops counting"
+msgstr "Para de contar"
+
+#: ../chrono-marker/GUI Code/StopwatchWindow.cs:57
+#: ../chrono-marker/gtk-gui/Chrono.LoggerWindow.cs:1
+msgid "Undo"
+msgstr "Desfazer"
+
+#: ../chrono-marker/GUI Code/StopwatchWindow.cs:57
+msgid "Reverts changes made to the display"
+msgstr "Reverte mudanças feitas no display"
+
+#: ../chrono-marker/gtk-gui/Chrono.LoggerWindow.cs:1
+msgid "File"
+msgstr "Arquivo"
+
+#: ../chrono-marker/gtk-gui/Chrono.LoggerWindow.cs:1
+msgid "Quit"
+msgstr "Sair"
+
+#: ../chrono-marker/gtk-gui/Chrono.LoggerWindow.cs:1
+msgid "Help"
+msgstr "Ajuda"
+
+#: ../chrono-marker/gtk-gui/Chrono.LoggerWindow.cs:1
+msgid "About"
+msgstr "Sobre"
+
+#: ../chrono-marker/gtk-gui/Chrono.LoggerWindow.cs:1
+msgid "Edit"
+msgstr "Editar"
+
+#: ../chrono-marker/gtk-gui/Chrono.LoggerWindow.cs:1
+msgid "Copy"
+msgstr "Copiar"
+
+#: ../chrono-marker/gtk-gui/Chrono.LoggerWindow.cs:1
+msgid "Delete"
+msgstr "Excluir"
+
+#: ../chrono-marker/gtk-gui/Chrono.LoggerWindow.cs:1
+msgid "Select all"
+msgstr "Selecionar tudo"
+
+#: ../chrono-marker/gtk-gui/Chrono.LoggerWindow.cs:1
+msgid "Export..."
+msgstr "Exportar..."
+
+#: ../chrono-marker/gtk-gui/Chrono.LoggerWindow.cs:1
+msgid "Stopwatches..."
+msgstr "Cronômetros..."
+
+#: ../chrono-marker/gtk-gui/Chrono.LoggerWindow.cs:1
+msgid "Preferences..."
+msgstr "Preferências..."
+
+#: ../chrono-marker/gtk-gui/Chrono.LoggerWindow.cs:1
+msgid "Redo"
+msgstr "Refazer"
+
+#: ../chrono-marker/gtk-gui/Chrono.StopwatchWindow.cs:1
+#: ../chrono-marker/gtk-gui/Chrono.PreferencesWindow.cs:1
+msgid "Stopwatch"
+msgstr "Cronômetro"
+
+#: ../chrono-marker/gtk-gui/Chrono.RenameClockDialog.cs:1
+msgid "New name"
+msgstr "Novo nome"
+
+#: ../chrono-marker/gtk-gui/Chrono.PreferencesWindow.cs:1
+msgid "Preferences"
+msgstr "Preferências"
+
+#: ../chrono-marker/gtk-gui/Chrono.PreferencesWindow.cs:1
+msgid "Create a stopwatch on startup"
+msgstr "Criar um cronômetro ao iniciar"
+
+#: ../chrono-marker/gtk-gui/Chrono.PreferencesWindow.cs:1
+#: ../chrono-marker/gtk-gui/Chrono.ClockPropertiesWindow.cs:1
+msgid "Name"
+msgstr "Nome"
+
+#: ../chrono-marker/gtk-gui/Chrono.PreferencesWindow.cs:1
+msgid "Start docked in the log window"
+msgstr "Iniciar acoplado a janela de registros"
+
+#: ../chrono-marker/gtk-gui/Chrono.PreferencesWindow.cs:1
+msgid "Startup"
+msgstr "Ao iniciar"
+
+#: ../chrono-marker/gtk-gui/Chrono.PreferencesWindow.cs:1
+msgid "Show the following on the time display box"
+msgstr "Exibir no display do cronômetro"
+
+#: ../chrono-marker/gtk-gui/Chrono.PreferencesWindow.cs:1
+msgid "Preview"
+msgstr "Previsualização"
+
+#: ../chrono-marker/gtk-gui/Chrono.PreferencesWindow.cs:1
+msgid "Abbreviations"
+msgstr "Abreviações"
+
+#: ../chrono-marker/gtk-gui/Chrono.PreferencesWindow.cs:1
+msgid "Hours"
+msgstr "Horas"
+
+#: ../chrono-marker/gtk-gui/Chrono.PreferencesWindow.cs:1
+msgid "Leading zero"
+msgstr "Zero à esquerda"
+
+#: ../chrono-marker/gtk-gui/Chrono.PreferencesWindow.cs:1
+msgid "Milliseconds"
+msgstr "Milisegundos"
+
+#: ../chrono-marker/gtk-gui/Chrono.PreferencesWindow.cs:1
+msgid "Minus symbol"
+msgstr "Sinal de menos"
+
+#: ../chrono-marker/gtk-gui/Chrono.PreferencesWindow.cs:1
+msgid "Minutes"
+msgstr "Minutos"
+
+#: ../chrono-marker/gtk-gui/Chrono.PreferencesWindow.cs:1
+msgid "Plus symbol"
+msgstr "Sinal de mais"
+
+#: ../chrono-marker/gtk-gui/Chrono.PreferencesWindow.cs:1
+msgid "Seconds"
+msgstr "Segundos"
+
+#: ../chrono-marker/gtk-gui/Chrono.PreferencesWindow.cs:1
+msgid "Separators"
+msgstr "Separadores"
+
+#: ../chrono-marker/gtk-gui/Chrono.PreferencesWindow.cs:1
+msgid "Stopwatches are compact by default"
+msgstr "Cronômetros são compactos por padrão"
+
+#: ../chrono-marker/gtk-gui/Chrono.ClockPropertiesWindow.cs:1
+msgid "Stopwatches"
+msgstr "Cronômetros"
+
+#: ../chrono-marker/gtk-gui/Chrono.ClockPropertiesWindow.cs:1
+msgid "Log the following events"
+msgstr "Registrar os seguintes eventos"
+
+#: ../chrono-marker/gtk-gui/Chrono.ClockPropertiesWindow.cs:1
+msgid "When the Start button is clicked"
+msgstr "Quando o botão contar for clicado"
+
+#: ../chrono-marker/gtk-gui/Chrono.ClockPropertiesWindow.cs:1
+msgid "When the Stop button is clicked"
+msgstr "Quando o botão Parar for clicado"
+
+#: ../chrono-marker/gtk-gui/Chrono.ClockPropertiesWindow.cs:1
+msgid "Clock speed settings"
+msgstr "Configuração de velocidade"
+
+#: ../chrono-marker/gtk-gui/Chrono.ClockPropertiesWindow.cs:1
+msgid "Counting backwards"
+msgstr "Contar para trás"
+
+#: ../chrono-marker/gtk-gui/Chrono.ClockPropertiesWindow.cs:1
+msgid "Counting forward"
+msgstr "Contar para frente"
+
+#: ../chrono-marker/gtk-gui/Chrono.ClockPropertiesWindow.cs:1
+msgid "Ticking speed"
+msgstr "Velocidade de contagem"
+
+#: ../chrono-marker/gtk-gui/Chrono.ClockPropertiesWindow.cs:1
+msgid "Apply speed"
+msgstr "Aplicar velocidade"
+
+#: ../chrono-marker/gtk-gui/Chrono.ClockPropertiesWindow.cs:1
+msgid "Window settings"
+msgstr "Configurações de janela"
+
+#: ../chrono-marker/gtk-gui/Chrono.ClockPropertiesWindow.cs:1
+msgid "Compact mode"
+msgstr "Modo compacto"
+
+#: ../chrono-marker/gtk-gui/Chrono.ClockPropertiesWindow.cs:1
+msgid "Display"
+msgstr "Exibir"
+
+#: ../chrono-marker/gtk-gui/Chrono.ClockPropertiesWindow.cs:1
+msgid "Dock in log window"
+msgstr "Acoplar na janela de registro"
+
+#: ../chrono-marker/gtk-gui/Chrono.ClockPropertiesWindow.cs:1
+msgid "Normal mode"
+msgstr "Modo normal"
+
+#: ../chrono-marker/gtk-gui/Chrono.ClockPropertiesWindow.cs:1
+msgid "Display on top"
+msgstr "Exibir ao topo"
+
+#: ../chrono-marker/gtk-gui/Chrono.ClockPropertiesWindow.cs:1
+msgid "General"
+msgstr "Geral"
+
+#: ../chrono-marker/gtk-gui/Chrono.AboutDialog.cs:1
+msgid "About Chrono Marker"
+msgstr "Sobre Chrono Marker"
+
+#: ../chrono-marker/gtk-gui/Chrono.AboutDialog.cs:1
+msgid "License"
+msgstr "Licença"
+
+#: ../chrono-marker/Preferences.cs:14
+msgid "First Clock Name"
+msgstr ""
+
+#: ../chrono-marker/History/DeleteLogsDoable.cs:5
+msgid "Redelete a log"
+msgid_plural "Redelete {0} logs"
+msgstr[0] "Deexcluir um registro"
+msgstr[1] "Reexcluir {0} registros"
+
+#: ../chrono-marker/History/DeleteLogsDoable.cs:7
+msgid "Undelete a log"
+msgid_plural "Undelete {0} logs"
+msgstr[0] "Desexcluir um registro"
+msgstr[1] "Desexcluir {0} registros"
+
+#~ msgid "Clock name"
+#~ msgstr "Nome"
+

@@ -10,6 +10,81 @@ namespace Stetic
 		{
 			if ((Stetic.Gui.initialized == false)) {
 				Stetic.Gui.initialized = true;
+				global::Gtk.IconFactory w1 = new global::Gtk.IconFactory ();
+				global::Gtk.IconSet w2 = new global::Gtk.IconSet (global::Gdk.Pixbuf.LoadFromResource ("Chrono.forward.png"));
+				w1.Add ("chrono-forward", w2);
+				global::Gtk.IconSet w3 = new global::Gtk.IconSet (global::Gdk.Pixbuf.LoadFromResource ("Chrono.backward.png"));
+				w1.Add ("chrono-backward", w3);
+				global::Gtk.IconSet w4 = new global::Gtk.IconSet (global::Gdk.Pixbuf.LoadFromResource ("Chrono.pause.png"));
+				w1.Add ("chrono-pause", w4);
+				global::Gtk.IconSet w5 = new global::Gtk.IconSet (global::Gdk.Pixbuf.LoadFromResource ("Chrono.undo.png"));
+				w1.Add ("chrono-undo", w5);
+				global::Gtk.IconSet w6 = new global::Gtk.IconSet ();
+				global::Gtk.IconSource w7 = new global::Gtk.IconSource ();
+				w7.Pixbuf = global::Gdk.Pixbuf.LoadFromResource ("Chrono.chrono-marker-16.png");
+				w7.SizeWildcarded = false;
+				w7.Size = global::Gtk.IconSize.Menu;
+				w6.AddSource (w7);
+				global::Gtk.IconSource w8 = new global::Gtk.IconSource ();
+				w8.Pixbuf = global::Gdk.Pixbuf.LoadFromResource ("Chrono.chrono-marker-24.png");
+				w8.SizeWildcarded = false;
+				w8.Size = global::Gtk.IconSize.SmallToolbar;
+				w6.AddSource (w8);
+				global::Gtk.IconSource w9 = new global::Gtk.IconSource ();
+				w9.Pixbuf = global::Gdk.Pixbuf.LoadFromResource ("Chrono.chrono-marker-32.png");
+				w9.SizeWildcarded = false;
+				w9.Size = global::Gtk.IconSize.Button;
+				w6.AddSource (w9);
+				global::Gtk.IconSource w10 = new global::Gtk.IconSource ();
+				w10.Pixbuf = global::Gdk.Pixbuf.LoadFromResource ("Chrono.chrono-marker-48.png");
+				w10.SizeWildcarded = false;
+				w10.Size = global::Gtk.IconSize.LargeToolbar;
+				w6.AddSource (w10);
+				global::Gtk.IconSource w11 = new global::Gtk.IconSource ();
+				w11.Pixbuf = global::Gdk.Pixbuf.LoadFromResource ("Chrono.chrono-marker-64.png");
+				w11.SizeWildcarded = false;
+				w11.Size = global::Gtk.IconSize.Dialog;
+				w6.AddSource (w11);
+				w1.Add ("chrono-marker", w6);
+				w1.AddDefault ();
+			}
+		}
+	}
+	
+	internal class IconLoader
+	{
+		public static Gdk.Pixbuf LoadIcon (Gtk.Widget widget, string name, Gtk.IconSize size)
+		{
+			Gdk.Pixbuf res = widget.RenderIcon (name, size, null);
+			if ((res != null)) {
+				return res;
+			} else {
+				int sz;
+				int sy;
+				global::Gtk.Icon.SizeLookup (size, out sz, out sy);
+				try {
+					return Gtk.IconTheme.Default.LoadIcon (name, sz, 0);
+				} catch (System.Exception) {
+					if ((name != "gtk-missing-image")) {
+						return Stetic.IconLoader.LoadIcon (widget, "gtk-missing-image", size);
+					} else {
+						Gdk.Pixmap pmap = new Gdk.Pixmap (Gdk.Screen.Default.RootWindow, sz, sz);
+						Gdk.GC gc = new Gdk.GC (pmap);
+						gc.RgbFgColor = new Gdk.Color (255, 255, 255);
+						pmap.DrawRectangle (gc, true, 0, 0, sz, sz);
+						gc.RgbFgColor = new Gdk.Color (0, 0, 0);
+						pmap.DrawRectangle (gc, false, 0, 0, (sz - 1), (sz - 1));
+						gc.SetLineAttributes (3, Gdk.LineStyle.Solid, Gdk.CapStyle.Round, Gdk.JoinStyle.Round);
+						gc.RgbFgColor = new Gdk.Color (255, 0, 0);
+						pmap.DrawLine (gc, (sz / 4), (sz / 4), ((sz - 1) 
+							- (sz / 4)), ((sz - 1) 
+							- (sz / 4)));
+						pmap.DrawLine (gc, ((sz - 1) 
+							- (sz / 4)), (sz / 4), (sz / 4), ((sz - 1) 
+							- (sz / 4)));
+						return Gdk.Pixbuf.FromDrawable (pmap, pmap.Colormap, 0, 0, 0, 0, sz, sz);
+					}
+				}
 			}
 		}
 	}

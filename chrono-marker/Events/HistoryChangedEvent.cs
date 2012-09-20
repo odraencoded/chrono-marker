@@ -1,5 +1,5 @@
 //
-//  RenameClockDialog.cs
+//  HistoryChangedEventArgs.cs
 //
 //  Author:
 //       Leonardo Augusto Pereira <http://code.google.com/p/chrono-marker/>
@@ -19,21 +19,19 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
-using Gtk;
-using Mono.Unix;
 
 namespace Chrono
 {
-	public partial class RenameClockDialog : Dialog
+	public class HistoryChangedArgs : EventArgs
 	{
-		public RenameClockDialog(string previousName)
+		public HistoryChangedArgs(History history)
 		{
-			this.Build( );
-
-			newNameEntry.Text = previousName;
-			Title = string.Format(Catalog.GetString("Rename {0}"), previousName);
+			History = history;
 		}
-		public string NewName { get { return newNameEntry.Text; } }
+
+		public History History { get; private set; }
 	}
+
+	public delegate void HistoryChangedHandler(object sender, HistoryChangedArgs e);
 }
 

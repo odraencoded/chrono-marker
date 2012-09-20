@@ -16,7 +16,6 @@ namespace Chrono
 			// Widget Chrono.RenameClockDialog
 			this.Name = "Chrono.RenameClockDialog";
 			this.Title = "Rename Clock";
-			this.Icon = global::Gdk.Pixbuf.LoadFromResource ("Chrono.icon.ico");
 			this.TypeHint = ((global::Gdk.WindowTypeHint)(1));
 			this.WindowPosition = ((global::Gtk.WindowPosition)(4));
 			this.Modal = true;
@@ -43,6 +42,7 @@ namespace Chrono
 			w2.Fill = false;
 			// Container child hbox2.Gtk.Box+BoxChild
 			this.newNameEntry = new global::Gtk.Entry ();
+			this.newNameEntry.TooltipMarkup = "Enter a new name for the stopwatch here";
 			this.newNameEntry.CanFocus = true;
 			this.newNameEntry.Name = "newNameEntry";
 			this.newNameEntry.IsEditable = true;

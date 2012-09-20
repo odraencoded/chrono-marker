@@ -44,10 +44,6 @@ namespace Chrono
             return Timestamp.CompareTo(other.Timestamp);
         }
 
-        public override int GetHashCode()
-        {
-            return _timestamp.GetHashCode();
-        }
         public override string ToString()
         {
             return "[" + _timestamp.ToString("HH:mm:ss.fff") + "] " + _clockName + " - " + _description;

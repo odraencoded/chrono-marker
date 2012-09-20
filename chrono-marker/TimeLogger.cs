@@ -88,8 +88,8 @@ namespace Chrono
 		/// </param>
 		public LoggingHandler CreateClock(string name)
 		{
-
-			if(string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Blank name");
+			if(string.IsNullOrWhiteSpace(name)) 
+				throw new ArgumentException("Blank name");
 
 			if( _namedHandlers.ContainsKey( name ) )
 				throw new ArgumentException(string.Format(
@@ -176,29 +176,45 @@ namespace Chrono
         #endregion
 
         #region Log entry manipulation
-		public void AddEntry(LogEntry entry)
+		public void AddEntry(params LogEntry[] manyEntries)
 		{
-			if( _logEntryNodes.ContainsKey( entry ) )
-				throw new ArgumentException("Duplicated entry", "entry");
+			// Nothing to add here, going back
+			if(manyEntries.Length == 0)
+				return;
 
-			LinkedListNode<LogEntry> logNode = _manyLogEntries.AddLast( entry );
-			_logEntryNodes.Add( entry, logNode );
+			foreach( LogEntry entry in manyEntries ) 
+			{
+				if( _logEntryNodes.ContainsKey( entry ) )
+					throw new ArgumentException("Duplicated entry", "entry");
 
-			if( EntryAdded != null )
-				EntryAdded( this, new LoggingEventArgs(this, entry) );
+				LinkedListNode<LogEntry> logNode = _manyLogEntries.AddLast( entry );
+				_logEntryNodes.Add( entry, logNode );
+			}
+
+			// This event is raised only once no matter how many entries are added
+			if(EntryAdded != null)
+				EntryAdded(this, new LoggingEventArgs(this, manyEntries));
 		}
-		public void RemoveEntry(LogEntry entry)
-		{
-			LinkedListNode<LogEntry> logNode;
 
-			if( !_logEntryNodes.TryGetValue( entry, out logNode ) )
+		public void DeleteEntry(params LogEntry[] manyEntries)
+		{
+			// Nothing to delete here, going back
+			if(manyEntries.Length == 0)
+				return;
+
+			foreach( LogEntry entry in manyEntries ) {
+				LinkedListNode<LogEntry> logNode;
+
+				if( !_logEntryNodes.TryGetValue( entry, out logNode ) )
 				throw new ArgumentException("Entry does not exist on this logger", "entry");
 
 			_manyLogEntries.Remove( logNode );
 			_logEntryNodes.Remove( entry );
+			}
 
+			// This event is raised only once no matter how many entries are deleted
 			if( EntryDeleted != null )
-				EntryDeleted( this, new LoggingEventArgs(this, entry) );
+				EntryDeleted( this, new LoggingEventArgs(this, manyEntries) );
 		}
         #endregion
 

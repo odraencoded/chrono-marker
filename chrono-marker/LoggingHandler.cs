@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Mono.Unix;
 
 namespace Chrono
 {
@@ -31,14 +32,11 @@ namespace Chrono
         public LoggingHandler(TimeLogger logger, Clock clock, string name)
 		{
 			_name = name;
-			_clock = clock;
-			_logger = logger;
+			Clock = clock;
+			Logger = logger;
 
-			_clock.Started += clockStarted_event;
-			_clock.Stopped += clockStopped_event;
-
-			_logStops = true;
-			_logStarts = true;
+			LogStarts = true;
+			LogStops = true;
 		}
 
 		/// <summary>
@@ -55,6 +53,7 @@ namespace Chrono
 			{
 				if(value == _name)
 					return;
+
 				string prevName = _name;
 				_name = value;
 				Logger.RefreshClock(prevName);
@@ -64,8 +63,10 @@ namespace Chrono
 			}
 		}
 
-		public TimeLogger Logger { get { return _logger; } }
-		public Clock Clock { get { return _clock; } }
+		private string _name;
+
+		public TimeLogger Logger { get; private set; }
+		public Clock Clock { get; private set; }
 
 		public TimeFormatSettings TimeFormatSettings {
 			get
@@ -83,11 +84,13 @@ namespace Chrono
 			set {
 				if( value == _logStarts )
 					return;
+
 				if( value == true ) {
 					Clock.Started += clockStarted_event;
 				} else {
 					Clock.Started -= clockStarted_event;
 				}
+
 				_logStarts = value;
 			}
 		}
@@ -96,11 +99,13 @@ namespace Chrono
 			set {
 				if( value == _logStops )
 					return;
+
 				if( value == true ) {
 					Clock.Stopped += clockStopped_event;
 				} else {
 					Clock.Stopped -= clockStopped_event;
 				}
+
 				_logStops = value;
 			}
 		}
@@ -108,74 +113,54 @@ namespace Chrono
 		private bool _logStarts;
 		private bool _logStops;
 
-		private string _name;
-		private readonly TimeLogger _logger;
-		private readonly Clock _clock;
+		public TimeSpan UpperCap { get { return new TimeSpan(7, 0, 0, 0, 0); } }
+		public TimeSpan LowerCap { get { return new TimeSpan(-7, 0, 0, 0, 0); } }
 
-        private void clockStarted_event(object sender, ClockEventArgs e)
-		{
-			string logDesc = "Started ";
-
-			if( e.Speed >= 0 )
-				logDesc += "ticking";
-			else
-				logDesc += "counting down";
-
-			TimeSpan displayTime = e.DisplayTime;
-			if( displayTime != TimeSpan.Zero ) 
+		public string CurrentTime {
+			get
 			{
-				TimeSpan weekCap = new TimeSpan(7, 0, 0, 0, 0);
+				TimeSpan clockTime = Clock.ElapsedTime;
 
-				if( displayTime.Duration( ) > weekCap ) {
-					if( displayTime.Ticks >= 0 )
-						displayTime = weekCap;
-					else
-						displayTime = weekCap.Negate( );
-				}
+				if(clockTime > UpperCap) clockTime = UpperCap;
+				else if(clockTime < LowerCap) clockTime = LowerCap;
 
-				logDesc += " with " + TimeFormatSettings.ToString( displayTime );
+				return TimeFormatSettings.ToString(clockTime);
 			}
-			logDesc += ".";
-
-			Logger.AddEntry( new LogEntry(_name, logDesc, e.Timestamp) );
 		}
-        private void clockStopped_event(object sender, ClockEventArgs e)
-		{
-			string logDesc = "Stopped ";
-
-			if( e.Speed >= 0 )
-				logDesc += "ticking";
-			else
-				logDesc += "counting down";
-
-			TimeSpan displayTime = e.DisplayTime;
-
-			if( displayTime != TimeSpan.Zero ) 
-			{
-				TimeSpan weekCap = new TimeSpan(7, 0, 0, 0, 0);
-			
-				if( displayTime.Duration( ) > weekCap ) {
-					if( displayTime.Ticks >= 0 )
-						displayTime = weekCap;
-					else
-						displayTime = weekCap.Negate( );
-				}
-				logDesc += " with " + TimeFormatSettings.ToString( displayTime );
-			}
-
-            logDesc += ".";
-
-            Logger.AddEntry( new LogEntry(_name, logDesc, e.Timestamp) );
-        }
 
 		/// <summary>
 		/// Occurs when the Name property is changed
 		/// </summary>
 		public event EventHandler Renamed;
 
+        private void clockStarted_event(object sender, ClockEventArgs e)
+		{
+			string translatable, logDesc;
+
+			if(e.Speed >= 0)
+				translatable = Catalog.GetString("Started ticking with {0}.");
+			else translatable = Catalog.GetString("Started counting down with {0}.");
+
+			logDesc = string.Format(translatable, CurrentTime);
+
+			Logger.AddEntry( new LogEntry(_name, logDesc, e.Timestamp) );
+		}
+        private void clockStopped_event(object sender, ClockEventArgs e)
+		{
+			string translatable, logDesc;
+
+			if( e.Speed >= 0 )
+				translatable = Catalog.GetString( "Stopped ticking at {0}." );
+			else translatable = Catalog.GetString( "Stopped counting down at {0}." );
+
+			logDesc = string.Format( translatable, CurrentTime);
+
+			Logger.AddEntry( new LogEntry(_name, logDesc, e.Timestamp) );
+        }
+
 		public override int GetHashCode()
 		{
-			return _clock.GetHashCode( ) ^ _logger.GetHashCode( );
+			return Clock.GetHashCode( ) ^ Logger.GetHashCode( );
 		}
     }
 }

@@ -22,6 +22,7 @@
 using System;
 using Gtk;
 using System.Collections.Generic;
+using Mono.Unix;
 
 namespace Chrono
 {
@@ -30,19 +31,23 @@ namespace Chrono
 		public LoggerWindow(Program program) : 
 				base(Gtk.WindowType.Toplevel)
 		{
-			if(program == null)
+			if( program == null )
 				throw new ArgumentNullException("program");
 
-			this.Build();
+			this.Build( );
 
 			dockExpanderVBox = new VBox();
-			vbox1.Add(dockExpanderVBox);
+			vbox1.Add( dockExpanderVBox );
 
-			Box.BoxChild vboxChild = (Box.BoxChild) vbox1[dockExpanderVBox];
+			Box.BoxChild vboxChild = ( Box.BoxChild )vbox1 [dockExpanderVBox];
 			vboxChild.Expand = false;
 			vboxChild.Fill = false;
 
-			dockExpanderVBox.Show();
+			dockExpanderVBox.Show( );
+
+			logViewMenu = new Menu();
+			logViewMenu.Append( copyAction.CreateMenuItem( ) );
+			logViewMenu.Append( deleteAction.CreateMenuItem( ) );
 
 			Program = program;
 
@@ -52,57 +57,51 @@ namespace Chrono
 			CellRendererText cellRenderer = new CellRendererText();
 
 			TreeViewColumn clockColumn = new TreeViewColumn();
-			clockColumn.Title = "Source";
+			clockColumn.Title = Catalog.GetString("Source");
 			clockColumn.PackStart( cellRenderer, true );
 			clockColumn.AddAttribute( cellRenderer, "text", 1 );
 
 			TreeViewColumn descColumn = new TreeViewColumn();
-			descColumn.Title = "Event";
+			descColumn.Title = Catalog.GetString("Event");
 			descColumn.PackStart( cellRenderer, true );
 			descColumn.AddAttribute( cellRenderer, "text", 2 );
 
 			TreeViewColumn timeColumn = new TreeViewColumn();
-			timeColumn.Title = "Occurred";
+			timeColumn.Title = Catalog.GetString("Occurred");
 			timeColumn.PackStart( cellRenderer, true );
 			timeColumn.AddAttribute( cellRenderer, "text", 3 );
+
+			TreeViewColumn[] manyColumns = new TreeViewColumn[] 
+			{clockColumn, descColumn, timeColumn};
+
+			foreach(TreeViewColumn column in manyColumns)
+			{
+				logView.AppendColumn(column);
+
+				column.Resizable = true;
+				column.Reorderable = true;
+				column.SortIndicator = true;
+			}
 
 			logView.Model = _logStore = new ListStore(
 				typeof( LogEntry ), typeof( string ), typeof( string ), typeof( string ));
 
 			logView.Selection.Mode = SelectionMode.Multiple;
 
-			logView.AppendColumn( clockColumn );
-			logView.AppendColumn( descColumn );
-			logView.AppendColumn( timeColumn );
-
 			clockColumn.SortColumnId = 1;
 			descColumn.SortColumnId = 2;
 			timeColumn.SortColumnId = 3;
-
-			clockColumn.SortIndicator = true;
-			descColumn.SortIndicator = true;
-			timeColumn.SortIndicator = true;
-
-			clockColumn.Resizable = true;
-			descColumn.Resizable = true;
-			timeColumn.Resizable = true;
-
-			clockColumn.Reorderable = true;
-			descColumn.Reorderable = true;
-			timeColumn.Reorderable = true;
 
 			clockColumn.MinWidth = 40;
 			descColumn.MinWidth = 120;
 			timeColumn.MinWidth = 40;
 
-			_logStore.SetSortColumnId(3,SortType.Descending); 
+			_logStore.SetSortColumnId(3, SortType.Descending); 
 
 			_logEntryRows = new Dictionary<LogEntry, TreeIter>();
 			logView.Selection.Changed += logViewSelectionChanged_event;
 
-			_logViewMenu = new Menu();
-			_logViewMenu.Append(copyAction.CreateMenuItem());
-			_logViewMenu.Append(deleteAction.CreateMenuItem());
+			Program.History.Changed += historyChanged_event;
 		}
 
 		public Program Program { get; private set; }
@@ -110,17 +109,15 @@ namespace Chrono
 
 		private Dictionary<LogEntry, TreeIter> _logEntryRows;
 
-		private Menu _logViewMenu;
+		private Menu logViewMenu;
 		private ListStore _logStore;
 
 		private VBox dockExpanderVBox;
 
 		private List<LogEntry> GetSelectedLogs()
 		{
-			List<LogEntry> result = new List<LogEntry>();
-
 			TreePath[] manyPaths = logView.Selection.GetSelectedRows();
-			result.Capacity = manyPaths.Length;
+			List<LogEntry> result = new List<LogEntry>(manyPaths.Length);
 
 			foreach( TreePath selectedPath in manyPaths ) {
 				TreeIter iter;
@@ -145,28 +142,47 @@ namespace Chrono
 			resultBoxChild.Expand = false;
 			resultBoxChild.Fill = false;
 
+			result.CanFocus = true;
+
 			return result;
 		}
 
 		#region Dynamic events
 		private void loggerEntryAdded_event(object sender, LoggingEventArgs e)
 		{
-			TreeIter entryRow = _logStore.AppendValues(
-				e.Entry,
-				e.Entry.ClockName,
-				e.Entry.Description,
-				e.Entry.Timestamp.ToString("HH:mm:ss.fff"));
+			foreach( LogEntry entry in e.Entries ) {
+				TreeIter entryRow = _logStore.AppendValues(
+				entry,
+				entry.ClockName,
+				entry.Description,
+				entry.Timestamp.ToString("HH:mm:ss.fff"));
 
-			_logEntryRows.Add(e.Entry, entryRow);
+				_logEntryRows.Add(entry, entryRow);
+			}
 		}
+
 		private void loggerEntryDelete_event(object sender, LoggingEventArgs e)
 		{
-			TreeIter iter;
-			if(!_logEntryRows.TryGetValue(e.Entry, out iter))return;
+			foreach( LogEntry entry in e.Entries ) {
+				TreeIter iter;
+				if( !_logEntryRows.TryGetValue( entry, out iter ) )
+					continue;
 
-			_logStore.Remove(ref iter);
+				_logStore.Remove( ref iter );
 
-			_logEntryRows.Remove(e.Entry);
+				_logEntryRows.Remove( entry );
+			}
+		}
+
+		private void historyChanged_event(object sender, HistoryChangedArgs e)
+		{
+			if( undoAction.Sensitive = e.History.CanUndo )
+				undoAction.Label = e.History.Undoable.UndoText;
+			else undoAction.Label = Catalog.GetString("Undo");
+
+			if( redoAction.Sensitive = e.History.CanRedo )
+				redoAction.Label = e.History.Redoable.RedoText;
+			else redoAction.Label = Catalog.GetString("Redo");
 		}
 		#endregion
 
@@ -180,7 +196,7 @@ namespace Chrono
 
 		protected void logViewPopup_event(object o, PopupMenuArgs args)
 		{
-			logViewShowContextMenu();
+			showLogViewContextMenu();
 		}
 
 		// This makes this damn event work like it damn should!
@@ -197,14 +213,14 @@ namespace Chrono
 						args.RetVal=true;
 				}
 
-				logViewShowContextMenu( );
+				showLogViewContextMenu( );
 			}
 		}
 
-		private void logViewShowContextMenu()
+		private void showLogViewContextMenu()
 		{
-			_logViewMenu.ShowAll();
-			_logViewMenu.Popup();
+			logViewMenu.Show();
+			logViewMenu.Popup();
 		}
 		#endregion
 
@@ -226,14 +242,19 @@ namespace Chrono
 
 			saveDialog.Destroy();
 		}
+
 		protected void quitAction_event (object sender, EventArgs e)
 		{
 			this.Destroy();
 		}
 
-		protected void selectAllAction_event (object sender, EventArgs e)
+		protected void undo_event (object sender, EventArgs e)
 		{
-			logView.Selection.SelectAll();
+			Program.History.Undo();
+		}
+		protected void redo_event (object sender, EventArgs e)
+		{
+			Program.History.Redo();
 		}
 		protected void copyAction_event(object sender, EventArgs e)
 		{
@@ -260,9 +281,14 @@ namespace Chrono
 			List<LogEntry> selectedEntries = GetSelectedLogs( );
 
 			foreach( LogEntry entry in selectedEntries )
-				Logger.RemoveEntry( entry );
+				Logger.DeleteEntry( entry );
+
+			Program.History.Register(new DeleteLogsDoable(Logger, selectedEntries.ToArray()));
 		}
-		
+		protected void selectAllAction_event (object sender, EventArgs e)
+		{
+			logView.Selection.SelectAll();
+		}
 		protected void editStopwatches_event(object sender, EventArgs e)
 		{
 			Program.ClockPropertiesWindow.Present();

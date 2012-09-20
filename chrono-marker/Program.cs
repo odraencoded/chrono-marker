@@ -31,9 +31,12 @@ namespace Chrono
     public sealed class Program
     {
 		private const string settingsFilename = "config.ini";
+		private const int historySteps = 128;
 
 		private Program()
 		{
+			Gtk.Window.DefaultIconName = "chrono-marker";
+
 			clockWindows = new Dictionary<LoggingHandler, StopwatchWindow>();
 
 			Settings = Preferences.Load(settingsFilename);
@@ -42,6 +45,8 @@ namespace Chrono
 
 			TimeLogger.ClockAdded += loggerClockAdded_event;
 			TimeLogger.ClockRemoved += loggerClockRemoved_event;
+
+			History = new History(historySteps);
 
 			LoggerWindow = new LoggerWindow(this); // This
 			ClockPropertiesWindow = new ClockPropertiesWindow(this); // And this
@@ -86,6 +91,7 @@ namespace Chrono
 		#region Properties & Fields
 		public Preferences Settings { get; private set; }
 		public TimeLogger TimeLogger { get; private set; }
+		public History History { get; private set; }
 
 		public ClockPropertiesWindow ClockPropertiesWindow { get; private set; }
 		public LoggerWindow LoggerWindow { get; private set; }
@@ -102,7 +108,7 @@ namespace Chrono
 		#region Events
 		public event ClockHandlerEventHandler ClockWindowReceivedFocus;
 
-		private void StopwatchFocusIn_event(object sender, FocusInEventArgs e)
+		private void StopwatchFocusIn_event(object sender, EventArgs e)
 		{
 			// This relays a focus in event of a window to the rest of the application
 			StopwatchWindow clockWindow = sender as StopwatchWindow;
@@ -116,8 +122,7 @@ namespace Chrono
 			StopwatchWindow newWindow = new StopwatchWindow(this, e.LoggingHandler);
 
 			newWindow.Compact = Settings.ClockCompactByDefault;
-			newWindow.FocusInEvent += StopwatchFocusIn_event;
-
+			newWindow.DisplayFocused += StopwatchFocusIn_event;
 			clockWindows.Add(e.LoggingHandler, newWindow);
 		}
 
@@ -129,7 +134,7 @@ namespace Chrono
 				return;
 
 			obsoleteWindow.Destroy();
-			obsoleteWindow.FocusInEvent -= StopwatchFocusIn_event;
+			obsoleteWindow.DisplayFocused -= StopwatchFocusIn_event;
 			clockWindows.Remove(e.LoggingHandler);
 		}
 		#endregion

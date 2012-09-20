@@ -24,104 +24,44 @@ namespace Chrono
 {
 	public class TimeFormatSettings
 	{
-		public TimeFormatSettings(TimeFormatFlags flags)
-		{
-			TimeFormatOptions = flags;
-		}
-
 		#region Properties
-		public bool ShowHours {
-			get { return ( TimeFormatOptions & TimeFormatFlags.Hours ) != 0;}
-			set {
-				if( value )
-					TimeFormatOptions |= TimeFormatFlags.Hours;
-				else
-					TimeFormatOptions &= ~TimeFormatFlags.Hours;
-			}
-		}
-
-		public bool ShowMinutes {
-			get { return ( TimeFormatOptions & TimeFormatFlags.Minutes ) != 0;}
-			set {
-				if( value )
-					TimeFormatOptions |= TimeFormatFlags.Minutes;
-				else
-					TimeFormatOptions &= ~TimeFormatFlags.Minutes;
-			}
-		}
-
-		public bool ShowSeconds {
-			get { return ( TimeFormatOptions & TimeFormatFlags.Seconds ) != 0;}
-			set {
-				if( value )
-					TimeFormatOptions |= TimeFormatFlags.Seconds;
-				else
-					TimeFormatOptions &= ~TimeFormatFlags.Seconds;
-			}
-		}
-
-		public bool ShowMilliseconds {
-			get { return ( TimeFormatOptions & TimeFormatFlags.Milliseconds ) != 0;}
-			set {
-				if( value )
-					TimeFormatOptions |= TimeFormatFlags.Milliseconds;
-				else
-					TimeFormatOptions &= ~TimeFormatFlags.Milliseconds;
-			}
-		}
+		public bool ShowHours { get; set; }
+		public bool ShowMinutes { get; set; }
+		public bool ShowSeconds { get; set; }
+		public bool ShowMilliseconds { get; set; }
 		
-		public bool ShowPlusSymbol {
-			get { return ( TimeFormatOptions & TimeFormatFlags.PlusSymbol ) != 0;}
-			set {
-				if( value )
-					TimeFormatOptions |= TimeFormatFlags.PlusSymbol;
-				else
-					TimeFormatOptions &= ~TimeFormatFlags.PlusSymbol;
-			}
-		}
-		
-		public bool ShowMinusSymbol {
-			get { return ( TimeFormatOptions & TimeFormatFlags.MinusSymbol ) != 0;}
-			set {
-				if( value )
-					TimeFormatOptions |= TimeFormatFlags.MinusSymbol;
-				else
-					TimeFormatOptions &= ~TimeFormatFlags.MinusSymbol;
-			}
-		}
+		public bool ShowPlusSymbol { get; set; }		
+		public bool ShowMinusSymbol { get; set; }
 
-		public bool ShowLeadingZero {
-			get { return ( TimeFormatOptions & TimeFormatFlags.LeadingZero ) != 0;}
-			set {
-				if( value )
-					TimeFormatOptions |= TimeFormatFlags.LeadingZero;
-				else
-					TimeFormatOptions &= ~TimeFormatFlags.LeadingZero;
-			}
-		}
-
-		public bool ShowSeparators {
-			get { return ( TimeFormatOptions & TimeFormatFlags.Separators ) != 0;}
-			set {
-				if( value )
-					TimeFormatOptions |= TimeFormatFlags.Separators;
-				else
-					TimeFormatOptions &= ~TimeFormatFlags.Separators;
-			}
-		}
-
-		public TimeFormatFlags TimeFormatOptions { get; set; }
+		public bool ShowLeadingZero { get; set; }
+		public bool ShowSeparators { get; set; }
 		#endregion
+
+		public bool IsSignificant(TimeSpan timespan)
+		{
+			if(ShowMilliseconds && timespan.TotalMilliseconds >= 1)
+				return true;
+			if(ShowSeconds && timespan.TotalSeconds >= 1)
+				return true;
+			if(ShowMinutes && timespan.TotalMinutes >= 1)
+				return true;
+			if(ShowHours && timespan.TotalHours >= 1)
+				return true;
+			return false;
+		}
 
 		public string ToString(TimeSpan timespan)
 		{
 			string leftSymbol;
 			string milliseconds, seconds, minutes, hours;
 
-			if( ShowMinusSymbol && timespan.Ticks < 0 )
-				leftSymbol = "-";
-			else if( ShowPlusSymbol && timespan.Ticks > 0 )
-				leftSymbol = "+";
+			if( IsSignificant( timespan ) ) {
+				if( ShowMinusSymbol && timespan.Ticks < 0 )
+					leftSymbol = "-";
+				else if( ShowPlusSymbol && timespan.Ticks > 0 )
+					leftSymbol = "+";
+				else leftSymbol = "";
+			}
 			else leftSymbol = "";
 
 			timespan = timespan.Duration( );

@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "chrono-marker", "chrono-marker\chrono-marker.csproj", "{C5EBA8E1-1107-4EC4-A184-A06F82FC87E5}"
 EndProject
+Project("{9344bdbb-3e7f-41fc-a0dd-8665d75ee146}") = "chrono-translation", "chrono-translation\chrono-translation.mdproj", "{E6B3510B-4D74-4FB7-8B8C-0CF379C87660}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -13,6 +15,10 @@ Global
 		{C5EBA8E1-1107-4EC4-A184-A06F82FC87E5}.Debug|x86.Build.0 = Debug|x86
 		{C5EBA8E1-1107-4EC4-A184-A06F82FC87E5}.Release|x86.ActiveCfg = Release|x86
 		{C5EBA8E1-1107-4EC4-A184-A06F82FC87E5}.Release|x86.Build.0 = Release|x86
+		{E6B3510B-4D74-4FB7-8B8C-0CF379C87660}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E6B3510B-4D74-4FB7-8B8C-0CF379C87660}.Debug|x86.Build.0 = Debug|Any CPU
+		{E6B3510B-4D74-4FB7-8B8C-0CF379C87660}.Release|x86.ActiveCfg = Release|Any CPU
+		{E6B3510B-4D74-4FB7-8B8C-0CF379C87660}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = chrono-marker\chrono-marker.csproj
@@ -216,6 +222,6 @@ Global
 		$0.DotNetNamingPolicy = $33
 		$33.DirectoryNamespaceAssociation = None
 		$33.ResourceNamePolicy = FileFormatDefault
-		version = 0.4
+		version = 0.5
 	EndGlobalSection
 EndGlobal

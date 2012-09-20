@@ -17,7 +17,7 @@
  */
 
 using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 
 namespace Chrono
@@ -26,16 +26,15 @@ namespace Chrono
 
     public class LoggingEventArgs : EventArgs
     {
-        public LoggingEventArgs(TimeLogger logger, LogEntry entry)
+        public LoggingEventArgs(TimeLogger logger, params LogEntry[] manyEntries)
         {
-            _logger = logger;
-            _logEntry = entry;
+            Logger = logger;
+            _entries = manyEntries;
         }
 
-		public TimeLogger Logger { get { return _logger; } }
-		public LogEntry Entry { get { return _logEntry; } }
+		public TimeLogger Logger { get; private set; }
+		public ReadOnlyCollection<LogEntry> Entries {get { return Array.AsReadOnly(_entries); } }
 
-		private readonly TimeLogger _logger;
-		private readonly LogEntry _logEntry;
+		private readonly LogEntry[] _entries;
 	}
 }

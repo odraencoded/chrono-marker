@@ -40,13 +40,17 @@ namespace Chrono
 		{
 			ConfigFile configFile = new ConfigFile();
 
+			ConfigSection rootSection = configFile.RootSection;
+			
+			rootSection.SetValue("Compact by Default", ClockCompactByDefault);
+
 			ConfigSection startupSection = configFile["Startup"];
 
-			startupSection.SetValue("Create Clock", Startup.CreateClock);
-			startupSection.SetValue("First Clock Name", Startup.FirstClockName);
-			startupSection.SetValue("Start Docked", Startup.StartDocked);
+			startupSection.SetValue("Create Stopwatch", Startup.CreateClock);
+			startupSection.SetValue("Stopwatch Name", Startup.FirstClockName);
+			startupSection.SetValue("Starts Docked", Startup.StartDocked);
 
-			ConfigSection clockDefaultsSection = configFile["Clock Defaults"];
+			ConfigSection clockDefaultsSection = configFile["Formatting"];
 
 			clockDefaultsSection.SetValue("Show Hours", TimeDisplaySettings.ShowHours);
 			clockDefaultsSection.SetValue("Show Minutes", TimeDisplaySettings.ShowMinutes);
@@ -56,7 +60,6 @@ namespace Chrono
 			clockDefaultsSection.SetValue("Show Minus Symbol", TimeDisplaySettings.ShowMinusSymbol);
 			clockDefaultsSection.SetValue("Show Leading Zero", TimeDisplaySettings.ShowLeadingZero);
 			clockDefaultsSection.SetValue("Show Separators", TimeDisplaySettings.ShowSeparators);
-			clockDefaultsSection.SetValue("Starts Compact", ClockCompactByDefault);
 
 			configFile.Save(filename);
 		}
@@ -72,15 +75,19 @@ namespace Chrono
 			if(File.Exists(filename))
 				configFile.Load( filename );
 
+			ConfigSection rootSection = configFile.RootSection;
+
+			result.ClockCompactByDefault = rootSection.GetBoolean("Compact by Default", false);
+
 			ConfigSection startupSection = configFile["Startup"];
 
-			result.Startup.CreateClock = startupSection.GetBoolean("Create Clock", true);
-			result.Startup.FirstClockName = startupSection.GetString("First Clock Name", "Sundial");
-			result.Startup.StartDocked = startupSection.GetBoolean("Start Docked", true);
+			result.Startup.CreateClock = startupSection.GetBoolean("Create Stopwatch", true);
+			result.Startup.FirstClockName = startupSection.GetString("Stopwatch Name", "Chrono Marker");
+			result.Startup.StartDocked = startupSection.GetBoolean("Starts Docked", true);
 
-			result.TimeDisplaySettings = new TimeFormatSettings(TimeFormatFlags.Nothing);
+			result.TimeDisplaySettings = new TimeFormatSettings();
 
-			ConfigSection clockDefaultsSection = configFile["Clock Defaults"];
+			ConfigSection clockDefaultsSection = configFile["Formatting"];
 
 			result.TimeDisplaySettings.ShowHours = clockDefaultsSection.GetBoolean("Show Hours", true);
 			result.TimeDisplaySettings.ShowMinutes = clockDefaultsSection.GetBoolean("Show Minutes", true);
@@ -90,7 +97,8 @@ namespace Chrono
 			result.TimeDisplaySettings.ShowMinusSymbol = clockDefaultsSection.GetBoolean("Show Minus Symbol", true);
 			result.TimeDisplaySettings.ShowLeadingZero = clockDefaultsSection.GetBoolean("Show Leading Zero", true);
 			result.TimeDisplaySettings.ShowSeparators = clockDefaultsSection.GetBoolean("Show Separators", true);
-			result.ClockCompactByDefault = clockDefaultsSection.GetBoolean("Starts Compact", false);
+
+
 
 			return result;
 		}

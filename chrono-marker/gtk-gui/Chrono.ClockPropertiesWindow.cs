@@ -51,8 +51,7 @@ namespace Chrono
 			global::Stetic.Gui.Initialize (this);
 			// Widget Chrono.ClockPropertiesWindow
 			this.Name = "Chrono.ClockPropertiesWindow";
-			this.Title = global::Mono.Unix.Catalog.GetString ("Stopwatch Properties");
-			this.Icon = global::Gdk.Pixbuf.LoadFromResource ("Chrono.icon.ico");
+			this.Title = global::Mono.Unix.Catalog.GetString ("Stopwatches");
 			this.WindowPosition = ((global::Gtk.WindowPosition)(4));
 			this.BorderWidth = ((uint)(6));
 			this.Resizable = false;
@@ -80,6 +79,7 @@ namespace Chrono
 			w1.Fill = false;
 			// Container child hbox2.Gtk.Box+BoxChild
 			this.clockNameBox = new global::Gtk.ComboBoxEntry ();
+			this.clockNameBox.TooltipMarkup = "Type a new name and press enter to create a stopwatch";
 			this.clockNameBox.Name = "clockNameBox";
 			this.hbox2.Add (this.clockNameBox);
 			global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.clockNameBox]));
@@ -239,14 +239,14 @@ namespace Chrono
 			this.hbox7.Name = "hbox7";
 			this.hbox7.Spacing = 20;
 			// Container child hbox7.Gtk.Box+BoxChild
-			this.speedEntry = new global::Gtk.SpinButton (0, 60, 1);
+			this.speedEntry = new global::Gtk.SpinButton (0D, 60D, 1D);
 			this.speedEntry.CanFocus = true;
 			this.speedEntry.Name = "speedEntry";
-			this.speedEntry.Adjustment.PageIncrement = 6;
-			this.speedEntry.ClimbRate = 1;
+			this.speedEntry.Adjustment.PageIncrement = 6D;
+			this.speedEntry.ClimbRate = 1D;
 			this.speedEntry.Digits = ((uint)(2));
 			this.speedEntry.Numeric = true;
-			this.speedEntry.Value = 1;
+			this.speedEntry.Value = 1D;
 			this.hbox7.Add (this.speedEntry);
 			global::Gtk.Box.BoxChild w16 = ((global::Gtk.Box.BoxChild)(this.hbox7 [this.speedEntry]));
 			w16.PackType = ((global::Gtk.PackType)(1));
@@ -270,11 +270,12 @@ namespace Chrono
 			w18.Fill = false;
 			// Container child hbox4.Gtk.Box+BoxChild
 			this.button14 = new global::Gtk.Button ();
+			this.button14.TooltipMarkup = "You have to click here for the speed settings to apply";
 			this.button14.WidthRequest = 40;
 			this.button14.CanFocus = true;
 			this.button14.Name = "button14";
 			this.button14.UseUnderline = true;
-			this.button14.Label = global::Mono.Unix.Catalog.GetString ("Apply Speed");
+			this.button14.Label = global::Mono.Unix.Catalog.GetString ("Apply speed");
 			this.hbox4.Add (this.button14);
 			global::Gtk.Box.BoxChild w19 = ((global::Gtk.Box.BoxChild)(this.hbox4 [this.button14]));
 			w19.PackType = ((global::Gtk.PackType)(1));
@@ -319,9 +320,11 @@ namespace Chrono
 			this.table1.RowSpacing = ((uint)(6));
 			this.table1.ColumnSpacing = ((uint)(20));
 			// Container child table1.Gtk.Table+TableChild
-			this.compactWindowOption = new global::Gtk.RadioButton (global::Mono.Unix.Catalog.GetString ("Compact Mode"));
+			this.compactWindowOption = new global::Gtk.RadioButton (global::Mono.Unix.Catalog.GetString ("Compact mode"));
+			this.compactWindowOption.TooltipMarkup = "This mode has a single button";
 			this.compactWindowOption.CanFocus = true;
 			this.compactWindowOption.Name = "compactWindowOption";
+			this.compactWindowOption.Active = true;
 			this.compactWindowOption.DrawIndicator = true;
 			this.compactWindowOption.UseUnderline = true;
 			this.compactWindowOption.Group = new global::GLib.SList (global::System.IntPtr.Zero);
@@ -333,6 +336,7 @@ namespace Chrono
 			w25.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table1.Gtk.Table+TableChild
 			this.displayStopwatchBtn = new global::Gtk.ToggleButton ();
+			this.displayStopwatchBtn.TooltipMarkup = "Shows the window";
 			this.displayStopwatchBtn.CanFocus = true;
 			this.displayStopwatchBtn.Name = "displayStopwatchBtn";
 			this.displayStopwatchBtn.UseUnderline = true;
@@ -346,9 +350,10 @@ namespace Chrono
 			w26.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table1.Gtk.Table+TableChild
 			this.dockedCheck = new global::Gtk.CheckButton ();
+			this.dockedCheck.TooltipMarkup = "Displays the stopwatch inside the log window";
 			this.dockedCheck.CanFocus = true;
 			this.dockedCheck.Name = "dockedCheck";
-			this.dockedCheck.Label = global::Mono.Unix.Catalog.GetString ("Dock in Log Window");
+			this.dockedCheck.Label = global::Mono.Unix.Catalog.GetString ("Dock in log window");
 			this.dockedCheck.DrawIndicator = true;
 			this.dockedCheck.UseUnderline = true;
 			this.table1.Add (this.dockedCheck);
@@ -360,7 +365,8 @@ namespace Chrono
 			w27.XOptions = ((global::Gtk.AttachOptions)(4));
 			w27.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table1.Gtk.Table+TableChild
-			this.normalWindowOption = new global::Gtk.RadioButton (global::Mono.Unix.Catalog.GetString ("Normal Mode"));
+			this.normalWindowOption = new global::Gtk.RadioButton (global::Mono.Unix.Catalog.GetString ("Normal mode"));
+			this.normalWindowOption.TooltipMarkup = "This mode has a larger display";
 			this.normalWindowOption.CanFocus = true;
 			this.normalWindowOption.Name = "normalWindowOption";
 			this.normalWindowOption.DrawIndicator = true;
@@ -372,6 +378,7 @@ namespace Chrono
 			w28.YOptions = ((global::Gtk.AttachOptions)(4));
 			// Container child table1.Gtk.Table+TableChild
 			this.onTopCheck = new global::Gtk.CheckButton ();
+			this.onTopCheck.TooltipMarkup = "Forces the window to stay always visible";
 			this.onTopCheck.CanFocus = true;
 			this.onTopCheck.Name = "onTopCheck";
 			this.onTopCheck.Label = global::Mono.Unix.Catalog.GetString ("Display on top");
@@ -403,10 +410,12 @@ namespace Chrono
 			this.hbuttonbox3.LayoutStyle = ((global::Gtk.ButtonBoxStyle)(3));
 			// Container child hbuttonbox3.Gtk.ButtonBox+ButtonBoxChild
 			this.deleteBtn = new global::Gtk.Button ();
+			this.deleteBtn.TooltipMarkup = "Click here to delete this stopwatch";
 			this.deleteBtn.CanFocus = true;
 			this.deleteBtn.Name = "deleteBtn";
+			this.deleteBtn.UseStock = true;
 			this.deleteBtn.UseUnderline = true;
-			this.deleteBtn.Label = global::Mono.Unix.Catalog.GetString ("Delete");
+			this.deleteBtn.Label = "gtk-delete";
 			this.hbuttonbox3.Add (this.deleteBtn);
 			global::Gtk.ButtonBox.ButtonBoxChild w33 = ((global::Gtk.ButtonBox.ButtonBoxChild)(this.hbuttonbox3 [this.deleteBtn]));
 			w33.Expand = false;
@@ -435,8 +444,9 @@ namespace Chrono
 			this.closeBtn = new global::Gtk.Button ();
 			this.closeBtn.CanFocus = true;
 			this.closeBtn.Name = "closeBtn";
+			this.closeBtn.UseStock = true;
 			this.closeBtn.UseUnderline = true;
-			this.closeBtn.Label = global::Mono.Unix.Catalog.GetString ("Close");
+			this.closeBtn.Label = "gtk-close";
 			this.hbuttonbox2.Add (this.closeBtn);
 			global::Gtk.ButtonBox.ButtonBoxChild w38 = ((global::Gtk.ButtonBox.ButtonBoxChild)(this.hbuttonbox2 [this.closeBtn]));
 			w38.Expand = false;

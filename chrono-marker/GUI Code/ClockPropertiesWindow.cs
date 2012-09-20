@@ -21,10 +21,11 @@
 using System;
 using System.Collections.Generic;
 using Gtk;
+using Mono.Unix;
 
 namespace Chrono
 {
-	public partial class ClockPropertiesWindow : Gtk.Window
+	public partial class ClockPropertiesWindow : Window
 	{
 		public ClockPropertiesWindow(Program program) : 
 				base(Gtk.WindowType.Toplevel)
@@ -144,7 +145,7 @@ namespace Chrono
 				displayStopwatchBtn.Active = _clockWindow.DisplayVisible;
 
 				// When the name is valid, createBtn becomes renameBtn!!!
-				clockNameBtn.Label = "Rename";
+				clockNameBtn.Label = Catalog.GetString("Rename");
 			} else {
 				logStartsCheck.Active = false;
 				logStopsCheck.Active = false;
@@ -158,7 +159,7 @@ namespace Chrono
 				dockedCheck.Active = false;
 				displayStopwatchBtn.Active = false;
 
-				clockNameBtn.Label = "Create";
+				clockNameBtn.Label = Catalog.GetString("Create");
 
 				clockNameBtn.Sensitive = Logger.CanCreateClock(clockNameBox.Entry.Text);
 			}
@@ -281,14 +282,17 @@ namespace Chrono
 
 						if(string.IsNullOrWhiteSpace(newName))
 						{
-							errorMessage = "Blank names are not valid.";
+							errorMessage = Catalog.GetString("Blank names are not valid.");
 						}
 						// This name comparison allows the user to rename a clock using different casing
 						else if(!string.Equals(newName, _currentHandler.Name, TimeLogger.HandlerNameComparison)
 						   && _currentHandler.Logger.HasClock( newName ) ) {
 
-							errorMessage = string.Format("A clock with the name \"{0}\" already exists!\n"
-							                             +"Please choose another name.", newName);
+							string translatable = Catalog.GetString(
+								"A clock with named \"{0}\" already exists!\n" +
+								"Please choose another name.");
+
+							errorMessage = string.Format(translatable, newName);
 						}
 
 						if(errorMessage != null)

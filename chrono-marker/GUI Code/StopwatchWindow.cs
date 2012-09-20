@@ -21,6 +21,7 @@
 using System;
 using Gtk;
 using Pango;
+using Mono.Unix;
 
 namespace Chrono
 {
@@ -31,10 +32,16 @@ namespace Chrono
 		public StopwatchWindow(Program program, LoggingHandler logHandler) : 
 				base(Gtk.WindowType.Toplevel)
 		{
-			this.Build( );
+			this.Build();
+
+			_forwardIcon = Stetic.IconLoader.LoadIcon(this, "chrono-forward", IconSize.Button);
+			_backwardIcon = Stetic.IconLoader.LoadIcon(this, "chrono-backward", IconSize.Button);
+			_pauseIcon = Stetic.IconLoader.LoadIcon(this, "chrono-pause", IconSize.Button);
+			_undoIcon = Stetic.IconLoader.LoadIcon(this, "chrono-undo", IconSize.Button);
 
 			// Sets the focus chain AKA tab order
-			FocusChain = new Widget[]
+			Container frame = (Container)Children[0];
+			frame.FocusChain = new Widget[]
 			{
 				timeDisplayBox,
 				bottomBtn,
@@ -66,9 +73,11 @@ namespace Chrono
 			_isEditValid = true;
 			_hasEditedTime = false;
 
-			_normalFont = FontDescription.FromString( "consolas 32" );
-			_compactFont = FontDescription.FromString( "consolas 16" );
+			_normalFont = FontDescription.FromString( "monospace 32" );
+			_compactFont = FontDescription.FromString( "monospace 16" );
 
+			RefreshLayout();
+			RefreshTitle();
 			RefreshControls( );
 			RefreshTimeDisplay( );
 		}
@@ -91,9 +100,13 @@ namespace Chrono
 			get { return _compact; }
 			set
 			{
-				_compact = value; 
-				RefreshControls();
-				QueueResize();
+				if(_compact != value)
+				{
+					_compact = value;
+
+					RefreshLayout();
+					RefreshTitle();
+				}
 			}
 		}
 
@@ -112,6 +125,7 @@ namespace Chrono
 					{
 						_dockExpander = Program.LoggerWindow.CreateDockExpander();
 						_dockExpander.Activated += visibilityChanged_event;
+						_dockExpander.Activated += focusIn_event;
 					}
 
 					_dockExpander.Expanded = DisplayVisible;
@@ -121,7 +135,7 @@ namespace Chrono
 					_dockExpander.Visible = true;
 					this.Visible = false;
 
-					Children[0].Reparent(_dockExpander);
+					topContainer.Reparent(_dockExpander);
 				}
 				else
 				{
@@ -130,11 +144,12 @@ namespace Chrono
 					_docked = value;
 
 					_dockExpander.Visible = false;
-					_dockExpander.Children[0].Reparent(this);
+					topContainer.Reparent(this);
 				
 				}
 
-				RefreshControls();
+				RefreshLayout();
+				RefreshTitle();
 			}
 		}
 
@@ -170,12 +185,42 @@ namespace Chrono
 		private FontDescription _normalFont;
 		private FontDescription _compactFont;
 
-		private static Gdk.Pixbuf _forwardIcon = Gdk.Pixbuf.LoadFromResource("Chrono.forward.png");
-		private static Gdk.Pixbuf _backwardIcon = Gdk.Pixbuf.LoadFromResource("Chrono.backward.png");
-        private static Gdk.Pixbuf _stopIcon = Gdk.Pixbuf.LoadFromResource("Chrono.stop.png");
-    	private static Gdk.Pixbuf _undoIcon = Gdk.Pixbuf.LoadFromResource("Chrono.undo.png");
+		private Gdk.Pixbuf _forwardIcon, _backwardIcon, _pauseIcon, _undoIcon;
 
 		public event ChangedHandler DisplayVisibleChanged;
+		public event EventHandler DisplayFocused;
+
+		public void RefreshLayout()
+		{
+			if( _compact ) {
+				forwardBtn.Visible = false;
+				backwardBtn.Visible = false;
+				bottomBtn.Visible = false;
+				compactBtn.Visible = true;
+
+				timeDisplayBox.ModifyFont( _compactFont );
+
+				compactBtn.HasDefault = true;
+			} else {
+				forwardBtn.Visible = true;
+				backwardBtn.Visible = true;
+				bottomBtn.Visible = true;
+				compactBtn.Visible = false;
+
+				timeDisplayBox.ModifyFont( _normalFont );
+
+				bottomBtn.HasDefault = true;
+			}
+		}
+
+		public void RefreshTitle()
+		{
+			if( _compact ) Title = LogHandler.Name;
+			else Title = string.Format(Catalog.GetString("Stopwatch - {0}"),
+				                      LogHandler.Name);
+
+			if(_docked) _dockExpander.Label = LogHandler.Name;
+		}
 
 		public void RefreshTimeDisplay()
 		{
@@ -218,78 +263,58 @@ namespace Chrono
 
 				if( !_isEditValid ) 
 					_clockButtonMode = ClockButtonMode.Undo;
-				else _clockButtonMode = ClockButtonMode.Start;
+				else
+					_clockButtonMode = ClockButtonMode.Start;
 			}
 
-			if( _compact ) {
-				forwardBtn.Visible = false;
-				backwardBtn.Visible = false;
-				bottomBtn.Visible = false;
-				compactBtn.Visible = true;
+			Gdk.Pixbuf compactBtnPixbuf;
+			string bottomBtnLabel;
+			string clockBtnToolTip;
 
-				compactBtn.HasDefault = true;
-
-				timeDisplayBox.ModifyFont( _compactFont );
-
-				switch( _clockButtonMode ) {
-				case ClockButtonMode.Start:
-					if(Clock.Speed >= 0)
-						compactBtnImage.Pixbuf = _forwardIcon;
-					else compactBtnImage.Pixbuf = _backwardIcon;
-					break;
-
-				case ClockButtonMode.Stop:
-					compactBtnImage.Pixbuf = _stopIcon;
-					break;
-
-				case ClockButtonMode.Undo:
-					compactBtnImage.Pixbuf = _undoIcon;
-					break;
-
-				default:
-					break;
-				}
-
-				Title = LogHandler.Name;
-			}
-			else
-			{
-				forwardBtn.Visible = true;
-				backwardBtn.Visible = true;
-				bottomBtn.Visible = true;
-				compactBtn.Visible = false;
-
-				bottomBtn.HasDefault = true;
-
-				timeDisplayBox.ModifyFont( _normalFont );
+			switch( _clockButtonMode ) {
+			case ClockButtonMode.Start:
+				bottomBtnLabel = Catalog.GetString( "Start" );
 
 				if( Clock.Speed >= 0 ) {
-					forwardBtn.Sensitive = false;
-					backwardBtn.Sensitive = true;
+					compactBtnPixbuf = _forwardIcon;
+					clockBtnToolTip = Catalog.GetString( "Begins counting forward" );
 				} else {
-					forwardBtn.Sensitive = true;
-					backwardBtn.Sensitive = false;
+					compactBtnPixbuf = _backwardIcon;
+					clockBtnToolTip = Catalog.GetString( "Begins counting backward" );
 				}
+				break;
 
-				switch( _clockButtonMode ) {
-				case ClockButtonMode.Start:
-					bottomBtn.Label = "Start";
-					break;
-				case ClockButtonMode.Stop:
-					bottomBtn.Label = "Stop";
-					break;
-				case ClockButtonMode.Undo:
-					bottomBtn.Label = "Undo";
-					break;
+			case ClockButtonMode.Stop:
+				bottomBtnLabel = Catalog.GetString( "Stop" );
+				clockBtnToolTip = Catalog.GetString( "Stops counting" );
+				compactBtnPixbuf = _pauseIcon;
+				break;
 
-				default:
-					break;
-				}
-
-				Title = string.Format("Stopwatch - {0}", LogHandler.Name);
+			case ClockButtonMode.Undo:
+				bottomBtnLabel = Catalog.GetString( "Undo" );
+				clockBtnToolTip = Catalog.GetString( "Reverts changes made to the display" );
+				compactBtnPixbuf = _undoIcon;
+					
+				break;
+			default:
+				bottomBtnLabel = "Error";
+				clockBtnToolTip = "";
+				compactBtnPixbuf = null;
+				break;
 			}
 
-			if(_docked) _dockExpander.Label = LogHandler.Name;
+			bottomBtn.TooltipText = compactBtn.TooltipText = clockBtnToolTip;
+
+			bottomBtn.Label = bottomBtnLabel;
+			compactBtnImage.Pixbuf = compactBtnPixbuf;
+
+			if( Clock.Speed >= 0 ) {
+				forwardBtn.Sensitive = false;
+				backwardBtn.Sensitive = true;
+			} else {
+				forwardBtn.Sensitive = true;
+				backwardBtn.Sensitive = false;
+			}
 		}
 
 		private enum ClockButtonMode
@@ -300,7 +325,7 @@ namespace Chrono
 		#region Dynamic Events
 		private void ClockRenamed_event(object sender, EventArgs e)
 		{
-			RefreshControls();
+			RefreshTitle();
 		}
 
 		private void ClockStarted_event(object sender, ClockEventArgs e)
@@ -433,6 +458,12 @@ namespace Chrono
 		{
 			if(DisplayVisibleChanged != null)
 				DisplayVisibleChanged(this, new ChangedArgs());
+		}
+
+		protected void focusIn_event(object o, EventArgs args)
+		{
+			if( DisplayFocused != null )
+				DisplayFocused( this, new EventArgs() );
 		}
 
 		protected void windowDelete_event(object o, DeleteEventArgs args)

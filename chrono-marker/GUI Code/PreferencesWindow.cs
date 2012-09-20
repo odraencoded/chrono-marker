@@ -32,9 +32,7 @@ namespace Chrono
 			this.Program = program;
 
 			previewTime = new TimeSpan(0, 3, 14, 15, 926);
-			previewDisplaySettings = new TimeFormatSettings(TimeFormatFlags.Nothing);
-
-			LoadPreferences();
+			previewDisplaySettings = new TimeFormatSettings();
 		}
 
 		public Program Program { get; private set; }
@@ -61,9 +59,7 @@ namespace Chrono
 			else showAbbreviationsOption.Active = true;
 
 
-			if(Preferences.ClockCompactByDefault)
-				compactModeOption.Active = true;
-			else normalModeOption.Active = true;
+			compactByDefaultCheck.Active = Preferences.ClockCompactByDefault;
 
 			firstClockNameEntry.Text = Preferences.Startup.FirstClockName;
 			createClockOnStartupCheck.Active = Preferences.Startup.CreateClock;
@@ -95,7 +91,7 @@ namespace Chrono
 
 			Preferences.Startup = startupSettings;
 
-			Preferences.ClockCompactByDefault = compactModeOption.Active;
+			Preferences.ClockCompactByDefault = compactByDefaultCheck.Active;
 
 			foreach( LoggingHandler handler in Program.TimeLogger.Handlers ) {
 				StopwatchWindow clockWindow;
@@ -170,21 +166,7 @@ namespace Chrono
 
 		protected void WindowShown_event(object sender, EventArgs e)
 		{
-			TimeFormatSettings timeSettings = Program.Settings.TimeDisplaySettings;
-
-			showHoursCheck.Active = timeSettings.ShowHours;
-			showMinutesCheck.Active = timeSettings.ShowMinutes;
-			showSecondsCheck.Active = timeSettings.ShowSeconds;
-			showMilisecondsCheck.Active = timeSettings.ShowMilliseconds;
-			showLeadingZeroCheck.Active = timeSettings.ShowLeadingZero;
-			showMinusSymbolCheck.Active = timeSettings.ShowMinusSymbol;
-
-			StartupSettings startupSettings = Program.Settings.Startup;
-
-			createClockOnStartupCheck.Active = startupSettings.CreateClock;
-			firstClockNameEntry.Text = startupSettings.FirstClockName;
-
-			compactModeOption.Active = Program.Settings.ClockCompactByDefault;
+			LoadPreferences();
 		}
 
 		protected void WindowDelete_event(object o, Gtk.DeleteEventArgs args)

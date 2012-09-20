@@ -1,5 +1,5 @@
 //
-//  RenameClockDialog.cs
+//  Doable.cs
 //
 //  Author:
 //       Leonardo Augusto Pereira <http://code.google.com/p/chrono-marker/>
@@ -19,21 +19,26 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
-using Gtk;
-using Mono.Unix;
 
 namespace Chrono
 {
-	public partial class RenameClockDialog : Dialog
+	/// <summary>
+	/// Undo and Redo abstract class.
+	/// </summary>
+	public abstract class Doable
 	{
-		public RenameClockDialog(string previousName)
-		{
-			this.Build( );
+		public abstract string RedoText { get; }
+		public abstract string UndoText { get; }
 
-			newNameEntry.Text = previousName;
-			Title = string.Format(Catalog.GetString("Rename {0}"), previousName);
+		public abstract void Redo();
+		public abstract void Undo();
+	}
+
+	public class NoCanDoException : Exception
+	{
+		NoCanDoException(string why) : base(why)
+		{
 		}
-		public string NewName { get { return newNameEntry.Text; } }
 	}
 }
 
