@@ -150,8 +150,8 @@ namespace Chrono
 			string translatable, logDesc;
 
 			if( e.Speed >= 0 )
-				translatable = Catalog.GetString( "Stopped ticking at {0}." );
-			else translatable = Catalog.GetString( "Stopped counting down at {0}." );
+				translatable = Catalog.GetString( "Stopped ticking with {0}." );
+			else translatable = Catalog.GetString( "Stopped counting down with {0}." );
 
 			logDesc = string.Format( translatable, CurrentTime);
 

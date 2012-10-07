@@ -50,10 +50,6 @@ namespace Chrono
 				backwardBtn
 			};
 
-			// Selects the display bo by default
-			timeDisplayBox.GrabFocus();
-			timeDisplayBox.SelectRegion(0,0);
-
 			this.Program = program;
 			this.LogHandler = logHandler;
 
@@ -63,7 +59,7 @@ namespace Chrono
 			Clock.Stopped += ClockStopped_event;
 			Clock.SpeedChanged += ClockChangedSpeed_event;
 
-			_clockButtonMode = ClockButtonMode.Unset;
+			_clockButtonMode = ClockButtonMode.Start;
 
 			if( Clock.IsTicking ) {
 				_timedRefreshCaller = new TimedCaller(displayRefreshFrequency);
@@ -80,15 +76,18 @@ namespace Chrono
 			RefreshTitle();
 			RefreshControls( );
 			RefreshTimeDisplay( );
+
+			RefreshTexts();
 		}
 
+		#region Properties
 		public Program Program { get; private set; }
 		public Clock Clock { get { return LogHandler.Clock; } }
 		public LoggingHandler LogHandler { get; private set; }
 
 		// This is a wrapper around keep above that
 		// stores the current value of "KeepAbove"
-		public bool OnTop {
+		public bool KeepVisible {
 			get { return _onTop;}
 			set {
 				_onTop = value;
@@ -100,13 +99,13 @@ namespace Chrono
 			get { return _compact; }
 			set
 			{
-				if(_compact != value)
-				{
-					_compact = value;
+				if(_compact == value)
+					return;
 
-					RefreshLayout();
-					RefreshTitle();
-				}
+				_compact = value;
+
+				RefreshLayout();
+				RefreshTitle();
 			}
 		}
 
@@ -117,58 +116,35 @@ namespace Chrono
 			}
 			set
 			{
-				if(_docked == value) return;
-
-				if(value == true)
-				{
-					if(_dockExpander == null)
-					{
-						_dockExpander = Program.LoggerWindow.CreateDockExpander();
-						_dockExpander.Activated += visibilityChanged_event;
-						_dockExpander.Activated += focusIn_event;
-					}
-
-					_dockExpander.Expanded = DisplayVisible;
-
-					_docked = value;
-
-					_dockExpander.Visible = true;
-					this.Visible = false;
-
-					topContainer.Reparent(_dockExpander);
-				}
-				else
-				{
-					Visible = DisplayVisible;
-
-					_docked = value;
-
-					_dockExpander.Visible = false;
-					topContainer.Reparent(this);
-				
-				}
-
-				RefreshLayout();
-				RefreshTitle();
+				if(value) Dock();
+				else Undock();
 			}
 		}
 
 		public bool DisplayVisible {
-			get
-			{
-				if(_docked) return _dockExpander.Expanded;
-				else return Visible;
+			get {
+				if( _docked )
+					return _dockExpander.Expanded;
+				else
+					return Visible;
 			}
-			set
-			{
-				if(_docked) _dockExpander.Expanded = value;
-				else Visible = value;
+			set {
+				if( _docked )
+					_dockExpander.Expanded = value;
+				else {
+					if( value )
+						this.Present( );
+					else
+						this.Hide( );
+				}
 
-				if(DisplayVisibleChanged != null)
-					DisplayVisibleChanged(this, new ChangedArgs());
+				if( DisplayVisibilityChanged != null )
+					DisplayVisibilityChanged( this, new ChangedArgs() );
 			}
 		}
+		#endregion
 
+		#region Fields
 		private bool _hasEditedTime;
 		private bool _isEditValid;
 		private TimeSpan _timeInput;
@@ -180,18 +156,138 @@ namespace Chrono
 		private bool _docked;
 		private Expander _dockExpander;
 
-		private bool _supressBoxValidation;
-
+		private bool _supressDisplayValidation;
+		private bool _supressVisibilityNotification;
 		private FontDescription _normalFont;
 		private FontDescription _compactFont;
 
 		private Gdk.Pixbuf _forwardIcon, _backwardIcon, _pauseIcon, _undoIcon;
 
-		public event ChangedHandler DisplayVisibleChanged;
-		public event EventHandler DisplayFocused;
+		private enum ClockButtonMode
+		{ Start, Stop, Undo };
+		
+		private ClockButtonMode _clockButtonMode;
+		#endregion
+
+		public event EventHandler DisplayVisibilityChanged;
+
+		public void Dock()
+		{
+			if( _docked )
+				return;
+
+			_supressVisibilityNotification = true;
+
+			bool hasDefault = bottomBtn.HasDefault || compactBtn.HasDefault;
+
+			if( _dockExpander == null ) {
+				_dockExpander = Program.LoggerWindow.CreateDockExpander( );
+				_dockExpander.Activated += expanderActivated_event;
+				Program.LoggerWindow.FocusInEvent += windowFocusIn_event;
+			}
+
+			_dockExpander.Expanded = DisplayVisible;
+
+			_dockExpander.Show();
+			this.Hide();
+
+			_docked = true;
+
+			topContainer.Reparent( _dockExpander );
+
+			if( hasDefault ) {
+				if( _compact )
+					compactBtn.HasDefault = true;
+				else
+					bottomBtn.HasDefault = true;
+			}
+
+			RefreshLayout( );
+			RefreshTitle( );
+
+			_supressVisibilityNotification = false;
+		}
+
+		public void Undock()
+		{
+			if( !_docked )
+				return;
+
+			_supressVisibilityNotification = true;
+
+			bool hasDefault = bottomBtn.HasDefault || compactBtn.HasDefault;
+
+			this.Visible = DisplayVisible;
+			_dockExpander.Hide();
+			topContainer.Reparent( this );
+			_docked = false;
+
+			if( hasDefault ) {
+				if( _compact )
+					compactBtn.HasDefault = true;
+				else
+					bottomBtn.HasDefault = true;
+			}
+
+			RefreshLayout( );
+			RefreshTitle( );
+
+			_supressVisibilityNotification = false;
+		}
+
+		public void RefreshTexts()
+		{
+			RefreshTitle( );
+
+			timeDisplayBox.TooltipMarkup = Catalog.GetString( "You can edit the time in this box" );
+			forwardBtn.TooltipMarkup = Catalog.GetString( "Count forward" );
+			backwardBtn.TooltipMarkup = Catalog.GetString( "Count backward" );
+
+			RefreshMainButton();
+		}
+
+		public void RefreshMainButton()
+		{
+			string mainButtonTooltip;
+			
+			switch( _clockButtonMode ) {
+			case ClockButtonMode.Start:
+				bottomBtn.Label = Catalog.GetString( "Start" );
+
+				if( LogHandler.Clock.Speed >= 0 ) {
+					compactBtnImage.Pixbuf = _forwardIcon;
+					mainButtonTooltip = Catalog.GetString( "Begins counting forward" );
+				} else {
+					compactBtnImage.Pixbuf = _backwardIcon;
+					mainButtonTooltip = Catalog.GetString( "Begins counting backward" );
+				}
+
+				break;
+
+			case ClockButtonMode.Stop:
+				bottomBtn.Label = Catalog.GetString( "Stop" );
+				compactBtnImage.Pixbuf = _pauseIcon;
+				mainButtonTooltip = Catalog.GetString( "Stops counting" );
+				break;
+
+			case ClockButtonMode.Undo:
+				bottomBtn.Label = Catalog.GetString("Undo");
+				compactBtnImage.Pixbuf = _undoIcon;
+				mainButtonTooltip = Catalog.GetString( "Revert changes made to the display" );
+				break;
+
+			default:
+				mainButtonTooltip = "";
+				break;
+			}
+
+			compactBtn.TooltipMarkup = bottomBtn.TooltipMarkup = mainButtonTooltip;
+		}
 
 		public void RefreshLayout()
 		{
+			bool hasDefault = bottomBtn.HasDefault || compactBtn.HasDefault;
+
 			if( _compact ) {
 				forwardBtn.Visible = false;
 				backwardBtn.Visible = false;
@@ -200,7 +296,7 @@ namespace Chrono
 
 				timeDisplayBox.ModifyFont( _compactFont );
 
-				compactBtn.HasDefault = true;
+				if(!Docked || hasDefault) compactBtn.HasDefault = true;
 			} else {
 				forwardBtn.Visible = true;
 				backwardBtn.Visible = true;
@@ -209,17 +305,23 @@ namespace Chrono
 
 				timeDisplayBox.ModifyFont( _normalFont );
 
-				bottomBtn.HasDefault = true;
+				if(!Docked || hasDefault) bottomBtn.HasDefault = true;
 			}
 		}
 
 		public void RefreshTitle()
 		{
-			if( _compact ) Title = LogHandler.Name;
-			else Title = string.Format(Catalog.GetString("Stopwatch - {0}"),
-				                      LogHandler.Name);
+			if( _compact ) {
+				Title = LogHandler.Name;
+			}
+			else {
+				Title = string.Format(
+					Catalog.GetString( "Stopwatch - {0}" ),
+					LogHandler.Name );
+			}
 
-			if(_docked) _dockExpander.Label = LogHandler.Name;
+			if(_dockExpander != null)
+				_dockExpander.Label = LogHandler.Name;
 		}
 
 		public void RefreshTimeDisplay()
@@ -227,15 +329,18 @@ namespace Chrono
 			// Cache time
 			_clockTime = Clock.ElapsedTime;
 
-			// Absolute cap is 7 days.
-			TimeSpan timeCap = new TimeSpan(7, 0, 0, 0, 0);
+			// Apply capping
+			bool inRange = false;
 
-			if(_clockTime.Duration() > timeCap)
-		   	{	
-				if(_clockTime.Ticks >= 0) _clockTime = timeCap;
-				else _clockTime = timeCap.Negate();
+			if( _clockTime > LogHandler.UpperCap ) {	
+				_clockTime = LogHandler.UpperCap;
+			} else if( _clockTime < LogHandler.LowerCap ) {
+				_clockTime = LogHandler.LowerCap;
+			}
+			else inRange = true;
 
-				// Preserve the order!!!
+			if(!inRange)
+			{
 				Clock.Stop();
 				Clock.ElapsedTime = _clockTime;
 			}
@@ -244,12 +349,12 @@ namespace Chrono
 			if(_hasEditedTime)
 				return;
 
-			_supressBoxValidation = true;
+			_supressDisplayValidation = true;
 
 			timeDisplayBox.Text = LogHandler.TimeFormatSettings.ToString(_clockTime);
 			timeDisplayBox.WidthChars = GetDisplayWidth(LogHandler.TimeFormatSettings);
 
-			_supressBoxValidation = false;
+			_supressDisplayValidation = false;
 		}
 
 		public void RefreshControls()
@@ -267,46 +372,7 @@ namespace Chrono
 					_clockButtonMode = ClockButtonMode.Start;
 			}
 
-			Gdk.Pixbuf compactBtnPixbuf;
-			string bottomBtnLabel;
-			string clockBtnToolTip;
-
-			switch( _clockButtonMode ) {
-			case ClockButtonMode.Start:
-				bottomBtnLabel = Catalog.GetString( "Start" );
-
-				if( Clock.Speed >= 0 ) {
-					compactBtnPixbuf = _forwardIcon;
-					clockBtnToolTip = Catalog.GetString( "Begins counting forward" );
-				} else {
-					compactBtnPixbuf = _backwardIcon;
-					clockBtnToolTip = Catalog.GetString( "Begins counting backward" );
-				}
-				break;
-
-			case ClockButtonMode.Stop:
-				bottomBtnLabel = Catalog.GetString( "Stop" );
-				clockBtnToolTip = Catalog.GetString( "Stops counting" );
-				compactBtnPixbuf = _pauseIcon;
-				break;
-
-			case ClockButtonMode.Undo:
-				bottomBtnLabel = Catalog.GetString( "Undo" );
-				clockBtnToolTip = Catalog.GetString( "Reverts changes made to the display" );
-				compactBtnPixbuf = _undoIcon;
-					
-				break;
-			default:
-				bottomBtnLabel = "Error";
-				clockBtnToolTip = "";
-				compactBtnPixbuf = null;
-				break;
-			}
-
-			bottomBtn.TooltipText = compactBtn.TooltipText = clockBtnToolTip;
-
-			bottomBtn.Label = bottomBtnLabel;
-			compactBtnImage.Pixbuf = compactBtnPixbuf;
+			RefreshMainButton();
 
 			if( Clock.Speed >= 0 ) {
 				forwardBtn.Sensitive = false;
@@ -316,11 +382,6 @@ namespace Chrono
 				backwardBtn.Sensitive = false;
 			}
 		}
-
-		private enum ClockButtonMode
-		{ Unset = -1, Start, Stop, Undo };
-
-		private ClockButtonMode _clockButtonMode;
 
 		#region Dynamic Events
 		private void ClockRenamed_event(object sender, EventArgs e)
@@ -378,22 +439,27 @@ namespace Chrono
 		#region Bottom Button handling
 		protected void clockButton_event(object sender, EventArgs e)
 		{
+			handleClockButtonAction();
+		}
+
+		private void handleClockButtonAction()
+		{
 			switch( _clockButtonMode ) {
 			case ClockButtonMode.Start:
-				start_event(sender, e);
+				startAction();
 				break;
 			case ClockButtonMode.Stop:
-				stop_event(sender, e);
+				stopAction();
 				break;
 			case ClockButtonMode.Undo:
-				undo_event(sender, e);
+				undoAction();
 				break;
 			default:
 				break;
 			}
 		}
 
-		protected void start_event(object sender, EventArgs e)
+		private void startAction()
 		{
 			if( _hasEditedTime ) {
 				if( _isEditValid )
@@ -406,13 +472,13 @@ namespace Chrono
 
 			Clock.Toggle( );
 		}
-		protected void stop_event (object sender, EventArgs e)
+		private void stopAction ()
 		{
 			Clock.Toggle( );
 
 			timeDisplayBox.GrabFocus();
 		}
-		protected void undo_event(object sender, EventArgs e)
+		private void undoAction()
 		{
 			_hasEditedTime = false;
 			_isEditValid = true;
@@ -428,49 +494,77 @@ namespace Chrono
 
 		protected void displayBoxChanged_event(object sender, EventArgs e)
 		{
-			if( _supressBoxValidation || Clock.IsTicking )
+			if( _supressDisplayValidation || Clock.IsTicking )
 				return;
 
 			TimeSpan possibleTimeInput;
 
 			_hasEditedTime = true;
-			_isEditValid = TryParseTime(timeDisplayBox.Text, out possibleTimeInput);
+			_isEditValid = TryParseTime( timeDisplayBox.Text, out possibleTimeInput )
+				&& possibleTimeInput <= LogHandler.UpperCap
+				&& possibleTimeInput >= LogHandler.LowerCap;
 
-			if(_isEditValid)
-			{
-				timeDisplayBox.ModifyText(StateType.Normal, new Gdk.Color(0, 0, 0) );
+			if( _isEditValid ) {
+				timeDisplayBox.ModifyText( StateType.Normal, new Gdk.Color(0, 0, 0) );
 				_clockButtonMode = ClockButtonMode.Start;
 
 				_timeInput = possibleTimeInput;
-			}
-			else
-			{
-				timeDisplayBox.ModifyText(StateType.Normal, new Gdk.Color(255, 0, 0) );
+			} else {
+				timeDisplayBox.ModifyText( StateType.Normal, new Gdk.Color(255, 0, 0) );
 				_clockButtonMode = ClockButtonMode.Undo;
 
 				_timeInput = _clockTime;
 			}
 
-			RefreshControls();
+			RefreshControls( );
 		}
 
-		protected void visibilityChanged_event(object sender, EventArgs e)
+		// Sets the default button, this avoids mistaken default buttons
+		// on compact mode.
+		protected void displayBoxFocused_event (object o, EventArgs args)
 		{
-			if(DisplayVisibleChanged != null)
-				DisplayVisibleChanged(this, new ChangedArgs());
+			if(Compact)	compactBtn.HasDefault = true;
+			else bottomBtn.HasDefault = true;
+
+			if(Docked)
+				Program.ClockPropertiesWindow.SetHandler( LogHandler );
 		}
 
-		protected void focusIn_event(object o, EventArgs args)
+		protected void windowFocusIn_event(object o, FocusInEventArgs args)
 		{
-			if( DisplayFocused != null )
-				DisplayFocused( this, new EventArgs() );
+			if( Docked ) {
+				// In this case, the focus in event is raised from LoggerWindow
+				if( timeDisplayBox.HasFocus )
+					Program.ClockPropertiesWindow.SetHandler( LogHandler );
+			} else {
+				// In this case, the focus in event is raised from this.
+				Program.ClockPropertiesWindow.SetHandler( LogHandler );
+			}
+		}
+		
+		void windowVisibilityChanged_event(object o, EventArgs args)
+		{
+			if( _supressVisibilityNotification || _docked )
+				return;
+
+			if( DisplayVisibilityChanged != null )
+					DisplayVisibilityChanged( this, new EventArgs() );
+		}
+
+		void expanderActivated_event(object o, EventArgs args)
+		{
+			if(_supressVisibilityNotification || !_docked) return;
+
+			if(DisplayVisibilityChanged != null)
+					DisplayVisibilityChanged(this, new EventArgs());
 		}
 
 		protected void windowDelete_event(object o, DeleteEventArgs args)
 		{
+			Hide();
+
 			// This should stop the window from being destroyed
 			args.RetVal = true;
-			Hide();
 		}
 		#region Overrides
 		protected override void OnShown()
@@ -478,16 +572,20 @@ namespace Chrono
 			base.OnShown();
 
 			// Necessary for whatever reason
-			KeepAbove = OnTop;
+			KeepAbove = KeepVisible;
+			QueueResize();
 		}
 
 		protected override void OnDestroyed()
 		{
-			if( _timedRefreshCaller != null )
-				_timedRefreshCaller.Cancel();
+			if( _timedRefreshCaller != null ) {
+				_timedRefreshCaller.Cancel( );
+			}
 
-			if(_dockExpander != null)
-				_dockExpander.Destroy();
+			if( _dockExpander != null ) {
+				Program.LoggerWindow.FocusInEvent -= windowFocusIn_event;
+				_dockExpander.Destroy( );
+			}
 
 			base.OnDestroyed();
 		}
@@ -675,48 +773,35 @@ namespace Chrono
 				if(!int.TryParse(unitString, out unitVal))
 					return false;
 
-				int maxUnitValue;
 				if(i == milliIndex)
 				{
 					milliVal = unitVal; 
 
-					if(hasSeconds || hasMinutes || hasHours)
-						maxUnitValue = 999;
-					// One week worth of milliseconds
-					else maxUnitValue = 7 * 24 * 60 * 60 * 1000;
+					if((hasSeconds || hasMinutes || hasHours) && milliVal >= 1000)
+						return false;
 				}
 				else if (i == secondsIndex)
 				{
 					secondsVal = unitVal;
 
-					if(hasMinutes || hasHours)
-						maxUnitValue = 59;
-					else maxUnitValue = 7 * 24 * 60 * 60;
+					if((hasMinutes || hasHours) && secondsVal >= 60)
+						return false;
 				}
 				else if(i == minutesIndex)
 				{
 					minutesVal = unitVal;
 
-					if(hasHours)
-						maxUnitValue = 59;
-					else maxUnitValue = 7 * 24 * 60;
+					if(hasHours && minutesVal >= 60)
+						return false;
 				}
 				else if(i == hoursIndex)
 				{
 					hoursVal = unitVal;
-
-					maxUnitValue = 7 * 24; // Hours are only capped to a week
 				}
 				else return false; // This supposedly never happens though.
-
-				if(unitVal > maxUnitValue)
-					return false;
 			}
 
 			result = new TimeSpan(0, hoursVal, minutesVal, secondsVal, milliVal);
-
-			if(result > new TimeSpan(7, 0, 0, 0, 0))
-				return false;
 
 			if(isNegative) result = result.Negate();
 

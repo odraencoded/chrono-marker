@@ -20,6 +20,7 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
 using Gtk;
+using Mono.Unix;
 
 namespace Chrono
 {
@@ -28,6 +29,15 @@ namespace Chrono
 		public AboutDialog()
 		{
 			this.Build( );
+
+			Console.WriteLine(IconTheme.Default.HasIcon("chrono-marker"));
+
+			RefreshTexts();
+		}
+
+		public void RefreshTexts()
+		{
+			Title = Catalog.GetString("About Chrono Marker");
 		}
 
 		protected void closeClicked_event(object sender, EventArgs e)

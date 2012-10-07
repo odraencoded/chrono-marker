@@ -30,10 +30,20 @@ namespace Chrono
 		{
 			this.Build( );
 
-			newNameEntry.Text = previousName;
-			Title = string.Format(Catalog.GetString("Rename {0}"), previousName);
+			newNameEntry.Text = this.PreviousName = previousName;
+
+			RefreshTexts();
 		}
+
+		public void RefreshTexts()
+		{
+			Title = string.Format(Catalog.GetString("Rename {0}"), PreviousName);
+			newNameLabel.Text = Catalog.GetString("New Name");
+			newNameContainer.TooltipMarkup = Catalog.GetString("Type a new name for the stopwatch here");
+		}
+
 		public string NewName { get { return newNameEntry.Text; } }
+		public string PreviousName { get; private set; }
 	}
 }
 

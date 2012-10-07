@@ -34,74 +34,77 @@ namespace Chrono
 			if( program == null )
 				throw new ArgumentNullException("program");
 
+			this.Program = program;
+
+			// Setting up GUI
+			// Main build
 			this.Build( );
 
-			dockExpanderVBox = new VBox();
-			vbox1.Add( dockExpanderVBox );
-
-			Box.BoxChild vboxChild = ( Box.BoxChild )vbox1 [dockExpanderVBox];
-			vboxChild.Expand = false;
-			vboxChild.Fill = false;
-
-			dockExpanderVBox.Show( );
-
-			logViewMenu = new Menu();
-			logViewMenu.Append( copyAction.CreateMenuItem( ) );
-			logViewMenu.Append( deleteAction.CreateMenuItem( ) );
-
-			Program = program;
-
-			Logger.EntryAdded += loggerEntryAdded_event;
-			Logger.EntryDeleted += loggerEntryDelete_event;
-
+			// Log view columns and setup
 			CellRendererText cellRenderer = new CellRendererText();
-
+			
 			TreeViewColumn clockColumn = new TreeViewColumn();
 			clockColumn.Title = Catalog.GetString("Source");
 			clockColumn.PackStart( cellRenderer, true );
 			clockColumn.AddAttribute( cellRenderer, "text", 1 );
-
+			
 			TreeViewColumn descColumn = new TreeViewColumn();
 			descColumn.Title = Catalog.GetString("Event");
 			descColumn.PackStart( cellRenderer, true );
 			descColumn.AddAttribute( cellRenderer, "text", 2 );
-
+			
 			TreeViewColumn timeColumn = new TreeViewColumn();
 			timeColumn.Title = Catalog.GetString("Occurred");
 			timeColumn.PackStart( cellRenderer, true );
 			timeColumn.AddAttribute( cellRenderer, "text", 3 );
-
+			
 			TreeViewColumn[] manyColumns = new TreeViewColumn[] 
 			{clockColumn, descColumn, timeColumn};
-
+			
 			foreach(TreeViewColumn column in manyColumns)
 			{
 				logView.AppendColumn(column);
-
+				
 				column.Resizable = true;
 				column.Reorderable = true;
 				column.SortIndicator = true;
 			}
 
-			logView.Model = _logStore = new ListStore(
+			_logListStore = new ListStore(
 				typeof( LogEntry ), typeof( string ), typeof( string ), typeof( string ));
 
+			logView.Model = _logListStore;
+			
 			logView.Selection.Mode = SelectionMode.Multiple;
-
+			
 			clockColumn.SortColumnId = 1;
 			descColumn.SortColumnId = 2;
 			timeColumn.SortColumnId = 3;
-
+			
 			clockColumn.MinWidth = 40;
 			descColumn.MinWidth = 120;
 			timeColumn.MinWidth = 40;
-
-			_logStore.SetSortColumnId(3, SortType.Descending); 
-
+			
+			_logListStore.SetSortColumnId(3, SortType.Descending); 
 			_logEntryRows = new Dictionary<LogEntry, TreeIter>();
+
+			// Log view popup menu
+			logViewMenu = new Menu();
+			logViewMenu.Append( copyAction.CreateMenuItem( ) );
+			logViewMenu.Append( deleteAction.CreateMenuItem( ) );
+
+			// Setup events
+			Logger.EntryAdded += loggerEntryAdded_event;
+			Logger.EntryDeleted += loggerEntryDelete_event;
+			Program.History.Changed += historyChanged_event;
 			logView.Selection.Changed += logViewSelectionChanged_event;
 
-			Program.History.Changed += historyChanged_event;
+			List<LogEntry> manyLogEntries = Logger.GetLogList();
+
+			foreach(LogEntry logEntry in manyLogEntries)
+				AddLogEntry(logEntry);
+
+			RefreshTexts();
 		}
 
 		public Program Program { get; private set; }
@@ -110,9 +113,77 @@ namespace Chrono
 		private Dictionary<LogEntry, TreeIter> _logEntryRows;
 
 		private Menu logViewMenu;
-		private ListStore _logStore;
+		private ListStore _logListStore;
 
-		private VBox dockExpanderVBox;
+		public void RefreshTexts()
+		{
+			// Menu bar
+			FileAction.ShortLabel = FileAction.Label = Catalog.GetString("File");
+			EditAction.ShortLabel = EditAction.Label = Catalog.GetString("Edit");
+			ViewAction.ShortLabel = ViewAction.Label = Catalog.GetString("View");
+			HelpAction.ShortLabel = HelpAction.Label = Catalog.GetString("Help");
+
+			// File menu
+			ExportAction.ShortLabel = ExportAction.Label = Catalog.GetString("Export...");
+			quitAction.ShortLabel = quitAction.Label = Catalog.GetString("Quit");
+
+			// Edit menu
+			undoAction.ShortLabel = Catalog.GetString("Undo");
+			redoAction.ShortLabel = Catalog.GetString("Redo");
+			RefreshHistoryTexts();
+
+			copyAction.ShortLabel = copyAction.Label = Catalog.GetString("Copy");
+			deleteAction.ShortLabel = deleteAction.Label = Catalog.GetString("Delete");
+
+			SelectAllAction.ShortLabel = SelectAllAction.Label = Catalog.GetString("Select All");
+			stopwatchesAction.ShortLabel = stopwatchesAction.Label = Catalog.GetString("Stopwatches...");
+			preferencesAction.ShortLabel = preferencesAction.Label = Catalog.GetString("Preferences...");
+
+			// View menu
+			KeepAboveAction.ShortLabel = KeepAboveAction.Label = Catalog.GetString("Keep Above");
+
+			// Help menu
+			HelpAction.ShortLabel = HelpAction.Label = Catalog.GetString("Help");
+
+			RefreshLogCount();
+		}
+
+		public void RefreshHistoryTexts()
+		{
+			if( undoAction.Sensitive = Program.History.CanUndo )
+				undoAction.Label = Program.History.Undoable.UndoText;
+			else undoAction.Label = Catalog.GetString("Undo");
+			
+			if( redoAction.Sensitive = Program.History.CanRedo )
+				redoAction.Label = Program.History.Redoable.RedoText;
+			else redoAction.Label = Catalog.GetString("Redo");
+		}
+
+		private void RefreshLogCount()
+		{
+			string logCountText;
+
+			int logCount = Logger.EntryCount;
+
+			if( logCount > 0 ) {
+				int selectedLogCount = logView.Selection.CountSelectedRows( );
+				
+				logCountText = String.Format(Catalog.GetPluralString(
+					"{0} Log", "{0} Logs", logCount), logCount);
+				if(selectedLogCount > 0)
+				{
+					logCountText = String.Format(Catalog.GetPluralString(
+						"{0} Selected", "{0} Selected", selectedLogCount), selectedLogCount)
+						+ " : " + logCountText;
+				}
+			}
+			else 
+			{
+				logCountText = Catalog.GetString("No Logs");
+			}
+
+			logCountLabel.Text = logCountText;
+		}
 
 		private List<LogEntry> GetSelectedLogs()
 		{
@@ -122,8 +193,8 @@ namespace Chrono
 			foreach( TreePath selectedPath in manyPaths ) {
 				TreeIter iter;
 
-				if( _logStore.GetIter( out iter, selectedPath ) ) {
-					LogEntry selectedEntry = _logStore.GetValue( iter, 0 ) as LogEntry;
+				if( _logListStore.GetIter( out iter, selectedPath ) ) {
+					LogEntry selectedEntry = _logListStore.GetValue( iter, 0 ) as LogEntry;
 
 					if( selectedEntry != null )
 						result.Add( selectedEntry );
@@ -147,42 +218,49 @@ namespace Chrono
 			return result;
 		}
 
-		#region Dynamic events
-		private void loggerEntryAdded_event(object sender, LoggingEventArgs e)
+		private void AddLogEntry(LogEntry entry)
 		{
-			foreach( LogEntry entry in e.Entries ) {
-				TreeIter entryRow = _logStore.AppendValues(
+			TreeIter entryRow = _logListStore.AppendValues(
 				entry,
 				entry.ClockName,
 				entry.Description,
 				entry.Timestamp.ToString("HH:mm:ss.fff"));
+			
+			_logEntryRows.Add(entry, entryRow);
+		}
 
-				_logEntryRows.Add(entry, entryRow);
+		private void RemoveLogEntry(LogEntry entry)
+		{
+			TreeIter iter;
+			if( !_logEntryRows.TryGetValue( entry, out iter ) )
+				return;
+			
+			_logListStore.Remove( ref iter );
+			_logEntryRows.Remove( entry );
+		}
+
+		#region Dynamic events
+		private void loggerEntryAdded_event(object sender, LoggingEventArgs e)
+		{
+			foreach( LogEntry entry in e.Entries ) {
+				AddLogEntry(entry);
 			}
+
+			RefreshLogCount();
 		}
 
 		private void loggerEntryDelete_event(object sender, LoggingEventArgs e)
 		{
 			foreach( LogEntry entry in e.Entries ) {
-				TreeIter iter;
-				if( !_logEntryRows.TryGetValue( entry, out iter ) )
-					continue;
-
-				_logStore.Remove( ref iter );
-
-				_logEntryRows.Remove( entry );
+				RemoveLogEntry(entry);
 			}
+
+			RefreshLogCount();
 		}
 
 		private void historyChanged_event(object sender, HistoryChangedArgs e)
 		{
-			if( undoAction.Sensitive = e.History.CanUndo )
-				undoAction.Label = e.History.Undoable.UndoText;
-			else undoAction.Label = Catalog.GetString("Undo");
-
-			if( redoAction.Sensitive = e.History.CanRedo )
-				redoAction.Label = e.History.Redoable.RedoText;
-			else redoAction.Label = Catalog.GetString("Redo");
+			RefreshHistoryTexts();
 		}
 		#endregion
 
@@ -192,6 +270,8 @@ namespace Chrono
 		{
 			copyAction.Sensitive = deleteAction.Sensitive =
 				!(logView.Selection.CountSelectedRows( ) == 0 );
+
+			RefreshLogCount();
 		}
 
 		protected void logViewPopup_event(object o, PopupMenuArgs args)
@@ -227,12 +307,16 @@ namespace Chrono
 		#region Menu events
 		protected void exportAction_event(object sender, EventArgs e)
 		{
+			string dialogTitle = Catalog.GetString("Export Logs As Text");
+
+
 			FileChooserDialog saveDialog = new FileChooserDialog(
-				"Export Log Text", this, FileChooserAction.Save,
+				dialogTitle, this, FileChooserAction.Save,
 				Stock.Cancel, ResponseType.Cancel,
 				Stock.Save, ResponseType.Accept,
 				null);
 
+			saveDialog.Modal = true;
 			saveDialog.TransientFor = this;
 			saveDialog.DoOverwriteConfirmation = true;
 
@@ -248,15 +332,15 @@ namespace Chrono
 			this.Destroy();
 		}
 
-		protected void undo_event (object sender, EventArgs e)
+		protected void editUndo_event (object sender, EventArgs e)
 		{
 			Program.History.Undo();
 		}
-		protected void redo_event (object sender, EventArgs e)
+		protected void editRedo_event (object sender, EventArgs e)
 		{
 			Program.History.Redo();
 		}
-		protected void copyAction_event(object sender, EventArgs e)
+		protected void editCopy_event(object sender, EventArgs e)
 		{
 			List<LogEntry> selectedEntries = GetSelectedLogs( );
 
@@ -276,7 +360,7 @@ namespace Chrono
 
 			logView.GetClipboard( Gdk.Selection.Clipboard ).Text = copyData;
 		}
-		protected void deleteAction_event(object sender, EventArgs e)
+		protected void editDelete_event(object sender, EventArgs e)
 		{
 			List<LogEntry> selectedEntries = GetSelectedLogs( );
 
@@ -289,12 +373,17 @@ namespace Chrono
 		{
 			logView.Selection.SelectAll();
 		}
-		protected void editStopwatches_event(object sender, EventArgs e)
+
+		protected void keepAbove_event(object sender, EventArgs e)
+		{
+			KeepAbove = KeepAboveAction.Active;
+		}
+		protected void stopwatches_event(object sender, EventArgs e)
 		{
 			Program.ClockPropertiesWindow.Present();
 		}
 
-		protected void editPreferences_click (object sender, EventArgs e)
+		protected void preferences_event (object sender, EventArgs e)
 		{
 			Program.PreferencesWindow.Present();
 		}
@@ -305,6 +394,11 @@ namespace Chrono
 
 			about.Run();
 			about.Destroy( );
+		}
+
+		protected void shown_event(object sender, EventArgs e)
+		{
+			KeepAbove = KeepAboveAction.Active;
 		}
 		#endregion
 

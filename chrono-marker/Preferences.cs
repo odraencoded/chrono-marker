@@ -30,11 +30,13 @@ namespace Chrono
 	{
 		private Preferences() { }
 
-		private const string Version = "c-m-pref-0";
+		public bool CreateWatchOnStartup;
+		public String StartupWatchName;
 
-		public StartupSettings Startup;
+		public bool WatchDockedByDefault;
+		public bool WatchCompactByDefault;
+
 		public TimeFormatSettings TimeDisplaySettings { get; private set; }
-		public bool ClockCompactByDefault;
 
 		public void SaveTo(string filename)
 		{
@@ -42,24 +44,22 @@ namespace Chrono
 
 			ConfigSection rootSection = configFile.RootSection;
 			
-			rootSection.SetValue("Compact by Default", ClockCompactByDefault);
+			rootSection.SetValue("Compact by Default", WatchCompactByDefault);
+			rootSection.SetValue("Docked by Default", WatchDockedByDefault);
 
-			ConfigSection startupSection = configFile["Startup"];
+			rootSection.SetValue("Create Stopwatch on Startup", CreateWatchOnStartup);
+			rootSection.SetValue("Startup Stopwatch Name", StartupWatchName);
 
-			startupSection.SetValue("Create Stopwatch", Startup.CreateClock);
-			startupSection.SetValue("Stopwatch Name", Startup.FirstClockName);
-			startupSection.SetValue("Starts Docked", Startup.StartDocked);
+			ConfigSection formattingSection = configFile["Formatting"];
 
-			ConfigSection clockDefaultsSection = configFile["Formatting"];
-
-			clockDefaultsSection.SetValue("Show Hours", TimeDisplaySettings.ShowHours);
-			clockDefaultsSection.SetValue("Show Minutes", TimeDisplaySettings.ShowMinutes);
-			clockDefaultsSection.SetValue("Show Seconds", TimeDisplaySettings.ShowSeconds);
-			clockDefaultsSection.SetValue("Show Milliseconds", TimeDisplaySettings.ShowMilliseconds);
-			clockDefaultsSection.SetValue("Show Plus Symbol", TimeDisplaySettings.ShowPlusSymbol);
-			clockDefaultsSection.SetValue("Show Minus Symbol", TimeDisplaySettings.ShowMinusSymbol);
-			clockDefaultsSection.SetValue("Show Leading Zero", TimeDisplaySettings.ShowLeadingZero);
-			clockDefaultsSection.SetValue("Show Separators", TimeDisplaySettings.ShowSeparators);
+			formattingSection.SetValue("Show Hours", TimeDisplaySettings.ShowHours);
+			formattingSection.SetValue("Show Minutes", TimeDisplaySettings.ShowMinutes);
+			formattingSection.SetValue("Show Seconds", TimeDisplaySettings.ShowSeconds);
+			formattingSection.SetValue("Show Milliseconds", TimeDisplaySettings.ShowMilliseconds);
+			formattingSection.SetValue("Show Plus Symbol", TimeDisplaySettings.ShowPlusSymbol);
+			formattingSection.SetValue("Show Minus Symbol", TimeDisplaySettings.ShowMinusSymbol);
+			formattingSection.SetValue("Show Leading Zeroes", TimeDisplaySettings.ShowLeadingZeroes);
+			formattingSection.SetValue("Show Separators", TimeDisplaySettings.ShowSeparators);
 
 			configFile.Save(filename);
 		}
@@ -77,13 +77,11 @@ namespace Chrono
 
 			ConfigSection rootSection = configFile.RootSection;
 
-			result.ClockCompactByDefault = rootSection.GetBoolean("Compact by Default", false);
+			result.WatchCompactByDefault = rootSection.GetBoolean("Compact by Default", false);
+			result.WatchDockedByDefault = rootSection.GetBoolean("Docked by Default", true);
 
-			ConfigSection startupSection = configFile["Startup"];
-
-			result.Startup.CreateClock = startupSection.GetBoolean("Create Stopwatch", true);
-			result.Startup.FirstClockName = startupSection.GetString("Stopwatch Name", "Chrono Marker");
-			result.Startup.StartDocked = startupSection.GetBoolean("Starts Docked", true);
+			result.CreateWatchOnStartup = rootSection.GetBoolean("Create Stopwatch on Startup", true);
+			result.StartupWatchName = rootSection.GetString("Startup Stopwatch Name", "Chrono Marker");
 
 			result.TimeDisplaySettings = new TimeFormatSettings();
 
@@ -95,10 +93,8 @@ namespace Chrono
 			result.TimeDisplaySettings.ShowMilliseconds = clockDefaultsSection.GetBoolean("Show Milliseconds", true);
 			result.TimeDisplaySettings.ShowPlusSymbol = clockDefaultsSection.GetBoolean("Show Plus Symbol", false);
 			result.TimeDisplaySettings.ShowMinusSymbol = clockDefaultsSection.GetBoolean("Show Minus Symbol", true);
-			result.TimeDisplaySettings.ShowLeadingZero = clockDefaultsSection.GetBoolean("Show Leading Zero", true);
+			result.TimeDisplaySettings.ShowLeadingZeroes = clockDefaultsSection.GetBoolean("Show Leading Zeroes", true);
 			result.TimeDisplaySettings.ShowSeparators = clockDefaultsSection.GetBoolean("Show Separators", true);
-
-
 
 			return result;
 		}

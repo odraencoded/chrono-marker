@@ -4,8 +4,8 @@ namespace Chrono
 {
 	public partial class RenameClockDialog
 	{
-		private global::Gtk.HBox hbox2;
-		private global::Gtk.Label messageLabel;
+		private global::Gtk.HBox newNameContainer;
+		private global::Gtk.Label newNameLabel;
 		private global::Gtk.Entry newNameEntry;
 		private global::Gtk.Button buttonCancel;
 		private global::Gtk.Button buttonOk;
@@ -28,31 +28,30 @@ namespace Chrono
 			w1.Name = "dialog1_VBox";
 			w1.BorderWidth = ((uint)(2));
 			// Container child dialog1_VBox.Gtk.Box+BoxChild
-			this.hbox2 = new global::Gtk.HBox ();
-			this.hbox2.Name = "hbox2";
-			this.hbox2.Spacing = 6;
-			// Container child hbox2.Gtk.Box+BoxChild
-			this.messageLabel = new global::Gtk.Label ();
-			this.messageLabel.Name = "messageLabel";
-			this.messageLabel.LabelProp = global::Mono.Unix.Catalog.GetString ("New name");
-			this.hbox2.Add (this.messageLabel);
-			global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.messageLabel]));
+			this.newNameContainer = new global::Gtk.HBox ();
+			this.newNameContainer.Name = "newNameContainer";
+			this.newNameContainer.Spacing = 6;
+			// Container child newNameContainer.Gtk.Box+BoxChild
+			this.newNameLabel = new global::Gtk.Label ();
+			this.newNameLabel.Name = "newNameLabel";
+			this.newNameLabel.LabelProp = "New Name";
+			this.newNameContainer.Add (this.newNameLabel);
+			global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.newNameContainer [this.newNameLabel]));
 			w2.Position = 0;
 			w2.Expand = false;
 			w2.Fill = false;
-			// Container child hbox2.Gtk.Box+BoxChild
+			// Container child newNameContainer.Gtk.Box+BoxChild
 			this.newNameEntry = new global::Gtk.Entry ();
-			this.newNameEntry.TooltipMarkup = "Enter a new name for the stopwatch here";
 			this.newNameEntry.CanFocus = true;
 			this.newNameEntry.Name = "newNameEntry";
 			this.newNameEntry.IsEditable = true;
 			this.newNameEntry.ActivatesDefault = true;
 			this.newNameEntry.InvisibleChar = '●';
-			this.hbox2.Add (this.newNameEntry);
-			global::Gtk.Box.BoxChild w3 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.newNameEntry]));
+			this.newNameContainer.Add (this.newNameEntry);
+			global::Gtk.Box.BoxChild w3 = ((global::Gtk.Box.BoxChild)(this.newNameContainer [this.newNameEntry]));
 			w3.Position = 1;
-			w1.Add (this.hbox2);
-			global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(w1 [this.hbox2]));
+			w1.Add (this.newNameContainer);
+			global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(w1 [this.newNameContainer]));
 			w4.Position = 0;
 			w4.Expand = false;
 			w4.Fill = false;

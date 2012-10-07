@@ -21,7 +21,7 @@ namespace Chrono
 			global::Stetic.Gui.Initialize (this);
 			// Widget Chrono.AboutDialog
 			this.Name = "Chrono.AboutDialog";
-			this.Title = global::Mono.Unix.Catalog.GetString ("About Chrono Marker");
+			this.Title = "About Chrono Marker";
 			this.TypeHint = ((global::Gdk.WindowTypeHint)(1));
 			this.WindowPosition = ((global::Gtk.WindowPosition)(4));
 			this.AllowGrow = false;
@@ -137,7 +137,7 @@ You should have received a copy of the GNU General Public License along with Chr
 				this.Child.ShowAll ();
 			}
 			this.DefaultWidth = 448;
-			this.DefaultHeight = 442;
+			this.DefaultHeight = 427;
 			this.Show ();
 			this.buttonCancel.Clicked += new global::System.EventHandler (this.closeClicked_event);
 		}

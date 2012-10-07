@@ -9,9 +9,9 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>Chrono</RootNamespace>
     <StartupObject>Chrono.Program</StartupObject>
-    <ApplicationIcon>..\extra\icon.ico</ApplicationIcon>
     <AssemblyName>chrono-marker</AssemblyName>
     <ReleaseVersion>0.5</ReleaseVersion>
+    <ApplicationIcon>..\resources\chrono-marker.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>True</DebugSymbols>
@@ -35,7 +35,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="Mono.Posix" />
     <Reference Include="gdk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
       <Private>False</Private>
     </Reference>
@@ -52,20 +51,20 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="System.Xml" />
+    <Reference Include="Mono.Posix, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="GUI Code\AboutDialog.cs" />
-    <Compile Include="GUI Code\ClockPropertiesWindow.cs" />
     <Compile Include="GUI Code\LoggerWindow.cs" />
     <Compile Include="GUI Code\PreferencesWindow.cs" />
     <Compile Include="GUI Code\RenameClockDialog.cs" />
-    <Compile Include="GUI Code\StopwatchWindow.cs" />
     <Compile Include="Clock.cs" />
     <Compile Include="TimedCaller.cs" />
     <Compile Include="Preferences.cs" />
-    <Compile Include="StartupSettings.cs" />
     <Compile Include="TimeFormatSettings.cs" />
     <Compile Include="LogEntry.cs" />
     <Compile Include="LoggingHandler.cs" />
@@ -76,68 +75,79 @@
     <Compile Include="History\History.cs" />
     <Compile Include="History\DeleteLogsDoable.cs" />
     <Compile Include="gtk-gui\generated.cs" />
-    <Compile Include="gtk-gui\Chrono.LoggerWindow.cs" />
-    <Compile Include="gtk-gui\Chrono.StopwatchWindow.cs" />
-    <Compile Include="gtk-gui\Chrono.RenameClockDialog.cs" />
-    <Compile Include="gtk-gui\Chrono.PreferencesWindow.cs" />
-    <Compile Include="gtk-gui\Chrono.ClockPropertiesWindow.cs" />
-    <Compile Include="gtk-gui\Chrono.AboutDialog.cs" />
     <Compile Include="Events\HistoryChangedEvent.cs" />
     <Compile Include="Events\ClockEvent.cs" />
     <Compile Include="Events\LoggingEvent.cs" />
+    <Compile Include="gtk-gui\Chrono.AboutDialog.cs" />
+    <Compile Include="gtk-gui\Chrono.RenameClockDialog.cs" />
+    <Compile Include="gtk-gui\Chrono.PreferencesWindow.cs" />
+    <Compile Include="gtk-gui\Chrono.StopwatchWindow.cs" />
+    <Compile Include="gtk-gui\Chrono.LoggerWindow.cs" />
     <Compile Include="Events\ClockHandlerEvent.cs" />
+    <Compile Include="GUI Code\StopwatchWindow.cs" />
+    <Compile Include="GUI Code\ClockPropertiesWindow.cs" />
+    <Compile Include="gtk-gui\Chrono.ClockPropertiesWindow.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\extra\backward.png">
-      <DeployService-UseProjectRelativePath>True</DeployService-UseProjectRelativePath>
-      <Link>Resources\backward.png</Link>
-      <LogicalName>Chrono.backward.png</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\extra\forward.png">
-      <DeployService-UseProjectRelativePath>True</DeployService-UseProjectRelativePath>
-      <Link>Resources\forward.png</Link>
-      <LogicalName>Chrono.forward.png</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\extra\pause.png">
-      <DeployService-UseProjectRelativePath>True</DeployService-UseProjectRelativePath>
-      <Link>Resources\pause.png</Link>
-      <LogicalName>Chrono.pause.png</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\extra\undo.png">
-      <DeployService-UseProjectRelativePath>True</DeployService-UseProjectRelativePath>
-      <Link>Resources\undo.png</Link>
-      <LogicalName>Chrono.undo.png</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\extra\chrono-marker-16.png">
-      <DeployService-UseProjectRelativePath>True</DeployService-UseProjectRelativePath>
-      <Link>Resources\chrono-marker-16.png</Link>
-      <LogicalName>Chrono.chrono-marker-16.png</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\extra\chrono-marker-24.png">
-      <DeployService-UseProjectRelativePath>True</DeployService-UseProjectRelativePath>
-      <Link>Resources\chrono-marker-24.png</Link>
-      <LogicalName>Chrono.chrono-marker-24.png</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\extra\chrono-marker-32.png">
-      <DeployService-UseProjectRelativePath>True</DeployService-UseProjectRelativePath>
-      <Link>Resources\chrono-marker-32.png</Link>
-      <LogicalName>Chrono.chrono-marker-32.png</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\extra\chrono-marker-64.png">
-      <DeployService-UseProjectRelativePath>True</DeployService-UseProjectRelativePath>
-      <Link>Resources\chrono-marker-64.png</Link>
-      <LogicalName>Chrono.chrono-marker-64.png</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\extra\chrono-marker-48.png">
-      <Link>Resources\chrono-marker-48.png</Link>
-      <LogicalName>Chrono.chrono-marker-48.png</LogicalName>
-    </EmbeddedResource>
     <EmbeddedResource Include="gtk-gui\gui.stetic">
       <LogicalName>gui.stetic</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\resources\backward.png">
+      <Link>Resources\backward.png</Link>
+      <LogicalName>backward.png</LogicalName>
+      <Gettext-ScanForTranslations>False</Gettext-ScanForTranslations>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\resources\chrono-marker-16.png">
+      <Link>Resources\chrono-marker-16.png</Link>
+      <LogicalName>chrono-marker-16.png</LogicalName>
+      <Gettext-ScanForTranslations>False</Gettext-ScanForTranslations>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\resources\chrono-marker-24.png">
+      <Link>Resources\chrono-marker-24.png</Link>
+      <LogicalName>chrono-marker-24.png</LogicalName>
+      <Gettext-ScanForTranslations>False</Gettext-ScanForTranslations>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\resources\chrono-marker-32.png">
+      <Link>Resources\chrono-marker-32.png</Link>
+      <LogicalName>chrono-marker-32.png</LogicalName>
+      <Gettext-ScanForTranslations>False</Gettext-ScanForTranslations>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\resources\chrono-marker-48.png">
+      <Link>Resources\chrono-marker-48.png</Link>
+      <LogicalName>chrono-marker-48.png</LogicalName>
+      <Gettext-ScanForTranslations>False</Gettext-ScanForTranslations>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\resources\chrono-marker-64.png">
+      <Link>Resources\chrono-marker-64.png</Link>
+      <LogicalName>chrono-marker-64.png</LogicalName>
+      <Gettext-ScanForTranslations>False</Gettext-ScanForTranslations>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\resources\forward.png">
+      <Link>Resources\forward.png</Link>
+      <LogicalName>forward.png</LogicalName>
+      <Gettext-ScanForTranslations>False</Gettext-ScanForTranslations>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\resources\pause.png">
+      <Link>Resources\pause.png</Link>
+      <LogicalName>pause.png</LogicalName>
+      <Gettext-ScanForTranslations>False</Gettext-ScanForTranslations>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\resources\undo.png">
+      <Link>Resources\undo.png</Link>
+      <LogicalName>undo.png</LogicalName>
+      <Gettext-ScanForTranslations>False</Gettext-ScanForTranslations>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="launcher.desktop" />
+    <None Include="..\LICENSE.TXT">
+      <Link>LICENSE.TXT</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\README.TXT">
+      <Link>README.TXT</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />
@@ -145,5 +155,6 @@
     <Folder Include="GUI Code\" />
     <Folder Include="History\" />
     <Folder Include="Events\" />
+    <Folder Include="Resources\" />
   </ItemGroup>
 </Project>

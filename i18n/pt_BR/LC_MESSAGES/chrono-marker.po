@@ -1,0 +1,549 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Chrono Marker 0.5\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-10-07 17:12-0300\n"
+"PO-Revision-Date: 2012-10-07 17:12-0300\n"
+"Last-Translator: Leonardo Augusto Pereira\n"
+"Language-Team: \n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: ShowError\n"
+"X-Poedit-Basepath: ../../../\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-Bookmarks: -1,-1,-1,-1,-1,-1,-1,74,-1,-1\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Poedit 1.5.3\n"
+"X-Poedit-SearchPath-0: chrono-marker\n"
+
+#: chrono-marker/LoggingHandler.cs:141
+#, csharp-format
+msgid "Started ticking with {0}."
+msgstr "Começou a contagem com {0}."
+
+#: chrono-marker/LoggingHandler.cs:142
+#, csharp-format
+msgid "Started counting down with {0}."
+msgstr "Começou a contagem regressiva com {0}."
+
+#: chrono-marker/LoggingHandler.cs:153
+#, csharp-format
+msgid "Stopped ticking with {0}."
+msgstr "Parou a contagem com {0}."
+
+#: chrono-marker/LoggingHandler.cs:154
+#, csharp-format
+msgid "Stopped counting down with {0}."
+msgstr "Parou a contagem regressiva com {0}."
+
+#: chrono-marker/Preferences.cs:84
+msgid "Startup Stopwatch Name"
+msgstr ""
+
+#: chrono-marker/Program.cs:106
+#, csharp-format
+msgid "Chrono Marker is crashing due to the following error \"{0}\""
+msgstr "Chrono Marker está finalizando pelo seguinte erro \"{0}\""
+
+#: chrono-marker/Program.cs:112
+msgid "Chrono Marker is crashing due to an unknown error."
+msgstr "Chrono Marker está finalizando por um error desconhecido."
+
+#: chrono-marker/gtk-gui/Chrono.AboutDialog.cs:91
+msgid "License"
+msgstr "Licença"
+
+#: chrono-marker/gtk-gui/Chrono.LoggerWindow.cs:39
+#: chrono-marker/gtk-gui/Chrono.LoggerWindow.cs:40 chrono-marker/GUI
+#: Code/LoggerWindow.cs:121
+msgid "File"
+msgstr "Arquivo"
+
+#: chrono-marker/gtk-gui/Chrono.LoggerWindow.cs:42
+#: chrono-marker/gtk-gui/Chrono.LoggerWindow.cs:43 chrono-marker/GUI
+#: Code/LoggerWindow.cs:128
+msgid "Quit"
+msgstr "Sair"
+
+#: chrono-marker/gtk-gui/Chrono.LoggerWindow.cs:45
+#: chrono-marker/gtk-gui/Chrono.LoggerWindow.cs:46
+msgid "About"
+msgstr "Sobre"
+
+#: chrono-marker/gtk-gui/Chrono.LoggerWindow.cs:48
+#: chrono-marker/gtk-gui/Chrono.LoggerWindow.cs:49 chrono-marker/GUI
+#: Code/LoggerWindow.cs:122
+msgid "Edit"
+msgstr "Editar"
+
+#: chrono-marker/gtk-gui/Chrono.LoggerWindow.cs:51
+#: chrono-marker/gtk-gui/Chrono.LoggerWindow.cs:53 chrono-marker/GUI
+#: Code/LoggerWindow.cs:135
+msgid "Copy"
+msgstr "Copiar"
+
+#: chrono-marker/gtk-gui/Chrono.LoggerWindow.cs:55
+#: chrono-marker/gtk-gui/Chrono.LoggerWindow.cs:57 chrono-marker/GUI
+#: Code/LoggerWindow.cs:136
+msgid "Delete"
+msgstr "Excluir"
+
+#: chrono-marker/gtk-gui/Chrono.LoggerWindow.cs:59
+#: chrono-marker/gtk-gui/Chrono.LoggerWindow.cs:60 chrono-marker/GUI
+#: Code/LoggerWindow.cs:138
+msgid "Select All"
+msgstr "Selecionar Tudo"
+
+#: chrono-marker/gtk-gui/Chrono.LoggerWindow.cs:62
+#: chrono-marker/gtk-gui/Chrono.LoggerWindow.cs:63 chrono-marker/GUI
+#: Code/LoggerWindow.cs:127
+msgid "Export..."
+msgstr "Exportar..."
+
+#: chrono-marker/gtk-gui/Chrono.LoggerWindow.cs:65
+#: chrono-marker/gtk-gui/Chrono.LoggerWindow.cs:66 chrono-marker/GUI
+#: Code/LoggerWindow.cs:139
+msgid "Stopwatches..."
+msgstr "Cronômetros..."
+
+#: chrono-marker/gtk-gui/Chrono.LoggerWindow.cs:68
+#: chrono-marker/gtk-gui/Chrono.LoggerWindow.cs:69 chrono-marker/GUI
+#: Code/LoggerWindow.cs:140
+msgid "Preferences..."
+msgstr "Preferências..."
+
+#: chrono-marker/gtk-gui/Chrono.LoggerWindow.cs:71
+#: chrono-marker/gtk-gui/Chrono.LoggerWindow.cs:73 chrono-marker/GUI
+#: Code/LoggerWindow.cs:131 Code/LoggerWindow.cs:155
+#: Code/StopwatchWindow.cs:274
+msgid "Undo"
+msgstr "Desfazer"
+
+#: chrono-marker/gtk-gui/Chrono.LoggerWindow.cs:75
+#: chrono-marker/gtk-gui/Chrono.LoggerWindow.cs:77 chrono-marker/GUI
+#: Code/LoggerWindow.cs:132 Code/LoggerWindow.cs:159
+msgid "Redo"
+msgstr "Refazer"
+
+#: chrono-marker/gtk-gui/Chrono.LoggerWindow.cs:79
+#: chrono-marker/gtk-gui/Chrono.LoggerWindow.cs:80 chrono-marker/GUI
+#: Code/LoggerWindow.cs:123
+msgid "View"
+msgstr "Ver"
+
+#: chrono-marker/gtk-gui/Chrono.LoggerWindow.cs:82
+#: chrono-marker/gtk-gui/Chrono.LoggerWindow.cs:83 chrono-marker/GUI
+#: Code/LoggerWindow.cs:143 Code/WatchPropertiesWindow.cs:130
+msgid "Keep Above"
+msgstr "Manter Acima"
+
+#: chrono-marker/gtk-gui/Chrono.LoggerWindow.cs:82
+msgid "Keeps the log window on top of other windows"
+msgstr "Mantém a janela de registro ao topo de outras janelas"
+
+#: chrono-marker/gtk-gui/Chrono.LoggerWindow.cs:85
+#: chrono-marker/gtk-gui/Chrono.LoggerWindow.cs:86 chrono-marker/GUI
+#: Code/LoggerWindow.cs:124 Code/LoggerWindow.cs:146
+msgid "Help"
+msgstr "Ajuda"
+
+#: chrono-marker/gtk-gui/Chrono.PreferencesWindow.cs:204
+#: chrono-marker/gtk-gui/Chrono.WatchPropertiesWindow.cs:213 chrono-marker/GUI
+#: Code/PreferencesWindow.cs:63 Code/WatchPropertiesWindow.cs:98
+msgid "General"
+msgstr "Geral"
+
+#: chrono-marker/gtk-gui/Chrono.PreferencesWindow.cs:372 chrono-marker/GUI
+#: Code/PreferencesWindow.cs:108
+msgid "Preview"
+msgstr "Exêmplo"
+
+#: chrono-marker/gtk-gui/Chrono.PreferencesWindow.cs:433 chrono-marker/GUI
+#: Code/PreferencesWindow.cs:78
+msgid "Formatting"
+msgstr "Formatação"
+
+#: chrono-marker/gtk-gui/Chrono.WatchPropertiesWindow.cs:78 chrono-marker/GUI
+#: Code/PreferencesWindow.cs:66 Code/WatchPropertiesWindow.cs:91
+msgid "Name"
+msgstr "Nome"
+
+#: chrono-marker/gtk-gui/Chrono.WatchPropertiesWindow.cs:101 chrono-marker/GUI
+#: Code/WatchPropertiesWindow.cs:137 Code/WatchPropertiesWindow.cs:228
+msgid "Create"
+msgstr "Criar"
+
+#: chrono-marker/gtk-gui/Chrono.WatchPropertiesWindow.cs:393 chrono-marker/GUI
+#: Code/WatchPropertiesWindow.cs:124
+msgid "Compact Mode"
+msgstr "Modo Compacto"
+
+#: chrono-marker/GUI Code/AboutDialog.cs:40
+msgid "About Chrono Marker"
+msgstr "Sobre Chrono Marker"
+
+#: chrono-marker/GUI Code/LoggerWindow.cs:47
+msgid "Source"
+msgstr "Fonte"
+
+#: chrono-marker/GUI Code/LoggerWindow.cs:52
+msgid "Event"
+msgstr "Evento"
+
+#: chrono-marker/GUI Code/LoggerWindow.cs:57
+msgid "Occurred"
+msgstr "Ocorreu"
+
+#: chrono-marker/GUI Code/LoggerWindow.cs:172
+#, csharp-format
+msgid "{0} Log"
+msgid_plural "{0} Logs"
+msgstr[0] "{0} Registro"
+msgstr[1] "{0} Registros"
+
+#: chrono-marker/GUI Code/LoggerWindow.cs:176
+#, csharp-format
+msgid "{0} Selected"
+msgid_plural "{0} Selected"
+msgstr[0] "{0} Selecionado"
+msgstr[1] "{0} Selecionados"
+
+#: chrono-marker/GUI Code/LoggerWindow.cs:182
+msgid "No Logs"
+msgstr "Sem Registros"
+
+#: chrono-marker/GUI Code/LoggerWindow.cs:310
+msgid "Export Logs As Text"
+msgstr "Exportar Registros Como Texto"
+
+#: chrono-marker/GUI Code/PreferencesWindow.cs:60
+msgid "Preferences"
+msgstr "Preferências"
+
+#: chrono-marker/GUI Code/PreferencesWindow.cs:65
+msgid "Create a stopwatch on startup"
+msgstr "Criar um cronômetro ao iniciar"
+
+#: chrono-marker/GUI Code/PreferencesWindow.cs:67
+msgid "Name of the stopwatch to create on startup"
+msgstr "Nome do cronômetro ao criar ao iniciar"
+
+#: chrono-marker/GUI Code/PreferencesWindow.cs:69
+msgid "By default stopwatches are"
+msgstr "Por padrão cronômetros são"
+
+#: chrono-marker/GUI Code/PreferencesWindow.cs:71
+msgid "Compact"
+msgstr "Compacto"
+
+#: chrono-marker/GUI Code/PreferencesWindow.cs:72
+msgid "Stopwatches will be created with a single button and a small display"
+msgstr "Cronômetros serão criados com um único botão and um display pequeno"
+
+#: chrono-marker/GUI Code/PreferencesWindow.cs:74
+msgid "Docked"
+msgstr "Acoplado"
+
+#: chrono-marker/GUI Code/PreferencesWindow.cs:75
+msgid "Stopwatches will be created docked in the log window"
+msgstr "Cronômetros serão criados acoplados à janela de registro"
+
+#: chrono-marker/GUI Code/PreferencesWindow.cs:79
+msgid "Show the following in the stopwatch display"
+msgstr "Exibir os seguntes itens no display do cronômetro"
+
+#: chrono-marker/GUI Code/PreferencesWindow.cs:81
+msgid "Plus Symbol"
+msgstr "Sinal de Mais"
+
+#: chrono-marker/GUI Code/PreferencesWindow.cs:82
+msgid "Prefix a + when the time is positive"
+msgstr "Prefixar um + quando o tempo for positivo"
+
+#: chrono-marker/GUI Code/PreferencesWindow.cs:84
+msgid "Minus Symbol"
+msgstr "Sinal de Menos"
+
+#: chrono-marker/GUI Code/PreferencesWindow.cs:85
+msgid "Prefix a - when the time is negative"
+msgstr "Prefixar um - quando o tempo for negativo"
+
+#: chrono-marker/GUI Code/PreferencesWindow.cs:87
+msgid "Separators"
+msgstr "Separadores"
+
+#: chrono-marker/GUI Code/PreferencesWindow.cs:88
+msgid "Show separators between time units"
+msgstr "Exibir separadores entre unidades de tempo"
+
+#: chrono-marker/GUI Code/PreferencesWindow.cs:90
+msgid "Abbreviations"
+msgstr "Abreviações"
+
+#: chrono-marker/GUI Code/PreferencesWindow.cs:91
+msgid "Show abbreviations next to time units"
+msgstr "Exibir abreviações ao lado de unidades de tempo"
+
+#: chrono-marker/GUI Code/PreferencesWindow.cs:93
+msgid "Leading Zeros"
+msgstr "Zeros à Esquerda"
+
+#: chrono-marker/GUI Code/PreferencesWindow.cs:94
+msgid "Uncheck to hide any left side zeros"
+msgstr "Desmarque para esconder zeros ao lado esquerdo do display"
+
+#: chrono-marker/GUI Code/PreferencesWindow.cs:96
+msgid "Hours"
+msgstr "Horas"
+
+#: chrono-marker/GUI Code/PreferencesWindow.cs:97
+msgid "Uncheck to convert hours to minutes"
+msgstr "Desmarque para converter horas para minutos"
+
+#: chrono-marker/GUI Code/PreferencesWindow.cs:99
+msgid "Minutes"
+msgstr "Minutos"
+
+#: chrono-marker/GUI Code/PreferencesWindow.cs:100
+msgid "Uncheck to convert minutes to seconds"
+msgstr "Desmarque para converter minutos para segundos"
+
+#: chrono-marker/GUI Code/PreferencesWindow.cs:102
+msgid "Seconds"
+msgstr "Segundos"
+
+#: chrono-marker/GUI Code/PreferencesWindow.cs:103
+msgid "Uncheck to convert seconds to milliseconds"
+msgstr "Desmarque para converter segundos para milisegundos"
+
+#: chrono-marker/GUI Code/PreferencesWindow.cs:105
+msgid "Milliseconds"
+msgstr "Milisegundos"
+
+#: chrono-marker/GUI Code/PreferencesWindow.cs:106
+msgid "Uncheck to hide fractions of second"
+msgstr "Desmarque para esconder frações de segundo"
+
+#: chrono-marker/GUI Code/PreferencesWindow.cs:109
+msgid "For previewing purposes only"
+msgstr "Somente para pré-visualização"
+
+#: chrono-marker/GUI Code/RenameClockDialog.cs:40
+#, csharp-format
+msgid "Rename {0}"
+msgstr "Renomear {0}"
+
+#: chrono-marker/GUI Code/RenameClockDialog.cs:41
+msgid "New Name"
+msgstr "Novo nome"
+
+#: chrono-marker/GUI Code/RenameClockDialog.cs:42
+msgid "Type a new name for the stopwatch here"
+msgstr "Digite um novo nome para o cronômetro aqui"
+
+#: chrono-marker/GUI Code/StopwatchWindow.cs:242
+msgid "You can edit the time in this box"
+msgstr "Você pode editar o tempo nesta caixa"
+
+#: chrono-marker/GUI Code/StopwatchWindow.cs:243
+msgid "Count forward"
+msgstr "Contar para frente"
+
+#: chrono-marker/GUI Code/StopwatchWindow.cs:244
+msgid "Count backward"
+msgstr "Contar para trás"
+
+#: chrono-marker/GUI Code/StopwatchWindow.cs:255
+msgid "Start"
+msgstr "Contar"
+
+#: chrono-marker/GUI Code/StopwatchWindow.cs:259
+msgid "Begins counting forward"
+msgstr "Começa a contar para frente"
+
+#: chrono-marker/GUI Code/StopwatchWindow.cs:262
+msgid "Begins counting backward"
+msgstr "Começa a contar para trás"
+
+#: chrono-marker/GUI Code/StopwatchWindow.cs:268
+msgid "Stop"
+msgstr "Parar"
+
+#: chrono-marker/GUI Code/StopwatchWindow.cs:270
+msgid "Stops counting"
+msgstr "Para de contar"
+
+#: chrono-marker/GUI Code/StopwatchWindow.cs:276
+msgid "Revert changes made to the display"
+msgstr "Reverte mudanças feitas ao display"
+
+#: chrono-marker/GUI Code/StopwatchWindow.cs:319
+#, csharp-format
+msgid "Stopwatch - {0}"
+msgstr "Cronômetro - {0}"
+
+#: chrono-marker/GUI Code/WatchPropertiesWindow.cs:89
+msgid "Stopwatches"
+msgstr "Cronômetros"
+
+#: chrono-marker/GUI Code/WatchPropertiesWindow.cs:92
+msgid "Type a stopwatch name to edit it or to create a new stopwatch"
+msgstr ""
+"Digite o nome de um cronômetro para editá-lo ou para criar um novo cronômetro"
+
+#: chrono-marker/GUI Code/WatchPropertiesWindow.cs:100
+msgid "Log the following events"
+msgstr "Registrar os seguintes eventos"
+
+#: chrono-marker/GUI Code/WatchPropertiesWindow.cs:101
+msgid "When the Start button is clicked"
+msgstr "Quando o botão Contar for clicado"
+
+#: chrono-marker/GUI Code/WatchPropertiesWindow.cs:102
+msgid "When the Stop button is clicked"
+msgstr "Quando o botão Parar for clicado"
+
+#: chrono-marker/GUI Code/WatchPropertiesWindow.cs:103
+msgid "Click here to delete this stopwatch, this action cannot be undone"
+msgstr ""
+"Clique aqui para excluir este cronômetro, esta ação não pode ser desfeita"
+
+#: chrono-marker/GUI Code/WatchPropertiesWindow.cs:106
+msgid "Counting"
+msgstr "Contagem"
+
+#: chrono-marker/GUI Code/WatchPropertiesWindow.cs:107
+msgid "Choose the counting direction"
+msgstr "Escolha a direção de contagem"
+
+#: chrono-marker/GUI Code/WatchPropertiesWindow.cs:108
+msgid "Count Forward"
+msgstr "Contar Para Frente"
+
+#: chrono-marker/GUI Code/WatchPropertiesWindow.cs:109
+msgid "Count Backward"
+msgstr "Contar Para Trás"
+
+#: chrono-marker/GUI Code/WatchPropertiesWindow.cs:111
+msgid "Counting Speed"
+msgstr "Velocidade de Contagem"
+
+#: chrono-marker/GUI Code/WatchPropertiesWindow.cs:112
+msgid "How many seconds are elapsed in this stopwatch every second"
+msgstr "Quantos segundos passam neste cronômetro a cada segundo"
+
+#: chrono-marker/GUI Code/WatchPropertiesWindow.cs:114
+msgid "Apply Settings"
+msgstr "Aplicar Configurações"
+
+#: chrono-marker/GUI Code/WatchPropertiesWindow.cs:115
+msgid ""
+"Click here to apply the changes made to this stopwatch counting settings"
+msgstr ""
+"Clique aqui para aplicar as mudanças feitas as configurações de contagem "
+"deste cronômetro"
+
+#: chrono-marker/GUI Code/WatchPropertiesWindow.cs:118
+msgid "Window"
+msgstr "Janela"
+
+#: chrono-marker/GUI Code/WatchPropertiesWindow.cs:120
+msgid "Configure the window layout"
+msgstr "Configure o layout da janela"
+
+#: chrono-marker/GUI Code/WatchPropertiesWindow.cs:121
+msgid "Dock in Log Window"
+msgstr "Acoplar à Janela de Registros"
+
+#: chrono-marker/GUI Code/WatchPropertiesWindow.cs:122
+msgid "Check to dock this stopwatch's window inside the log window"
+msgstr ""
+"Marque para acoplar a janela deste cronômetro dentro da janela de registro"
+
+#: chrono-marker/GUI Code/WatchPropertiesWindow.cs:125
+msgid ""
+"Check to show only one button and a smaller display in this stopwatch's "
+"window"
+msgstr ""
+"Marque para exibir somente um botão e um display menor na janela deste "
+"cronômetro"
+
+#: chrono-marker/GUI Code/WatchPropertiesWindow.cs:127
+msgid "Visible"
+msgstr "Visível"
+
+#: chrono-marker/GUI Code/WatchPropertiesWindow.cs:128
+msgid "Click here to show or hide this stopwatch's window"
+msgstr "Clique aqui para exibir ou esconder a janela deste cronômetro"
+
+#: chrono-marker/GUI Code/WatchPropertiesWindow.cs:131
+msgid "Check to keep this stopwatch's window on top of other windows"
+msgstr "Marque para manter a janela deste cronômetro ao topo de outras janelas"
+
+#: chrono-marker/GUI Code/WatchPropertiesWindow.cs:138
+msgid "Click here to create a stopwatch with this name"
+msgstr "Clique aqui para criar um cronômetro com este nome"
+
+#: chrono-marker/GUI Code/WatchPropertiesWindow.cs:142
+msgid "Rename..."
+msgstr "Renomear..."
+
+#: chrono-marker/GUI Code/WatchPropertiesWindow.cs:143
+msgid "Click here to rename this stopwatch"
+msgstr "Clique aqui para renomear este cronômetro"
+
+#: chrono-marker/GUI Code/WatchPropertiesWindow.cs:214
+msgid "Rename"
+msgstr "Renomear"
+
+#: chrono-marker/GUI Code/WatchPropertiesWindow.cs:350
+#, csharp-format
+msgid "Failed to create stopwatch \"{0}\"."
+msgstr "Falha ao criar cronômetro \"{0}\""
+
+#: chrono-marker/GUI Code/WatchPropertiesWindow.cs:379
+msgid "Blank names are not valid."
+msgstr "Nomes em branco não são válidos"
+
+#: chrono-marker/GUI Code/WatchPropertiesWindow.cs:389
+#, csharp-format
+msgid ""
+"A stopwatch with named \"{0}\" already exists!\n"
+"Please choose another name."
+msgstr ""
+"Um cronômetro chamado \"{0}\" já existe!\n"
+"Favor escolher um outro nome."
+
+#: chrono-marker/History/DeleteLogsDoable.cs:45
+#, csharp-format
+msgid "Redelete a Log"
+msgid_plural "Redelete {0} Logs"
+msgstr[0] "Reexcluir um Registro"
+msgstr[1] "Reexcluir {0} Registros"
+
+#: chrono-marker/History/DeleteLogsDoable.cs:53
+#, csharp-format
+msgid "Undelete a Log"
+msgid_plural "Undelete {0} Logs"
+msgstr[0] "Desexcluir um Registro"
+msgstr[1] "Desexcluir {0} Registros"
+
+#, fuzzy
+#~ msgid "Prefereces..."
+#~ msgstr "Preferências..."
+
+#~ msgid ""
+#~ "Keeps this stopwatch's window on top of other windows, if it's docked you "
+#~ "can set this in the log window menu"
+#~ msgstr "Mantém a janela deste cronômetro ao topo de outras janelas"
+
+#~ msgid "Stopwatch Speed"
+#~ msgstr "Velocidade do Cronômetro"
+
+#~ msgid "Stopwatches are compact by default"
+#~ msgstr "Cronômetros são compactos por padrão"
+
+#~ msgid "Stopwatch"
+#~ msgstr "Cronômetro"

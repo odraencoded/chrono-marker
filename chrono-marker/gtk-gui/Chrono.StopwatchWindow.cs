@@ -20,8 +20,7 @@ namespace Chrono
 			global::Stetic.Gui.Initialize (this);
 			// Widget Chrono.StopwatchWindow
 			this.Name = "Chrono.StopwatchWindow";
-			this.Title = global::Mono.Unix.Catalog.GetString ("Stopwatch");
-			this.WindowPosition = ((global::Gtk.WindowPosition)(4));
+			this.Title = "Stopwatch";
 			this.Resizable = false;
 			this.AllowGrow = false;
 			// Container child Chrono.StopwatchWindow.Gtk.Container+ContainerChild
@@ -34,7 +33,6 @@ namespace Chrono
 			this.hbox1.Spacing = 2;
 			// Container child hbox1.Gtk.Box+BoxChild
 			this.backwardBtn = new global::Gtk.Button ();
-			this.backwardBtn.TooltipMarkup = "Counts backwards";
 			this.backwardBtn.WidthRequest = 30;
 			this.backwardBtn.CanFocus = true;
 			this.backwardBtn.Name = "backwardBtn";
@@ -85,6 +83,7 @@ namespace Chrono
 			this.compactBtn.Name = "compactBtn";
 			// Container child compactBtn.Gtk.Container+ContainerChild
 			this.compactBtnImage = new global::Gtk.Image ();
+			this.compactBtnImage.CanDefault = true;
 			this.compactBtnImage.Name = "compactBtnImage";
 			this.compactBtnImage.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "chrono-forward", global::Gtk.IconSize.Button);
 			this.compactBtn.Add (this.compactBtnImage);
@@ -96,10 +95,9 @@ namespace Chrono
 			w12.Fill = false;
 			// Container child hbox2.Gtk.Box+BoxChild
 			this.timeDisplayBox = new global::Gtk.Entry ();
-			this.timeDisplayBox.TooltipMarkup = "You can edit the time in this box";
 			this.timeDisplayBox.CanFocus = true;
 			this.timeDisplayBox.Name = "timeDisplayBox";
-			this.timeDisplayBox.Text = "00:00:00.00";
+			this.timeDisplayBox.Text = "Time goes here";
 			this.timeDisplayBox.IsEditable = true;
 			this.timeDisplayBox.WidthChars = 13;
 			this.timeDisplayBox.MaxLength = 25;
@@ -121,7 +119,6 @@ namespace Chrono
 			w15.Position = 1;
 			// Container child hbox1.Gtk.Box+BoxChild
 			this.forwardBtn = new global::Gtk.Button ();
-			this.forwardBtn.TooltipMarkup = "Counts forward";
 			this.forwardBtn.WidthRequest = 30;
 			this.forwardBtn.CanFocus = true;
 			this.forwardBtn.Name = "forwardBtn";
@@ -156,13 +153,13 @@ namespace Chrono
 			this.compactBtn.Hide ();
 			this.Hide ();
 			this.DeleteEvent += new global::Gtk.DeleteEventHandler (this.windowDelete_event);
-			this.Hidden += new global::System.EventHandler (this.visibilityChanged_event);
-			this.Shown += new global::System.EventHandler (this.visibilityChanged_event);
-			this.FocusInEvent += new global::Gtk.FocusInEventHandler (this.focusIn_event);
+			this.FocusInEvent += new global::Gtk.FocusInEventHandler (this.windowFocusIn_event);
+			this.Hidden += new global::System.EventHandler (this.windowVisibilityChanged_event);
+			this.Shown += new global::System.EventHandler (this.windowVisibilityChanged_event);
 			this.backwardBtn.Clicked += new global::System.EventHandler (this.backwardBtn_event);
 			this.compactBtn.Clicked += new global::System.EventHandler (this.clockButton_event);
 			this.timeDisplayBox.Changed += new global::System.EventHandler (this.displayBoxChanged_event);
-			this.timeDisplayBox.Focused += new global::Gtk.FocusedHandler (this.focusIn_event);
+			this.timeDisplayBox.FocusGrabbed += new global::System.EventHandler (this.displayBoxFocused_event);
 			this.bottomBtn.Clicked += new global::System.EventHandler (this.clockButton_event);
 			this.forwardBtn.Clicked += new global::System.EventHandler (this.forwardBtn_event);
 		}

@@ -30,37 +30,43 @@ namespace Chrono
 		public ClockPropertiesWindow(Program program) : 
 				base(Gtk.WindowType.Toplevel)
 		{
-			Program = program;
-
-			Program.ClockWindowReceivedFocus += AnyClockWindowFocused_event;
-
-			Logger.ClockAdded += loggerClockAdded_event;
-			Logger.ClockRemoved += loggerClockRemoved_event;
-
 			this.Build( );
+
+			this.Program = program;
+
+			watchSpeedEntry.Alignment = 1;
 
 			_comboNameIters = new Dictionary<LoggingHandler, TreeIter>();
 
-			LoggingHandler[] manyHandlers = Logger.Handlers;
+			_handlerListStore = new ListStore(typeof(LoggingHandler), typeof(string));
+			watchNameCombo.Model = _handlerListStore;
 
-			clockNameBox.Model = _comboEntryList = new ListStore(typeof(LoggingHandler));
+			List<LoggingHandler> manyHandlers = Logger.GetClockList();
 
+			watchNameCombo.Entry.ActivatesDefault = true;
+			watchNameCombo.SetCellDataFunc(watchNameCombo.Cells[0], new CellLayoutDataFunc(renderComboBoxCells));
+
+			watchNameCombo.TextColumn = 1;
+
+			// Startup refresh
 			foreach( LoggingHandler handler in manyHandlers ) {
-				TreeIter iter =  _comboEntryList.AppendValues(handler);
-
+				TreeIter iter =  _handlerListStore.AppendValues(handler, handler.Name);
+				
 				_comboNameIters.Add(handler, iter);
 			}
-
-			clockNameBox.Entry.ActivatesDefault = true;
-			clockNameBox.Entry.Changed += clockNameEntryChanged_event;
-
-			clockNameBox.SetCellDataFunc(clockNameBox.Cells[0], new CellLayoutDataFunc(renderComboBoxCells));
-
-			if(manyHandlers.Length > 0)
+			if(manyHandlers.Count > 0)
 			{
 				ChangeHandler(manyHandlers[0]);
-				clockNameBox.Active = 0;
+				watchNameCombo.Active = 0;
 			}
+
+			// Events
+			watchNameCombo.Entry.Changed += clockNameEntryChanged_event;
+			Logger.ClockAdded += loggerClockAdded_event;
+			Logger.ClockRemoved += loggerClockRemoved_event;
+			Logger.ClockRenamed += loggerClockRenamed_event;
+
+			RefreshTexts();
 		}
 
 		public Program Program { get; private set; }
@@ -72,15 +78,80 @@ namespace Chrono
 		private StopwatchWindow _clockWindow;
 
 		private Dictionary<LoggingHandler, TreeIter> _comboNameIters;
-		private ListStore _comboEntryList;
+		private ListStore _handlerListStore;
 
-		// This helps supress false positive errors
+		// This supresses errors
 		// When RefreshControls is called
 		private bool _refreshing;
 
+		public void RefreshTexts()
+		{
+			Title = Catalog.GetString("Stopwatches");
+
+			watchNameLabel.Text = Catalog.GetString("Name");
+			watchNameContainer.TooltipMarkup = Catalog.GetString("Type a stopwatch name to edit it or to create a new stopwatch");
+
+			RefreshWatchButtonText();
+
+			// General tab
+
+			generalTabLabel.Text = Catalog.GetString("General");
+
+			logTheFollowingLabel.Text = Catalog.GetString("Log the following events");
+			logStartsCheck.Label = Catalog.GetString("When the Start button is clicked");
+			logStopsCheck.Label = Catalog.GetString("When the Stop button is clicked");
+			deleteBtn.TooltipMarkup = Catalog.GetString("Click here to delete this stopwatch, this action cannot be undone");
+
+			// Counting tab
+			countingTabLabel.Text = Catalog.GetString("Counting");
+			countingDirectionLabel.Text = Catalog.GetString("Choose the counting direction");
+			countForwardOption.Label = Catalog.GetString("Count Forward");
+			countBackwardOption.Label = Catalog.GetString("Count Backward");
+
+			watchSpeedLabel.Text = Catalog.GetString("Counting Speed");
+			watchSpeedContainer.TooltipMarkup = Catalog.GetString("How many seconds are elapsed in this stopwatch every second");
+
+			applySpeedBtn.Label = Catalog.GetString("Apply Settings");
+			applySpeedBtn.TooltipMarkup = Catalog.GetString("Click here to apply the changes made to this stopwatch counting settings");
+
+			// Window tab
+			windowTabLabel.Text = Catalog.GetString("Window");
+
+			configureLayoutLabel.Text = Catalog.GetString("Configure the window layout");
+			dockedCheck.Label = Catalog.GetString("Dock in Log Window");
+			dockedCheck.TooltipMarkup = Catalog.GetString("Check to dock this stopwatch's window inside the log window");
+
+			compactCheck.Label = Catalog.GetString("Compact Mode");
+			compactCheck.TooltipMarkup = Catalog.GetString("Check to show only one button and a smaller display in this stopwatch's window");
+
+			windowVisibleBtn.Label = Catalog.GetString("Visible");
+			windowVisibleBtn.TooltipMarkup = Catalog.GetString("Click here to show or hide this stopwatch's window");
+
+			keepAboveCheck.Label = Catalog.GetString("Keep Above");
+			keepAboveCheck.TooltipMarkup = Catalog.GetString("Check to keep this stopwatch's window on top of other windows");
+		}
+
+		public void RefreshWatchButtonText()
+		{
+			if( _currentHandler == null ) {
+				watchNameButton.Label = Catalog.GetString( "Create" );
+				watchNameButton.TooltipMarkup = Catalog.GetString("Click here to create a stopwatch with this name");
+			}
+			else
+			{
+				watchNameButton.Label = Catalog.GetString("Rename...");
+				watchNameButton.TooltipMarkup = Catalog.GetString("Click here to rename this stopwatch");
+			}
+		}
+
+		public void SetHandler(LoggingHandler handler)
+		{
+			watchNameCombo.Entry.Text = handler.Name;
+		}
+
 		private void RefreshHandler()
 		{
-			string clockName = clockNameBox.Entry.Text;
+			string clockName = watchNameCombo.Entry.Text;
 
 			LoggingHandler newHandler;
 
@@ -96,19 +167,16 @@ namespace Chrono
 				return;
 
 			if( _clockWindow != null ) {
-				_currentHandler.Renamed -= handlerRenamed_event;
 				_currentHandler.Clock.SpeedChanged -= clockSpeedChanged_event;
-
-				_clockWindow.DisplayVisibleChanged -= clockWindowDisplayChanged_event;
+				_clockWindow.DisplayVisibilityChanged -= clockWindowDisplayChanged_event;
 			}
 
 			_currentHandler = newHandler;
 			if( _currentHandler != null ) {
-				_currentHandler.Renamed += handlerRenamed_event;
 				_currentHandler.Clock.SpeedChanged += clockSpeedChanged_event;
 
-				Program.GetClockWindow( _currentHandler, out _clockWindow );
-				_clockWindow.DisplayVisibleChanged += clockWindowDisplayChanged_event;
+				Program.TryGetClockWindow( _currentHandler, out _clockWindow );
+				_clockWindow.DisplayVisibilityChanged += clockWindowDisplayChanged_event;
 			} else {
 				_clockWindow = null;
 			}
@@ -130,38 +198,36 @@ namespace Chrono
 				logStopsCheck.Active = _currentHandler.LogStops;
 
 				if( _currentHandler.Clock.Speed >= 0 )
-					tickForwardOption.Active = true;
+					countForwardOption.Active = true;
 				else
-					tickBackwardOption.Active = true;
+					countBackwardOption.Active = true;
 
-				speedEntry.Value = Math.Abs( _currentHandler.Clock.Speed );
+				watchSpeedEntry.Value = Math.Abs( _currentHandler.Clock.Speed );
 
-				if(_clockWindow.Compact)
-					compactWindowOption.Active = true;
-				else normalWindowOption.Active = true;
-
-				onTopCheck.Active = _clockWindow.OnTop;
+				compactCheck.Active = _clockWindow.Compact;
+				windowVisibleBtn.Active = _clockWindow.DisplayVisible;
 				dockedCheck.Active = _clockWindow.Docked;
-				displayStopwatchBtn.Active = _clockWindow.DisplayVisible;
+				keepAboveCheck.Active = _clockWindow.KeepVisible;
+				keepAboveCheck.Sensitive = !_clockWindow.Docked && _clockWindow.DisplayVisible;
 
 				// When the name is valid, createBtn becomes renameBtn!!!
-				clockNameBtn.Label = Catalog.GetString("Rename");
+				watchNameButton.Label = Catalog.GetString("Rename");
+				watchNameButton.Sensitive = true;
 			} else {
 				logStartsCheck.Active = false;
 				logStopsCheck.Active = false;
 
-				tickForwardOption.Active = true;
-				speedEntry.Value = 1.0;
+				countForwardOption.Active = true;
+				watchSpeedEntry.Value = 1.0;
 
-				normalWindowOption.Active = true;
-
-				onTopCheck.Active = false;
+				compactCheck.Active = false;
 				dockedCheck.Active = false;
-				displayStopwatchBtn.Active = false;
+				windowVisibleBtn.Active = false;
+				keepAboveCheck.Active = false;
 
-				clockNameBtn.Label = Catalog.GetString("Create");
+				watchNameButton.Label = Catalog.GetString("Create");
 
-				clockNameBtn.Sensitive = Logger.CanCreateClock(clockNameBox.Entry.Text);
+				watchNameButton.Sensitive = Logger.CanCreateClock(watchNameCombo.Entry.Text);
 			}
 
 			_refreshing = false;
@@ -170,49 +236,68 @@ namespace Chrono
 		#region Dynamic events
 		private void loggerClockAdded_event(object sender, ClockHandlerEventArgs e)
 		{
-			TreeIter iter = _comboEntryList.AppendValues(e.LoggingHandler);
+			bool first = _comboNameIters.Count == 0;
 
-			_comboNameIters.Add(e.LoggingHandler, iter);
+			TreeIter iter = _handlerListStore.AppendValues( e.LoggingHandler, e.LoggingHandler.Name );
+
+			_comboNameIters.Add( e.LoggingHandler, iter );
+
+			if( first ) {
+				ChangeHandler(e.LoggingHandler);
+				watchNameCombo.Active = 0;
+			}
 		}
 		private void loggerClockRemoved_event(object sender, ClockHandlerEventArgs e)
 		{
-			TreeIter removedIter = _comboNameIters [e.LoggingHandler];
+			TreeIter removedIter;
+			if(!_comboNameIters.TryGetValue(e.LoggingHandler, out removedIter))
+			{
+				Console.Error.WriteLine( "Failed to get clock treeiter name \"" + e.LoggingHandler.Name + "\"." );
+				return;
+			}
 
-			_comboEntryList.Remove( ref removedIter );
+			_handlerListStore.Remove( ref removedIter );
 
 			if( _currentHandler == e.LoggingHandler ) {
 				ChangeHandler( null );
 
+				// If there are any stopwatches left, change to the first one
+				// Otherwise clear the stopwatch name entry
 				TreeIter firstIter;
-				if( _comboEntryList.GetIterFirst( out firstIter ) )
-					clockNameBox.Entry.Text = _comboEntryList.GetValue( firstIter, 0 ) as String;
+				if( _handlerListStore.GetIterFirst( out firstIter ) )
+					watchNameCombo.Entry.Text = _handlerListStore.GetValue( firstIter, watchNameCombo.TextColumn ) as String;
+				else watchNameCombo.Entry.Text = "";
 
 				RefreshControls();
 			}
 		}
-		private void handlerRenamed_event(object sender, EventArgs e)
+		private void loggerClockRenamed_event(object sender, ClockHandlerEventArgs e)
 		{
+			TreeIter renamedIter;
+			if( !_comboNameIters.TryGetValue( e.LoggingHandler, out renamedIter ) ) {
+				Console.Error.WriteLine( "Failed to get clock treeiter name \"" + e.LoggingHandler.Name + "\"." );
+				return;
+			}
+
+			_handlerListStore.SetValue(renamedIter, 1, e.LoggingHandler.Name);
+
 			_refreshing = true;
-			if( _currentHandler != null ) {
-				clockNameBox.Entry.Text = _currentHandler.Name;
+
+			if( _currentHandler == e.LoggingHandler ) {
+				watchNameCombo.Entry.Text = _currentHandler.Name;
 			}
 
 			_refreshing = false;
-		}
-
-		private void AnyClockWindowFocused_event(object sender, ClockHandlerEventArgs e)
-		{
-			clockNameBox.Entry.Text = e.LoggingHandler.Name;
 		}
 
 		private void clockSpeedChanged_event(object sender, ClockEventArgs args)
 		{
 			_refreshing = true;
 			if(args.Speed >= 0)
-				tickForwardOption.Active = true;
-			else tickBackwardOption.Active = true;
+				countForwardOption.Active = true;
+			else countBackwardOption.Active = true;
 
-			speedEntry.Value = Math.Abs(args.Speed);
+			watchSpeedEntry.Value = Math.Abs(args.Speed);
 
 			_refreshing = false;
 		}
@@ -220,7 +305,7 @@ namespace Chrono
 		private void clockWindowDisplayChanged_event(object sender, EventArgs args)
 		{
 			_refreshing = true;
-			displayStopwatchBtn.Active = _clockWindow.DisplayVisible;
+			windowVisibleBtn.Active = _clockWindow.DisplayVisible;
 			_refreshing = false;
 		}
 		#endregion
@@ -237,12 +322,12 @@ namespace Chrono
 		protected void clockNameChanged_event(object sender, EventArgs e)
 		{
 			TreeIter activeIter;
-			if( clockNameBox.GetActiveIter( out activeIter ) ) {
+			if( watchNameCombo.GetActiveIter( out activeIter ) ) {
 				LoggingHandler selectedHandler =
-					_comboEntryList.GetValue(activeIter, 0) as LoggingHandler;
+					_handlerListStore.GetValue(activeIter, 0) as LoggingHandler;
 
 				if(selectedHandler != null)
-					clockNameBox.Entry.Text = selectedHandler.Name;
+					watchNameCombo.Entry.Text = selectedHandler.Name;
 			}
 		}
 
@@ -257,54 +342,54 @@ namespace Chrono
 
 		protected void clockNameBtn_event(object sender, EventArgs e)
 		{
-			string clockName = clockNameBox.Entry.Text;
+			string clockName = watchNameCombo.Entry.Text;
 
 			if( _currentHandler == null ) {
+				if(!Logger.CanCreateClock(clockName))
+				{
+					string localError = Catalog.GetString("Failed to create stopwatch \"{0}\".");
+
+					Program.ShowError(this, localError, clockName);
+					return;
+				}
+
 				LoggingHandler newHandler = Logger.CreateClock(clockName );
 				ChangeHandler( newHandler );
 
-				_clockWindow.Show();
-				Present();
+				_clockWindow.DisplayVisible = true;
+
+				// This avoids having the newly created window appear
+				// Over the properties window
+				this.Present(); 
 
 				RefreshControls( );
 
 			} else {
 				RenameClockDialog renameDiag = new RenameClockDialog(_currentHandler.Name);
-
 				renameDiag.TransientFor = this;
+
 			RunRenameDialog:
 				if(renameDiag.Run() == (int)ResponseType.Ok)
 				{
 					string newName = renameDiag.NewName;
 					if(newName != _currentHandler.Name)
 					{
-						string errorMessage = null;
-
 						if(string.IsNullOrWhiteSpace(newName))
 						{
-							errorMessage = Catalog.GetString("Blank names are not valid.");
+							string localError = Catalog.GetString("Blank names are not valid.");
+
+							Program.ShowError(renameDiag, localError);
+
+							goto RunRenameDialog;
 						}
 						// This name comparison allows the user to rename a clock using different casing
 						else if(!string.Equals(newName, _currentHandler.Name, TimeLogger.HandlerNameComparison)
 						   && _currentHandler.Logger.HasClock( newName ) ) {
 
-							string translatable = Catalog.GetString(
-								"A clock with named \"{0}\" already exists!\n" +
-								"Please choose another name.");
+							string localError = Catalog.GetString("A stopwatch with named \"{0}\" already exists!\n" +
+							                  "Please choose another name.");
 
-							errorMessage = string.Format(translatable, newName);
-						}
-
-						if(errorMessage != null)
-						{
-							MessageDialog errorDiag = 
-								new MessageDialog(this, DialogFlags.DestroyWithParent,
-								                  MessageType.Error, ButtonsType.Ok,
-								                  errorMessage);
-
-							errorDiag.TransientFor = renameDiag;
-							errorDiag.Run();
-							errorDiag.Destroy();
+							Program.ShowError(renameDiag, localError , newName);
 
 							goto RunRenameDialog;
 						}
@@ -349,44 +434,49 @@ namespace Chrono
 			if( _currentHandler == null )
 				return;
 
-			double newSpeed = speedEntry.Value;
-			if( tickBackwardOption.Active )
+			double newSpeed = watchSpeedEntry.Value;
+			if( countBackwardOption.Active )
 				newSpeed *= -1;
 
 			_currentHandler.Clock.ChangeSpeed( newSpeed );
 		}
-
-		protected void windowMode_event(object sender, EventArgs e)
-		{
-			if( _refreshing || _clockWindow == null )
-				return;
-
-			_clockWindow.Compact = compactWindowOption.Active;
-		}
-
-		protected void onTop_event (object sender, EventArgs e)
-		{
-			if( _refreshing || _clockWindow == null )
-				return;
-
-			_clockWindow.OnTop = onTopCheck.Active;
-		}
-
+		#region Window settings
 		protected void docked_event(object sender, EventArgs e)
 		{
-			if(_refreshing || _clockWindow == null)
+			if( _refreshing || _clockWindow == null )
 				return;
 
 			_clockWindow.Docked = dockedCheck.Active;
+
+			keepAboveCheck.Sensitive = !dockedCheck.Active && windowVisibleBtn.Active;
 		}
 
-		protected void displayStopwatch_event(object sender, EventArgs e)
+		protected void compact_event(object sender, EventArgs e)
+		{
+			if( _refreshing || _clockWindow == null )
+				return;
+
+			_clockWindow.Compact = compactCheck.Active;
+		}
+
+		protected void keepVisible_event (object sender, EventArgs e)
+		{
+			if( _refreshing || _clockWindow == null )
+				return;
+
+			_clockWindow.KeepVisible = keepAboveCheck.Active;
+		}
+
+		protected void visible_event(object sender, EventArgs e)
 		{
 			if(_refreshing || _clockWindow == null )
 				return;
 
-			_clockWindow.DisplayVisible = displayStopwatchBtn.Active;
+			_clockWindow.DisplayVisible = windowVisibleBtn.Active;
+
+			keepAboveCheck.Sensitive = !dockedCheck.Active && windowVisibleBtn.Active;
 		}
+		#endregion
 		#endregion
 
 		protected void closeWindow_event(object sender, EventArgs e)
@@ -396,11 +486,9 @@ namespace Chrono
 
 		protected void windowDelete_event(object o, DeleteEventArgs args)
 		{
-			ChangeHandler(null);
-			Hide( );
-
 			// Prevents from destroying
 			args.RetVal = true;
+			HideOnDelete();
 		}
 		#endregion
 

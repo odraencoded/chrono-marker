@@ -45,13 +45,14 @@ namespace Chrono
 
 		public void Clear()
 		{
-			manyDoables.Clear();
-			currentDoableNode = manyDoables.AddFirst((Doable)null);
+			manyDoables.Clear( );
+			currentDoableNode = manyDoables.AddFirst( ( Doable )null );
 		}
 
 		public bool CanRedo { 
 			get { return currentDoableNode != manyDoables.Last; }
 		}
+
 		public bool CanUndo {
 			get { return currentDoableNode != manyDoables.First; }
 		}
@@ -93,8 +94,8 @@ namespace Chrono
 
 		private void OnHistoryChanged()
 		{
-			if(Changed != null)
-				Changed(this, new HistoryChangedArgs(this));
+			if( Changed != null )
+				Changed( this, new HistoryChangedArgs(this) );
 		}
 	
 		public event HistoryChangedHandler Changed;

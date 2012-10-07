@@ -33,12 +33,14 @@ namespace Chrono
 		public bool ShowPlusSymbol { get; set; }		
 		public bool ShowMinusSymbol { get; set; }
 
-		public bool ShowLeadingZero { get; set; }
+		public bool ShowLeadingZeroes { get; set; }
 		public bool ShowSeparators { get; set; }
 		#endregion
 
-		public bool IsSignificant(TimeSpan timespan)
+		public bool IsNonZero(TimeSpan timespan)
 		{
+			timespan = timespan.Duration();
+
 			if(ShowMilliseconds && timespan.TotalMilliseconds >= 1)
 				return true;
 			if(ShowSeconds && timespan.TotalSeconds >= 1)
@@ -54,90 +56,95 @@ namespace Chrono
 		{
 			string leftSymbol;
 			string milliseconds, seconds, minutes, hours;
+			bool hoursVisible, minutesVisible, secondsVisible, milliVisible;
 
-			if( IsSignificant( timespan ) ) {
-				if( ShowMinusSymbol && timespan.Ticks < 0 )
-					leftSymbol = "-";
-				else if( ShowPlusSymbol && timespan.Ticks > 0 )
-					leftSymbol = "+";
-				else leftSymbol = "";
+			if( ShowMinusSymbol && timespan.Ticks < 0 && IsNonZero( timespan ) ) {
+				leftSymbol="-";
+			}
+			else if(ShowPlusSymbol && timespan.Ticks > 0 && IsNonZero(timespan))
+			{
+				leftSymbol="+";
 			}
 			else leftSymbol = "";
 
 			timespan = timespan.Duration( );
 
-			if( ShowMilliseconds )
+			// If a time unit is visible and ShowLeadingZeroes is not true,
+			// it will be display if it's greater than zero or
+			// if all lower units are hidden. This avoids empty strings.
+			milliVisible = ShowMilliseconds;
+			secondsVisible = ShowSeconds && (ShowLeadingZeroes || timespan.TotalSeconds >= 1 || !milliVisible);
+			minutesVisible = ShowMinutes && (ShowLeadingZeroes || timespan.TotalMinutes >= 1 || (!milliVisible && !secondsVisible));
+			hoursVisible = ShowHours && (ShowLeadingZeroes || timespan.TotalHours >= 1 || (!milliVisible && !secondsVisible && !minutesVisible));
+
+			if( milliVisible )
 			{
-				if( ShowSeconds )
+				if(secondsVisible)
 				{
 					milliseconds = timespan.Milliseconds.ToString().PadLeft(3, '0');
-					if(ShowSeparators) 
+					if(ShowSeparators)
 						milliseconds = "." + milliseconds;
+					else milliseconds = milliseconds + "ms";
 				}
 				else
 				{
 					milliseconds = ((int)Math.Floor(timespan.TotalMilliseconds)).ToString();
-
-					if(ShowLeadingZero)
+					if(ShowLeadingZeroes)
 						milliseconds = milliseconds.PadLeft(3, '0');
+					if(!ShowSeparators)
+						milliseconds = milliseconds + "ms";
 				}
 
-				if(!ShowSeparators)
-					milliseconds = milliseconds + "ms";
+
 			}
 			else milliseconds = "";
 
-			if( ShowSeconds )
+			if( secondsVisible)
 			{
-				if( ShowMinutes )
+				if(minutesVisible)
 				{
 					seconds = timespan.Seconds.ToString().PadLeft(2, '0');
-
-					if(ShowSeparators) 
+					if(ShowSeparators)
 						seconds = ":" + seconds;
+					else seconds = seconds + "s";
 				}
 				else
 				{
 					seconds = ((int)Math.Floor(timespan.TotalSeconds)).ToString();
-					
-					if(ShowLeadingZero)
+					if(ShowLeadingZeroes)
 						seconds = seconds.PadLeft(2, '0');
+					if(!ShowSeparators)
+						seconds = seconds + "s";
 				}
-
-				if(!ShowSeparators)
-					seconds = seconds + "s";
 			}
 			else seconds = "";
 
-			if( ShowMinutes )
+			if( minutesVisible )
 			{
-				if( ShowHours )
+				if(hoursVisible)
 				{
 					minutes = timespan.Minutes.ToString().PadLeft(2, '0');
-
-					if(ShowSeparators) 
+					if(ShowSeparators)
 						minutes = ":" + minutes;
+					else minutes = minutes + "m";
 				}
 				else
 				{
 					minutes = ((int)Math.Floor(timespan.TotalMinutes)).ToString();
-					
-					if(ShowLeadingZero)
+					if(ShowLeadingZeroes)
 						minutes = minutes.PadLeft(2, '0');
+					if(!ShowSeparators)
+						minutes = minutes + "m";
 				}
-
-				if(!ShowSeparators)
-					minutes = minutes + "m";
 			}
 			else minutes = "";
 
-			if( ShowHours )
+			if( hoursVisible )
 			{
 				hours = ((int)Math.Floor(timespan.TotalHours)).ToString();
-				
-				if(ShowLeadingZero)
-					hours = hours.PadLeft(2, '0');
 
+				if(ShowLeadingZeroes)
+					hours = hours.PadLeft(2, '0');
 				if(!ShowSeparators)
 					hours = hours + "h";
 			}

@@ -42,7 +42,7 @@ namespace Chrono
 
 		public override string RedoText {
 			get {
-				string translatable = Catalog.GetPluralString("Redelete a log", "Redelete {0} logs", _logsDeleted.Length);
+				string translatable = Catalog.GetPluralString("Redelete a Log", "Redelete {0} Logs", _logsDeleted.Length);
 
 				return string.Format(translatable, _logsDeleted.Length);
 			}
@@ -50,7 +50,7 @@ namespace Chrono
 
 		public override string UndoText {
 			get {
-				string translatable = Catalog.GetPluralString("Undelete a log", "Undelete {0} logs", _logsDeleted.Length);
+				string translatable = Catalog.GetPluralString("Undelete a Log", "Undelete {0} Logs", _logsDeleted.Length);
 
 				return string.Format(translatable, _logsDeleted.Length);
 			}

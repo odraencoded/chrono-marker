@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.IO;
 using Gtk;
 using Gdk;
+using Mono.Unix;
 
 namespace Chrono
 {
@@ -35,11 +36,16 @@ namespace Chrono
 
 		private Program()
 		{
-			Gtk.Window.DefaultIconName = "chrono-marker";
+			Gtk.Window.DefaultIconList = new Pixbuf[]
+			{
+				Pixbuf.LoadFromResource("chrono-marker-16.png"),
+				Pixbuf.LoadFromResource("chrono-marker-24.png"),
+				Pixbuf.LoadFromResource("chrono-marker-32.png"),
+				Pixbuf.LoadFromResource("chrono-marker-48.png"),
+				Pixbuf.LoadFromResource("chrono-marker-64.png"),
+			};
 
-			clockWindows = new Dictionary<LoggingHandler, StopwatchWindow>();
-
-			Settings = Preferences.Load(settingsFilename);
+			Settings = Preferences.Load( settingsFilename );
 
 			TimeLogger = new TimeLogger(Settings.TimeDisplaySettings);
 
@@ -48,21 +54,18 @@ namespace Chrono
 
 			History = new History(historySteps);
 
-			LoggerWindow = new LoggerWindow(this); // This
-			ClockPropertiesWindow = new ClockPropertiesWindow(this); // And this
-			PreferencesWindow = new PreferencesWindow(this); // And this too
+			clockWindows = new Dictionary<LoggingHandler, StopwatchWindow>();
+			LoggerWindow = new LoggerWindow(this);
+			ClockPropertiesWindow = new ClockPropertiesWindow(this);
+			PreferencesWindow = new PreferencesWindow(this);
 
-			StartupSettings onStartup = Settings.Startup;
-
-			if(onStartup.CreateClock && TimeLogger.CanCreateClock(onStartup.FirstClockName))
-			{
+			if( Settings.CreateWatchOnStartup && TimeLogger.CanCreateClock( Settings.StartupWatchName ) ) {
 				LoggingHandler firstClockHandler =
-					TimeLogger.CreateClock(onStartup.FirstClockName);
+					TimeLogger.CreateClock( Settings.StartupWatchName );
 
-				StopwatchWindow clockWindow = clockWindows[firstClockHandler];
+				StopwatchWindow clockWindow = clockWindows [firstClockHandler];
 
-				clockWindow.Present();
-				clockWindow.Docked = onStartup.StartDocked;
+				clockWindow.DisplayVisible = true;
 			}
 		}
 
@@ -74,7 +77,11 @@ namespace Chrono
 		{
 			Application.Init();
 
+			Catalog.Init("chrono-marker", "./i18n");
+
 			Program myself = new Program();
+
+			GLib.ExceptionManager.UnhandledException += myself.unhandledException_event;
 
 			try
 			{
@@ -84,8 +91,37 @@ namespace Chrono
 			}
 			finally
 			{
-				myself.Settings.SaveTo(settingsFilename);
+				myself.Finish();
 			}
+		}
+		
+		private void unhandledException_event(GLib.UnhandledExceptionArgs args)
+		{
+			Finish();
+
+			Exception theProblem = args.ExceptionObject as Exception;
+			string theError;
+
+			if( theProblem != null ) {
+				string theLocalizable = Catalog.GetString("Chrono Marker is crashing due to the following error \"{0}\"");
+
+				theError = string.Format(theLocalizable, theProblem);
+			}
+			else
+			{
+				theError = Catalog.GetString("Chrono Marker is crashing due to an unknown error.");
+			}
+
+			ShowError(null, theError);
+		}
+		
+		private void Finish()
+		{
+			if(finished) return;
+
+			Settings.SaveTo(settingsFilename);
+
+			finished = true;
 		}
 
 		#region Properties & Fields
@@ -98,31 +134,22 @@ namespace Chrono
 		public PreferencesWindow PreferencesWindow { get; private set; }
 
 		private Dictionary<LoggingHandler, StopwatchWindow> clockWindows;
+		private bool finished;
 
-		public bool GetClockWindow(LoggingHandler handler, out StopwatchWindow window)
+		public bool TryGetClockWindow(LoggingHandler handler, out StopwatchWindow window)
 		{
 			return clockWindows.TryGetValue(handler, out window);
 		}
 		#endregion
 
 		#region Events
-		public event ClockHandlerEventHandler ClockWindowReceivedFocus;
-
-		private void StopwatchFocusIn_event(object sender, EventArgs e)
-		{
-			// This relays a focus in event of a window to the rest of the application
-			StopwatchWindow clockWindow = sender as StopwatchWindow;
-
-			if(clockWindow != null && ClockWindowReceivedFocus != null)
-				ClockWindowReceivedFocus(clockWindow, new ClockHandlerEventArgs(clockWindow.LogHandler));
-		}
-
 		void loggerClockAdded_event(object sender, ClockHandlerEventArgs e)
 		{
 			StopwatchWindow newWindow = new StopwatchWindow(this, e.LoggingHandler);
 
-			newWindow.Compact = Settings.ClockCompactByDefault;
-			newWindow.DisplayFocused += StopwatchFocusIn_event;
+			newWindow.Compact = Settings.WatchCompactByDefault;
+			newWindow.Docked = Settings.WatchCompactByDefault;
+
 			clockWindows.Add(e.LoggingHandler, newWindow);
 		}
 
@@ -134,9 +161,24 @@ namespace Chrono
 				return;
 
 			obsoleteWindow.Destroy();
-			obsoleteWindow.DisplayFocused -= StopwatchFocusIn_event;
 			clockWindows.Remove(e.LoggingHandler);
 		}
 		#endregion
-	}
+
+		public static void ShowError(Gtk.Window parent, string format, params object[] args)
+		{
+			string message = string.Format(format, args);
+
+			MessageDialog errorDialog = new MessageDialog(
+				parent, DialogFlags.Modal, MessageType.Error,
+				ButtonsType.Ok, message);
+
+			errorDialog.Title = "Oopz!";
+
+			errorDialog.TransientFor = parent;
+
+			errorDialog.Run();
+			errorDialog.Destroy();
+		}
+	}	
 }

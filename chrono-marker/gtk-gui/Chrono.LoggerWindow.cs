@@ -7,21 +7,28 @@ namespace Chrono
 		private global::Gtk.UIManager UIManager;
 		private global::Gtk.Action FileAction;
 		private global::Gtk.Action quitAction;
-		private global::Gtk.Action HelpAction;
 		private global::Gtk.Action aboutAction;
 		private global::Gtk.Action EditAction;
 		private global::Gtk.Action copyAction;
 		private global::Gtk.Action deleteAction;
-		private global::Gtk.Action selectAllAction;
+		private global::Gtk.Action SelectAllAction;
 		private global::Gtk.Action ExportAction;
 		private global::Gtk.Action stopwatchesAction;
 		private global::Gtk.Action preferencesAction;
 		private global::Gtk.Action undoAction;
 		private global::Gtk.Action redoAction;
+		private global::Gtk.Action ViewAction;
+		private global::Gtk.ToggleAction KeepAboveAction;
+		private global::Gtk.Action HelpAction;
 		private global::Gtk.VBox vbox1;
 		private global::Gtk.MenuBar menubar1;
+		private global::Gtk.ScrolledWindow scrolledwindow1;
+		private global::Gtk.VBox vbox2;
+		private global::Gtk.VBox dockExpanderVBox;
 		private global::Gtk.ScrolledWindow GtkScrolledWindow;
 		private global::Gtk.TreeView logView;
+		private global::Gtk.Statusbar statusbar1;
+		private global::Gtk.Label logCountLabel;
 		
 		protected virtual void Build ()
 		{
@@ -35,9 +42,6 @@ namespace Chrono
 			this.quitAction = new global::Gtk.Action ("quitAction", global::Mono.Unix.Catalog.GetString ("Quit"), null, "gtk-quit");
 			this.quitAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Quit");
 			w1.Add (this.quitAction, "<Control>q");
-			this.HelpAction = new global::Gtk.Action ("HelpAction", global::Mono.Unix.Catalog.GetString ("Help"), null, null);
-			this.HelpAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Help");
-			w1.Add (this.HelpAction, null);
 			this.aboutAction = new global::Gtk.Action ("aboutAction", global::Mono.Unix.Catalog.GetString ("About"), null, "gtk-about");
 			this.aboutAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("About");
 			w1.Add (this.aboutAction, "F1");
@@ -52,9 +56,9 @@ namespace Chrono
 			this.deleteAction.Sensitive = false;
 			this.deleteAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Delete");
 			w1.Add (this.deleteAction, "Delete");
-			this.selectAllAction = new global::Gtk.Action ("selectAllAction", global::Mono.Unix.Catalog.GetString ("Select all"), null, null);
-			this.selectAllAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Select all");
-			w1.Add (this.selectAllAction, "<Control>a");
+			this.SelectAllAction = new global::Gtk.Action ("SelectAllAction", global::Mono.Unix.Catalog.GetString ("Select All"), null, null);
+			this.SelectAllAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Select All");
+			w1.Add (this.SelectAllAction, "<Control>a");
 			this.ExportAction = new global::Gtk.Action ("ExportAction", global::Mono.Unix.Catalog.GetString ("Export..."), null, null);
 			this.ExportAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Export...");
 			w1.Add (this.ExportAction, null);
@@ -72,6 +76,15 @@ namespace Chrono
 			this.redoAction.Sensitive = false;
 			this.redoAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Redo");
 			w1.Add (this.redoAction, "<Control>y");
+			this.ViewAction = new global::Gtk.Action ("ViewAction", global::Mono.Unix.Catalog.GetString ("View"), null, null);
+			this.ViewAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("View");
+			w1.Add (this.ViewAction, null);
+			this.KeepAboveAction = new global::Gtk.ToggleAction ("KeepAboveAction", global::Mono.Unix.Catalog.GetString ("Keep Above"), global::Mono.Unix.Catalog.GetString ("Keeps the log window on top of other windows"), null);
+			this.KeepAboveAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Keep Above");
+			w1.Add (this.KeepAboveAction, null);
+			this.HelpAction = new global::Gtk.Action ("HelpAction", global::Mono.Unix.Catalog.GetString ("Help"), null, null);
+			this.HelpAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Help");
+			w1.Add (this.HelpAction, null);
 			this.UIManager.InsertActionGroup (w1, 0);
 			this.AddAccelGroup (this.UIManager.AccelGroup);
 			this.Name = "Chrono.LoggerWindow";
@@ -81,7 +94,7 @@ namespace Chrono
 			this.vbox1 = new global::Gtk.VBox ();
 			this.vbox1.Name = "vbox1";
 			// Container child vbox1.Gtk.Box+BoxChild
-			this.UIManager.AddUiFromString (@"<ui><menubar name='menubar1'><menu name='FileAction' action='FileAction'><menuitem name='ExportAction' action='ExportAction'/><separator/><menuitem name='quitAction' action='quitAction'/></menu><menu name='EditAction' action='EditAction'><menuitem name='undoAction' action='undoAction'/><menuitem name='redoAction' action='redoAction'/><separator/><menuitem name='copyAction' action='copyAction'/><menuitem name='deleteAction' action='deleteAction'/><separator/><menuitem name='selectAllAction' action='selectAllAction'/><separator/><menuitem name='stopwatchesAction' action='stopwatchesAction'/><separator/><menuitem name='preferencesAction' action='preferencesAction'/></menu><menu name='HelpAction' action='HelpAction'><menuitem name='aboutAction' action='aboutAction'/></menu></menubar></ui>");
+			this.UIManager.AddUiFromString (@"<ui><menubar name='menubar1'><menu name='FileAction' action='FileAction'><menuitem name='ExportAction' action='ExportAction'/><separator/><menuitem name='quitAction' action='quitAction'/></menu><menu name='EditAction' action='EditAction'><menuitem name='undoAction' action='undoAction'/><menuitem name='redoAction' action='redoAction'/><separator/><menuitem name='copyAction' action='copyAction'/><menuitem name='deleteAction' action='deleteAction'/><separator/><menuitem name='SelectAllAction' action='SelectAllAction'/><separator/><menuitem name='stopwatchesAction' action='stopwatchesAction'/><menuitem name='preferencesAction' action='preferencesAction'/></menu><menu name='ViewAction' action='ViewAction'><menuitem name='KeepAboveAction' action='KeepAboveAction'/></menu><menu name='HelpAction' action='HelpAction'><menuitem name='aboutAction' action='aboutAction'/></menu></menubar></ui>");
 			this.menubar1 = ((global::Gtk.MenuBar)(this.UIManager.GetWidget ("/menubar1")));
 			this.menubar1.Name = "menubar1";
 			this.vbox1.Add (this.menubar1);
@@ -90,6 +103,28 @@ namespace Chrono
 			w2.Expand = false;
 			w2.Fill = false;
 			// Container child vbox1.Gtk.Box+BoxChild
+			this.scrolledwindow1 = new global::Gtk.ScrolledWindow ();
+			this.scrolledwindow1.WidthRequest = 300;
+			this.scrolledwindow1.HeightRequest = 300;
+			this.scrolledwindow1.CanFocus = true;
+			this.scrolledwindow1.Name = "scrolledwindow1";
+			this.scrolledwindow1.ShadowType = ((global::Gtk.ShadowType)(1));
+			this.scrolledwindow1.WindowPlacement = ((global::Gtk.CornerType)(3));
+			// Container child scrolledwindow1.Gtk.Container+ContainerChild
+			global::Gtk.Viewport w3 = new global::Gtk.Viewport ();
+			w3.ShadowType = ((global::Gtk.ShadowType)(0));
+			// Container child GtkViewport1.Gtk.Container+ContainerChild
+			this.vbox2 = new global::Gtk.VBox ();
+			this.vbox2.Name = "vbox2";
+			// Container child vbox2.Gtk.Box+BoxChild
+			this.dockExpanderVBox = new global::Gtk.VBox ();
+			this.dockExpanderVBox.Name = "dockExpanderVBox";
+			this.dockExpanderVBox.Spacing = 2;
+			this.vbox2.Add (this.dockExpanderVBox);
+			global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.dockExpanderVBox]));
+			w4.Position = 0;
+			w4.Expand = false;
+			// Container child vbox2.Gtk.Box+BoxChild
 			this.GtkScrolledWindow = new global::Gtk.ScrolledWindow ();
 			this.GtkScrolledWindow.Name = "GtkScrolledWindow";
 			this.GtkScrolledWindow.ShadowType = ((global::Gtk.ShadowType)(1));
@@ -102,27 +137,53 @@ namespace Chrono
 			this.logView.EnableSearch = false;
 			this.logView.Reorderable = true;
 			this.GtkScrolledWindow.Add (this.logView);
-			this.vbox1.Add (this.GtkScrolledWindow);
-			global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.GtkScrolledWindow]));
-			w4.PackType = ((global::Gtk.PackType)(1));
-			w4.Position = 1;
+			this.vbox2.Add (this.GtkScrolledWindow);
+			global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.GtkScrolledWindow]));
+			w6.Position = 1;
+			w3.Add (this.vbox2);
+			this.scrolledwindow1.Add (w3);
+			this.vbox1.Add (this.scrolledwindow1);
+			global::Gtk.Box.BoxChild w9 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.scrolledwindow1]));
+			w9.Position = 1;
+			// Container child vbox1.Gtk.Box+BoxChild
+			this.statusbar1 = new global::Gtk.Statusbar ();
+			this.statusbar1.Name = "statusbar1";
+			this.statusbar1.Spacing = 4;
+			this.statusbar1.BorderWidth = ((uint)(1));
+			// Container child statusbar1.Gtk.Box+BoxChild
+			this.logCountLabel = new global::Gtk.Label ();
+			this.logCountLabel.Name = "logCountLabel";
+			this.logCountLabel.LabelProp = "No Logs";
+			this.statusbar1.Add (this.logCountLabel);
+			global::Gtk.Box.BoxChild w10 = ((global::Gtk.Box.BoxChild)(this.statusbar1 [this.logCountLabel]));
+			w10.Position = 0;
+			w10.Expand = false;
+			w10.Fill = false;
+			this.vbox1.Add (this.statusbar1);
+			global::Gtk.Box.BoxChild w11 = ((global::Gtk.Box.BoxChild)(this.vbox1 [this.statusbar1]));
+			w11.PackType = ((global::Gtk.PackType)(1));
+			w11.Position = 2;
+			w11.Expand = false;
+			w11.Fill = false;
 			this.Add (this.vbox1);
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();
 			}
 			this.DefaultWidth = 473;
-			this.DefaultHeight = 373;
+			this.DefaultHeight = 505;
 			this.Hide ();
+			this.Shown += new global::System.EventHandler (this.shown_event);
 			this.quitAction.Activated += new global::System.EventHandler (this.quitAction_event);
 			this.aboutAction.Activated += new global::System.EventHandler (this.aboutAction_event);
-			this.copyAction.Activated += new global::System.EventHandler (this.copyAction_event);
-			this.deleteAction.Activated += new global::System.EventHandler (this.deleteAction_event);
-			this.selectAllAction.Activated += new global::System.EventHandler (this.selectAllAction_event);
+			this.copyAction.Activated += new global::System.EventHandler (this.editCopy_event);
+			this.deleteAction.Activated += new global::System.EventHandler (this.editDelete_event);
+			this.SelectAllAction.Activated += new global::System.EventHandler (this.selectAllAction_event);
 			this.ExportAction.Activated += new global::System.EventHandler (this.exportAction_event);
-			this.stopwatchesAction.Activated += new global::System.EventHandler (this.editStopwatches_event);
-			this.preferencesAction.Activated += new global::System.EventHandler (this.editPreferences_click);
-			this.undoAction.Activated += new global::System.EventHandler (this.undo_event);
-			this.redoAction.Activated += new global::System.EventHandler (this.redo_event);
+			this.stopwatchesAction.Activated += new global::System.EventHandler (this.stopwatches_event);
+			this.preferencesAction.Activated += new global::System.EventHandler (this.preferences_event);
+			this.undoAction.Activated += new global::System.EventHandler (this.editUndo_event);
+			this.redoAction.Activated += new global::System.EventHandler (this.editRedo_event);
+			this.KeepAboveAction.Toggled += new global::System.EventHandler (this.keepAbove_event);
 			this.logView.PopupMenu += new global::Gtk.PopupMenuHandler (this.logViewPopup_event);
 			this.logView.ButtonPressEvent += new global::Gtk.ButtonPressEventHandler (this.logViewButtonPress_event);
 		}

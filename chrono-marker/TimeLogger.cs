@@ -42,14 +42,24 @@ namespace Chrono
 		}
 
 		#region Properties
-		public LoggingHandler[] Handlers {
+		public List<LoggingHandler> GetClockList()
+		{
+			return new List<LoggingHandler>(_namedHandlers.Values);
+		}
+
+		public List<LogEntry> GetLogList()
+		{
+			return new List<LogEntry>(_manyLogEntries);
+		}
+
+		public IEnumerator<LogEntry> LogEnumerator {
 			get {
-				LoggingHandler[] result = new LoggingHandler[_namedHandlers.Count];
-
-				_namedHandlers.Values.CopyTo(result, 0);
-
-				return result;
+				return _manyLogEntries.GetEnumerator();
 			}
+		}
+
+		public int EntryCount {
+			get { return _manyLogEntries.Count; }
 		}
 
 		public TimeFormatSettings DefaultFormatSettings { get; set; }
@@ -65,6 +75,7 @@ namespace Chrono
         
 		public event ClockHandlerEventHandler ClockAdded;
 		public event ClockHandlerEventHandler ClockRemoved;
+		public event ClockHandlerEventHandler ClockRenamed;
         #endregion
 
         #region Clock handler interface
@@ -143,16 +154,16 @@ namespace Chrono
 
 		// Tries to move a logHandler from an obsolete key
 		// To the current one
-		public void RefreshClock(string clockName)
+		public void RefreshClock(string previousName)
 		{
 			LoggingHandler logHandler;
-			if( !_namedHandlers.TryGetValue( clockName, out logHandler ) )
+			if( !_namedHandlers.TryGetValue( previousName, out logHandler ) )
 				throw new ArgumentException(string.Format(
-					"Logging handler \"{0}\" does not exist", clockName )
+					"Logging handler \"{0}\" does not exist", previousName )
 				);
 
 			// Nothing to be done
-			if(string.Equals(logHandler.Name, clockName, HandlerNameComparison) )
+			if(string.Equals(logHandler.Name, previousName, HandlerNameComparison) )
 				return;
 
 			if( _namedHandlers.ContainsKey( logHandler.Name ) )
@@ -160,8 +171,11 @@ namespace Chrono
 					"Logging handler \"{0}\" already exists", logHandler.Name )
 				);
 
-			_namedHandlers.Remove( clockName );
+			_namedHandlers.Remove( previousName );
 			_namedHandlers.Add( logHandler.Name, logHandler );
+
+			if(ClockRenamed != null)
+				ClockRenamed(this, new ClockHandlerEventArgs(logHandler));
 		}
 
 		public LoggingHandler GetClockHandler(string name)
