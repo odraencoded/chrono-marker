@@ -38,7 +38,7 @@ namespace Chrono
 
 			// Setting up GUI
 			// Main build
-			this.Build( );
+			this.Build();
 
 			// Log view columns and setup
 			CellRendererText cellRenderer = new CellRendererText();
@@ -99,6 +99,22 @@ namespace Chrono
 			Program.History.Changed += historyChanged_event;
 			logView.Selection.Changed += logViewSelectionChanged_event;
 
+			// Load exporters
+			Gtk.MenuItem exportMenuItem = new MenuItem("Export");
+			Gtk.Menu exportMenu = new Menu();
+			exportMenuItem.Submenu = exportMenu;
+			((menubar1.Children[0] as MenuItem).Submenu as Menu).Insert(exportMenuItem, 0);
+
+			foreach(Files.ILogExporter exporter in program.LogExporters) {
+				MenuItem exporterMenuItem = new MenuItem(exporter.Label);
+				exporterMenuItem.Activated += exportAction_event;
+				exporterMenuItem.Data["exporter"] = exporter;
+
+				exportMenu.Append(exporterMenuItem);
+			}
+			exportMenuItem.ShowAll();
+			
+			// Load log entries
 			List<LogEntry> manyLogEntries = Logger.GetLogList();
 
 			foreach(LogEntry logEntry in manyLogEntries)
@@ -307,8 +323,21 @@ namespace Chrono
 		#region Menu events
 		protected void exportAction_event(object sender, EventArgs e)
 		{
-			string dialogTitle = Catalog.GetString("Export Logs As Text");
+			// Tries to get the data to export
+			Gtk.Widget itemSender = sender as Gtk.Widget;
+			if( itemSender == null ) {
+				Console.WriteLine( "Could not convert export widget!" );
+				return;
+			}
 
+			Files.ILogExporter exporter = itemSender.Data ["exporter"] as Files.ILogExporter;
+			if( itemSender == null ) {
+				Console.WriteLine("Could not get exporter from widget!");
+				return;
+			}
+
+
+			string dialogTitle = Catalog.GetString(exporter.Title);
 
 			FileChooserDialog saveDialog = new FileChooserDialog(
 				dialogTitle, this, FileChooserAction.Save,
@@ -320,8 +349,9 @@ namespace Chrono
 			saveDialog.TransientFor = this;
 			saveDialog.DoOverwriteConfirmation = true;
 
-			if( saveDialog.Run( ) == (int)ResponseType.Accept) {
-				Logger.ExportTo(saveDialog.Filename);
+			if(saveDialog.Run() == (int)ResponseType.Accept) {
+				Logger.Sort();
+				exporter.Export(Logger.GetLogs(false), saveDialog.Filename);
 			}
 
 			saveDialog.Destroy();

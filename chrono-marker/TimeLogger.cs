@@ -190,6 +190,60 @@ namespace Chrono
         #endregion
 
         #region Log entry manipulation
+		// Sorts the log list
+		public void Sort()
+		{
+			LinkedListNode<LogEntry> iterator = _manyLogEntries.First;
+
+			if( iterator != null ) {
+				do {
+					// Declare and assign stuff
+					LinkedListNode<LogEntry> testingNode, sortedNode;
+					testingNode = iterator;
+					sortedNode = testingNode.Previous;
+
+					// Move the iterator to the next value already
+					iterator = iterator.Next;
+
+					// Test.
+					if( sortedNode != null && sortedNode.Value.Timestamp > testingNode.Value.Timestamp) {
+						LogEntry testingValue = testingNode.Value;
+
+						do {
+							sortedNode = sortedNode.Previous;
+						} while(sortedNode != null && sortedNode.Value.Timestamp > testingValue.Timestamp);
+
+						_manyLogEntries.Remove( testingNode );
+
+						// Sort
+						if( sortedNode == null )
+							_manyLogEntries.AddFirst( testingValue );
+						else
+							_manyLogEntries.AddAfter( sortedNode, testingValue );
+					}
+				} while(iterator != null);
+			}
+		}
+
+		public IEnumerable<LogEntry> GetLogs(bool recentFirst = true)
+		{
+			LinkedListNode<LogEntry> iterator;
+
+			if( recentFirst	 ) {
+				iterator = _manyLogEntries.Last;
+				while( iterator != null ) {
+					yield return iterator.Value;
+					iterator = iterator.Previous;
+				}
+			} else {
+				iterator = _manyLogEntries.First;
+				while( iterator != null ) {
+					yield return iterator.Value;
+					iterator = iterator.Next;
+				}
+			}
+		}
+
 		public void AddEntry(params LogEntry[] manyEntries)
 		{
 			// Nothing to add here, going back
@@ -232,7 +286,7 @@ namespace Chrono
 		}
         #endregion
 
-		public void ExportTo(string filename)
+		/*public void ExportTo(string filename)
 		{
 			using( StreamWriter writer = new StreamWriter(filename, false, Encoding.Unicode) ) {
 				List<LogEntry> exportEntries = new List<LogEntry>(_manyLogEntries);
@@ -243,7 +297,7 @@ namespace Chrono
 				foreach( LogEntry logEntry in exportEntries )
 					writer.WriteLine( logEntry );
 			}
-		}
+		}*/
 
 		#region String conversion
 		/*

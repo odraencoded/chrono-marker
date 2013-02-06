@@ -59,8 +59,8 @@ namespace Chrono
 			this.SelectAllAction = new global::Gtk.Action ("SelectAllAction", global::Mono.Unix.Catalog.GetString ("Select All"), null, null);
 			this.SelectAllAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Select All");
 			w1.Add (this.SelectAllAction, "<Control>a");
-			this.ExportAction = new global::Gtk.Action ("ExportAction", global::Mono.Unix.Catalog.GetString ("Export..."), null, null);
-			this.ExportAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Export...");
+			this.ExportAction = new global::Gtk.Action ("ExportAction", global::Mono.Unix.Catalog.GetString ("Export"), null, null);
+			this.ExportAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Export");
 			w1.Add (this.ExportAction, null);
 			this.stopwatchesAction = new global::Gtk.Action ("stopwatchesAction", global::Mono.Unix.Catalog.GetString ("Stopwatches..."), null, "gtk-properties");
 			this.stopwatchesAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Stopwatches...");
@@ -94,7 +94,7 @@ namespace Chrono
 			this.vbox1 = new global::Gtk.VBox ();
 			this.vbox1.Name = "vbox1";
 			// Container child vbox1.Gtk.Box+BoxChild
-			this.UIManager.AddUiFromString (@"<ui><menubar name='menubar1'><menu name='FileAction' action='FileAction'><menuitem name='ExportAction' action='ExportAction'/><separator/><menuitem name='quitAction' action='quitAction'/></menu><menu name='EditAction' action='EditAction'><menuitem name='undoAction' action='undoAction'/><menuitem name='redoAction' action='redoAction'/><separator/><menuitem name='copyAction' action='copyAction'/><menuitem name='deleteAction' action='deleteAction'/><separator/><menuitem name='SelectAllAction' action='SelectAllAction'/><separator/><menuitem name='stopwatchesAction' action='stopwatchesAction'/><menuitem name='preferencesAction' action='preferencesAction'/></menu><menu name='ViewAction' action='ViewAction'><menuitem name='KeepAboveAction' action='KeepAboveAction'/></menu><menu name='HelpAction' action='HelpAction'><menuitem name='aboutAction' action='aboutAction'/></menu></menubar></ui>");
+			this.UIManager.AddUiFromString ("<ui><menubar name='menubar1'><menu name='FileAction' action='FileAction'><separator/><menuitem name='quitAction' action='quitAction'/></menu><menu name='EditAction' action='EditAction'><menuitem name='undoAction' action='undoAction'/><menuitem name='redoAction' action='redoAction'/><separator/><menuitem name='copyAction' action='copyAction'/><menuitem name='deleteAction' action='deleteAction'/><separator/><menuitem name='SelectAllAction' action='SelectAllAction'/><separator/><menuitem name='stopwatchesAction' action='stopwatchesAction'/><menuitem name='preferencesAction' action='preferencesAction'/></menu><menu name='ViewAction' action='ViewAction'><menuitem name='KeepAboveAction' action='KeepAboveAction'/></menu><menu name='HelpAction' action='HelpAction'><menuitem name='aboutAction' action='aboutAction'/></menu></menubar></ui>");
 			this.menubar1 = ((global::Gtk.MenuBar)(this.UIManager.GetWidget ("/menubar1")));
 			this.menubar1.Name = "menubar1";
 			this.vbox1.Add (this.menubar1);
@@ -178,7 +178,6 @@ namespace Chrono
 			this.copyAction.Activated += new global::System.EventHandler (this.editCopy_event);
 			this.deleteAction.Activated += new global::System.EventHandler (this.editDelete_event);
 			this.SelectAllAction.Activated += new global::System.EventHandler (this.selectAllAction_event);
-			this.ExportAction.Activated += new global::System.EventHandler (this.exportAction_event);
 			this.stopwatchesAction.Activated += new global::System.EventHandler (this.stopwatches_event);
 			this.preferencesAction.Activated += new global::System.EventHandler (this.preferences_event);
 			this.undoAction.Activated += new global::System.EventHandler (this.editUndo_event);

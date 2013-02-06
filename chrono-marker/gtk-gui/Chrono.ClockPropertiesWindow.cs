@@ -248,6 +248,7 @@ namespace Chrono
 			this.countForwardOption = new global::Gtk.RadioButton ("Count Forward");
 			this.countForwardOption.CanFocus = true;
 			this.countForwardOption.Name = "countForwardOption";
+			this.countForwardOption.Active = true;
 			this.countForwardOption.DrawIndicator = true;
 			this.countForwardOption.UseUnderline = true;
 			this.countForwardOption.Group = new global::GLib.SList (global::System.IntPtr.Zero);
@@ -296,14 +297,14 @@ namespace Chrono
 			w22.Expand = false;
 			w22.Fill = false;
 			// Container child watchSpeedContainer.Gtk.Box+BoxChild
-			this.watchSpeedEntry = new global::Gtk.SpinButton (0D, 60D, 1D);
+			this.watchSpeedEntry = new global::Gtk.SpinButton (0, 60, 1);
 			this.watchSpeedEntry.CanFocus = true;
 			this.watchSpeedEntry.Name = "watchSpeedEntry";
-			this.watchSpeedEntry.Adjustment.PageIncrement = 6D;
-			this.watchSpeedEntry.ClimbRate = 1D;
+			this.watchSpeedEntry.Adjustment.PageIncrement = 6;
+			this.watchSpeedEntry.ClimbRate = 1;
 			this.watchSpeedEntry.Digits = ((uint)(3));
 			this.watchSpeedEntry.Numeric = true;
-			this.watchSpeedEntry.Value = 1D;
+			this.watchSpeedEntry.Value = 1;
 			this.watchSpeedContainer.Add (this.watchSpeedEntry);
 			global::Gtk.Box.BoxChild w23 = ((global::Gtk.Box.BoxChild)(this.watchSpeedContainer [this.watchSpeedEntry]));
 			w23.Position = 1;

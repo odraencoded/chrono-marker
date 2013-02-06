@@ -239,6 +239,7 @@ namespace Chrono
 			this.showAbbreviationsOption = new global::Gtk.RadioButton ("Abbreviations");
 			this.showAbbreviationsOption.CanFocus = true;
 			this.showAbbreviationsOption.Name = "showAbbreviationsOption";
+			this.showAbbreviationsOption.Active = true;
 			this.showAbbreviationsOption.DrawIndicator = true;
 			this.showAbbreviationsOption.UseUnderline = true;
 			this.showAbbreviationsOption.Group = new global::GLib.SList (global::System.IntPtr.Zero);

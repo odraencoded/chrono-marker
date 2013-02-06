@@ -55,6 +55,12 @@ namespace Chrono
 
 			History = new History(historySteps);
 
+			// Creates exporters
+			LogExporters = new List<Chrono.Files.ILogExporter>();
+			LogExporters.Add(new Files.HTMLExporter());
+			LogExporters.Add(new Files.XMLExporter());
+			LogExporters.Add(new Files.PlainTextExporter());
+
 			clockWindows = new Dictionary<LoggingHandler, StopwatchWindow>();
 			LoggerWindow = new LoggerWindow(this);
 			ClockPropertiesWindow = new ClockPropertiesWindow(this);
@@ -70,6 +76,7 @@ namespace Chrono
 				clockWindow.DisplayVisible = true;
 			}
 		}
+		public List<Files.ILogExporter> LogExporters { get; private set; }
 
 		/// <summary>
 		/// The entry point of the program, where the program control starts and ends.

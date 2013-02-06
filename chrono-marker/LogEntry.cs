@@ -56,5 +56,9 @@ namespace Chrono
 				_clockName.Equals( obj._clockName ) &&
 				_description.Equals( obj.Description );
 		}
+
+		public enum Properties {
+			ClockName, Description, Timestamp
+		}
     }
 }
