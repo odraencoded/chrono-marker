@@ -57,6 +57,7 @@ namespace Chrono
 			// Widget Chrono.ClockPropertiesWindow
 			this.Name = "Chrono.ClockPropertiesWindow";
 			this.Title = "Stopwatches";
+			this.WindowPosition = ((global::Gtk.WindowPosition)(1));
 			this.BorderWidth = ((uint)(6));
 			this.Resizable = false;
 			this.AllowGrow = false;
@@ -247,7 +248,6 @@ namespace Chrono
 			this.countForwardOption = new global::Gtk.RadioButton ("Count Forward");
 			this.countForwardOption.CanFocus = true;
 			this.countForwardOption.Name = "countForwardOption";
-			this.countForwardOption.Active = true;
 			this.countForwardOption.DrawIndicator = true;
 			this.countForwardOption.UseUnderline = true;
 			this.countForwardOption.Group = new global::GLib.SList (global::System.IntPtr.Zero);

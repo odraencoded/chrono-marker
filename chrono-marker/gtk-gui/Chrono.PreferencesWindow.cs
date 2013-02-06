@@ -54,7 +54,7 @@ namespace Chrono
 			// Widget Chrono.PreferencesWindow
 			this.Name = "Chrono.PreferencesWindow";
 			this.Title = "Preferences";
-			this.WindowPosition = ((global::Gtk.WindowPosition)(4));
+			this.WindowPosition = ((global::Gtk.WindowPosition)(1));
 			this.BorderWidth = ((uint)(6));
 			this.Resizable = false;
 			// Container child Chrono.PreferencesWindow.Gtk.Container+ContainerChild
@@ -239,7 +239,6 @@ namespace Chrono
 			this.showAbbreviationsOption = new global::Gtk.RadioButton ("Abbreviations");
 			this.showAbbreviationsOption.CanFocus = true;
 			this.showAbbreviationsOption.Name = "showAbbreviationsOption";
-			this.showAbbreviationsOption.Active = true;
 			this.showAbbreviationsOption.DrawIndicator = true;
 			this.showAbbreviationsOption.UseUnderline = true;
 			this.showAbbreviationsOption.Group = new global::GLib.SList (global::System.IntPtr.Zero);

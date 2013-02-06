@@ -156,7 +156,7 @@
     <property name="MemberName" />
     <property name="Visible">False</property>
     <property name="Title">Preferences</property>
-    <property name="WindowPosition">CenterOnParent</property>
+    <property name="WindowPosition">Center</property>
     <property name="BorderWidth">6</property>
     <property name="Resizable">False</property>
     <signal name="DeleteEvent" handler="windowDelete_event" />
@@ -396,7 +396,6 @@
                                 <property name="MemberName" />
                                 <property name="CanFocus">True</property>
                                 <property name="Label">Abbreviations</property>
-                                <property name="Active">True</property>
                                 <property name="DrawIndicator">True</property>
                                 <property name="HasLabel">True</property>
                                 <property name="UseUnderline">True</property>
@@ -803,7 +802,7 @@
     <property name="MemberName" />
     <property name="Title">About Chrono Marker</property>
     <property name="TypeHint">Dialog</property>
-    <property name="WindowPosition">CenterOnParent</property>
+    <property name="WindowPosition">CenterAlways</property>
     <property name="AllowGrow">False</property>
     <property name="Buttons">1</property>
     <property name="HelpButton">False</property>
@@ -1352,6 +1351,7 @@ You should have received a copy of the GNU General Public License along with Chr
     <property name="MemberName" />
     <property name="Visible">False</property>
     <property name="Title">Stopwatches</property>
+    <property name="WindowPosition">Center</property>
     <property name="BorderWidth">6</property>
     <property name="Resizable">False</property>
     <property name="AllowGrow">False</property>
