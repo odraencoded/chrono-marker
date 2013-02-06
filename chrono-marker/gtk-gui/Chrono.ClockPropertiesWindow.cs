@@ -247,6 +247,7 @@ namespace Chrono
 			this.countForwardOption = new global::Gtk.RadioButton ("Count Forward");
 			this.countForwardOption.CanFocus = true;
 			this.countForwardOption.Name = "countForwardOption";
+			this.countForwardOption.Active = true;
 			this.countForwardOption.DrawIndicator = true;
 			this.countForwardOption.UseUnderline = true;
 			this.countForwardOption.Group = new global::GLib.SList (global::System.IntPtr.Zero);

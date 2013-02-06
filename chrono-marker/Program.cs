@@ -45,6 +45,7 @@ namespace Chrono
 				Pixbuf.LoadFromResource("chrono-marker-64.png"),
 			};
 
+			// Load settings. This is important.
 			Settings = Preferences.Load( settingsFilename );
 
 			TimeLogger = new TimeLogger(Settings.TimeDisplaySettings);
@@ -59,6 +60,7 @@ namespace Chrono
 			ClockPropertiesWindow = new ClockPropertiesWindow(this);
 			PreferencesWindow = new PreferencesWindow(this);
 
+			// Creates the first clock if configured to do so
 			if( Settings.CreateWatchOnStartup && TimeLogger.CanCreateClock( Settings.StartupWatchName ) ) {
 				LoggingHandler firstClockHandler =
 					TimeLogger.CreateClock( Settings.StartupWatchName );
@@ -148,7 +150,7 @@ namespace Chrono
 			StopwatchWindow newWindow = new StopwatchWindow(this, e.LoggingHandler);
 
 			newWindow.Compact = Settings.WatchCompactByDefault;
-			newWindow.Docked = Settings.WatchCompactByDefault;
+			newWindow.Docked = Settings.WatchDockedByDefault;
 
 			clockWindows.Add(e.LoggingHandler, newWindow);
 		}
