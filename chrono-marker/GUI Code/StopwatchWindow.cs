@@ -27,8 +27,6 @@ namespace Chrono
 {
 	public partial class StopwatchWindow : Window
 	{
-		private const int displayRefreshFrequency = 66;
-
 		public StopwatchWindow(Program program, LoggingHandler logHandler) : 
 				base(Gtk.WindowType.Toplevel)
 		{
@@ -62,8 +60,7 @@ namespace Chrono
 			_clockButtonMode = ClockButtonMode.Start;
 
 			if( Clock.IsTicking ) {
-				_timedRefreshCaller = new TimedCaller(displayRefreshFrequency);
-				_timedRefreshCaller.TimeOut += refreshTimeout_event;
+				program.TextRefresher.Handlers += refreshDisplayText;
 			}
 
 			_isEditValid = true;
@@ -138,8 +135,7 @@ namespace Chrono
 						this.Hide( );
 				}
 
-				if( DisplayVisibilityChanged != null )
-					DisplayVisibilityChanged( this, new ChangedArgs() );
+				OnDisplayVisibilityChanged(value);
 			}
 		}
 		#endregion
@@ -149,7 +145,6 @@ namespace Chrono
 		private bool _isEditValid;
 		private TimeSpan _timeInput;
 		private TimeSpan _clockTime;
-		private TimedCaller _timedRefreshCaller;
 
 		private bool _onTop;
 		private bool _compact;
@@ -391,20 +386,13 @@ namespace Chrono
 
 		private void ClockStarted_event(object sender, ClockEventArgs e)
 		{
-			if( _timedRefreshCaller != null ) {
-				_timedRefreshCaller.Cancel( );
-			}
-
-			_timedRefreshCaller = new TimedCaller(displayRefreshFrequency);
-			_timedRefreshCaller.TimeOut += refreshTimeout_event;
+			if(DisplayVisible)
+				Program.TextRefresher.Handlers += refreshDisplayText;
 
 			RefreshControls( );
 		}
 		private void ClockStopped_event(object sender, ClockEventArgs e)
 		{
-			_timedRefreshCaller.Cancel();
-			_timedRefreshCaller = null;
-
 			RefreshTimeDisplay( );
 			RefreshControls( );
 		}
@@ -413,10 +401,14 @@ namespace Chrono
 			RefreshControls();
 		}
 
-		private void refreshTimeout_event(object sender, TimedCallEventArgs e)
+		private bool refreshDisplayText()
 		{
-			if( DisplayVisible )
-				RefreshTimeDisplay( );
+			bool refreshing = DisplayVisible && Clock.IsTicking;
+
+			if(refreshing)
+				RefreshTimeDisplay();
+
+			return refreshing;
 		}
 		#endregion
 
@@ -544,19 +536,28 @@ namespace Chrono
 		
 		void windowVisibilityChanged_event(object o, EventArgs args)
 		{
-			if( _supressVisibilityNotification || _docked )
+			if(_docked)
 				return;
 
-			if( DisplayVisibilityChanged != null )
-					DisplayVisibilityChanged( this, new EventArgs() );
+			OnDisplayVisibilityChanged(Visible);
 		}
 
 		void expanderActivated_event(object o, EventArgs args)
 		{
-			if(_supressVisibilityNotification || !_docked) return;
+			if(!_docked)
+				return;
+
+			OnDisplayVisibilityChanged(_dockExpander.Expanded);
+		}
+		private void OnDisplayVisibilityChanged(bool visible){
+			if(visible && Clock.IsTicking)
+					Program.TextRefresher.Handlers += refreshDisplayText;
+
+			if(_supressVisibilityNotification)
+				return;
 
 			if(DisplayVisibilityChanged != null)
-					DisplayVisibilityChanged(this, new EventArgs());
+				DisplayVisibilityChanged(this, new EventArgs());
 		}
 
 		protected void windowDelete_event(object o, DeleteEventArgs args)
@@ -578,9 +579,7 @@ namespace Chrono
 
 		protected override void OnDestroyed()
 		{
-			if( _timedRefreshCaller != null ) {
-				_timedRefreshCaller.Cancel( );
-			}
+			Program.TextRefresher.Handlers -= refreshDisplayText;
 
 			if( _dockExpander != null ) {
 				Program.LoggerWindow.FocusInEvent -= windowFocusIn_event;

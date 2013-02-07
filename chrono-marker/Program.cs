@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.IO;
 using Gtk;
 using Gdk;
+using GLib;
 using Mono.Unix;
 
 namespace Chrono
@@ -33,9 +34,9 @@ namespace Chrono
     {
 		private const string settingsFilename = "config.ini";
 		private const int historySteps = 128;
+		private const int textRefreshFrequency = 57;
 
-		private Program()
-		{
+		private Program() {
 			Gtk.Window.DefaultIconList = new Pixbuf[]
 			{
 				Pixbuf.LoadFromResource("chrono-marker-16.png"),
@@ -46,7 +47,9 @@ namespace Chrono
 			};
 
 			// Load settings. This is important.
-			Settings = Preferences.Load( settingsFilename );
+			Settings = Preferences.Load(settingsFilename);
+
+			TextRefresher = new FrequentCaller(textRefreshFrequency);
 
 			TimeLogger = new TimeLogger(Settings.TimeDisplaySettings);
 
@@ -67,9 +70,9 @@ namespace Chrono
 			PreferencesWindow = new PreferencesWindow(this);
 
 			// Creates the first clock if configured to do so
-			if( Settings.CreateWatchOnStartup && TimeLogger.CanCreateClock( Settings.StartupWatchName ) ) {
+			if (Settings.CreateWatchOnStartup && TimeLogger.CanCreateClock(Settings.StartupWatchName)) {
 				LoggingHandler firstClockHandler =
-					TimeLogger.CreateClock( Settings.StartupWatchName );
+					TimeLogger.CreateClock(Settings.StartupWatchName);
 
 				StopwatchWindow clockWindow = clockWindows [firstClockHandler];
 
@@ -103,7 +106,9 @@ namespace Chrono
 				myself.Finish();
 			}
 		}
-		
+
+		public FrequentCaller TextRefresher;
+
 		private void unhandledException_event(GLib.UnhandledExceptionArgs args)
 		{
 			Finish();

@@ -1,0 +1,65 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "chrono-marker", "chrono-marker.csproj", "{C5EBA8E1-1107-4EC4-A184-A06F82FC87E5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C5EBA8E1-1107-4EC4-A184-A06F82FC87E5}.Debug|x86.ActiveCfg = Debug|x86
+		{C5EBA8E1-1107-4EC4-A184-A06F82FC87E5}.Debug|x86.Build.0 = Debug|x86
+		{C5EBA8E1-1107-4EC4-A184-A06F82FC87E5}.Release|x86.ActiveCfg = Release|x86
+		{C5EBA8E1-1107-4EC4-A184-A06F82FC87E5}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = chrono-marker.csproj
+		Policies = $0
+		$0.TextStylePolicy = $1
+		$1.inheritsSet = null
+		$1.scope = text/x-csharp
+		$0.CSharpFormattingPolicy = $2
+		$2.BeforeMethodDeclarationParentheses = False
+		$2.BeforeMethodCallParentheses = False
+		$2.WithinMethodCallParentheses = True
+		$2.BeforeConstructorDeclarationParentheses = False
+		$2.BeforeDelegateDeclarationParentheses = False
+		$2.NewParentheses = False
+		$2.IfParentheses = False
+		$2.WhileParentheses = False
+		$2.ForParentheses = False
+		$2.ForeachParentheses = False
+		$2.CatchParentheses = False
+		$2.SwitchParentheses = False
+		$2.LockParentheses = False
+		$2.UsingParentheses = False
+		$2.WithinParentheses = True
+		$2.WithinIfParentheses = True
+		$2.WithinWhileParentheses = True
+		$2.WithinForParentheses = True
+		$2.WithinForEachParentheses = True
+		$2.WithinCatchParentheses = True
+		$2.WithinSwitchParentheses = True
+		$2.WithinLockParentheses = True
+		$2.WithinUsingParentheses = True
+		$2.WithinCastParentheses = True
+		$2.WithinSizeOfParentheses = True
+		$2.WithinTypeOfParentheses = True
+		$2.WithinCheckedExpressionParantheses = True
+		$2.ConditionalOperatorBeforeConditionSpace = False
+		$2.inheritsSet = Mono
+		$2.inheritsScope = text/x-csharp
+		$2.scope = text/x-csharp
+		$0.TextStylePolicy = $3
+		$3.FileWidth = 120
+		$3.TabsToSpaces = False
+		$3.inheritsSet = VisualStudio
+		$3.inheritsScope = text/plain
+		$3.scope = text/plain
+		$0.StandardHeader = $4
+		$4.Text = 
+		$4.IncludeInNewFiles = True
+	EndGlobalSection
+EndGlobal
