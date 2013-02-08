@@ -12,7 +12,7 @@ namespace Chrono
 		private global::Gtk.HBox hbox2;
 		private global::Gtk.Button compactBtn;
 		private global::Gtk.Image compactBtnImage;
-		private global::Gtk.Entry timeDisplayBox;
+		private global::Chrono.ValidatableEntry timeDisplayBox;
 		private global::Gtk.Button forwardBtn;
 		
 		protected virtual void Build ()
@@ -94,16 +94,17 @@ namespace Chrono
 			w12.Expand = false;
 			w12.Fill = false;
 			// Container child hbox2.Gtk.Box+BoxChild
-			this.timeDisplayBox = new global::Gtk.Entry ();
+			this.timeDisplayBox = new global::Chrono.ValidatableEntry ();
 			this.timeDisplayBox.CanFocus = true;
 			this.timeDisplayBox.Name = "timeDisplayBox";
-			this.timeDisplayBox.Text = "Time goes here";
+			this.timeDisplayBox.Text = "It displays \"TIME\"";
 			this.timeDisplayBox.IsEditable = true;
 			this.timeDisplayBox.WidthChars = 13;
 			this.timeDisplayBox.MaxLength = 25;
 			this.timeDisplayBox.ActivatesDefault = true;
-			this.timeDisplayBox.InvisibleChar = '●';
+			this.timeDisplayBox.InvisibleChar = '•';
 			this.timeDisplayBox.Xalign = 1F;
+			this.timeDisplayBox.DoValidation = true;
 			this.hbox2.Add (this.timeDisplayBox);
 			global::Gtk.Box.BoxChild w13 = ((global::Gtk.Box.BoxChild)(this.hbox2 [this.timeDisplayBox]));
 			w13.PackType = ((global::Gtk.PackType)(1));
@@ -147,7 +148,7 @@ namespace Chrono
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();
 			}
-			this.DefaultWidth = 343;
+			this.DefaultWidth = 441;
 			this.DefaultHeight = 93;
 			this.bottomBtn.HasDefault = true;
 			this.compactBtn.Hide ();

@@ -10,27 +10,26 @@
     <RootNamespace>Chrono</RootNamespace>
     <StartupObject>Chrono.Program</StartupObject>
     <AssemblyName>chrono-marker</AssemblyName>
-    <ReleaseVersion>0.5</ReleaseVersion>
     <ApplicationIcon>..\resources\chrono-marker.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <DebugSymbols>True</DebugSymbols>
+    <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>False</Optimize>
+    <Optimize>false</Optimize>
     <OutputPath>bin\Debug</OutputPath>
     <DefineConstants>DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <ConsolePause>False</ConsolePause>
+    <ConsolePause>false</ConsolePause>
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>none</DebugType>
-    <Optimize>True</Optimize>
+    <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <ConsolePause>False</ConsolePause>
+    <ConsolePause>false</ConsolePause>
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
@@ -38,22 +37,27 @@
     <Reference Include="gdk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
       <Private>False</Private>
       <SpecificVersion>False</SpecificVersion>
+      <Package>gtk-sharp-2.0</Package>
     </Reference>
     <Reference Include="atk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
       <Private>False</Private>
       <SpecificVersion>False</SpecificVersion>
+      <Package>gtk-sharp-2.0</Package>
     </Reference>
     <Reference Include="glib-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
       <Private>False</Private>
       <SpecificVersion>False</SpecificVersion>
+      <Package>glib-sharp-2.0</Package>
     </Reference>
     <Reference Include="gtk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
       <Private>False</Private>
       <SpecificVersion>False</SpecificVersion>
+      <Package>gtk-sharp-2.0</Package>
     </Reference>
     <Reference Include="pango-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
       <Private>False</Private>
       <SpecificVersion>False</SpecificVersion>
+      <Package>gtk-sharp-2.0</Package>
     </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Mono.Posix" />
@@ -94,6 +98,8 @@
     <Compile Include="Files\ILogExporter.cs" />
     <Compile Include="Files\HTMLExporter.cs" />
     <Compile Include="FrequentCaller.cs" />
+    <Compile Include="GUI Code\ValidatableEntry.cs" />
+    <Compile Include="TimeParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="gtk-gui\gui.stetic">
@@ -102,47 +108,47 @@
     <EmbeddedResource Include="..\resources\backward.png">
       <Link>Resources\backward.png</Link>
       <LogicalName>backward.png</LogicalName>
-      <Gettext-ScanForTranslations>False</Gettext-ScanForTranslations>
+      <Gettext-ScanForTranslations>false</Gettext-ScanForTranslations>
     </EmbeddedResource>
     <EmbeddedResource Include="..\resources\chrono-marker-16.png">
       <Link>Resources\chrono-marker-16.png</Link>
       <LogicalName>chrono-marker-16.png</LogicalName>
-      <Gettext-ScanForTranslations>False</Gettext-ScanForTranslations>
+      <Gettext-ScanForTranslations>false</Gettext-ScanForTranslations>
     </EmbeddedResource>
     <EmbeddedResource Include="..\resources\chrono-marker-24.png">
       <Link>Resources\chrono-marker-24.png</Link>
       <LogicalName>chrono-marker-24.png</LogicalName>
-      <Gettext-ScanForTranslations>False</Gettext-ScanForTranslations>
+      <Gettext-ScanForTranslations>false</Gettext-ScanForTranslations>
     </EmbeddedResource>
     <EmbeddedResource Include="..\resources\chrono-marker-32.png">
       <Link>Resources\chrono-marker-32.png</Link>
       <LogicalName>chrono-marker-32.png</LogicalName>
-      <Gettext-ScanForTranslations>False</Gettext-ScanForTranslations>
+      <Gettext-ScanForTranslations>false</Gettext-ScanForTranslations>
     </EmbeddedResource>
     <EmbeddedResource Include="..\resources\chrono-marker-48.png">
       <Link>Resources\chrono-marker-48.png</Link>
       <LogicalName>chrono-marker-48.png</LogicalName>
-      <Gettext-ScanForTranslations>False</Gettext-ScanForTranslations>
+      <Gettext-ScanForTranslations>false</Gettext-ScanForTranslations>
     </EmbeddedResource>
     <EmbeddedResource Include="..\resources\chrono-marker-64.png">
       <Link>Resources\chrono-marker-64.png</Link>
       <LogicalName>chrono-marker-64.png</LogicalName>
-      <Gettext-ScanForTranslations>False</Gettext-ScanForTranslations>
+      <Gettext-ScanForTranslations>false</Gettext-ScanForTranslations>
     </EmbeddedResource>
     <EmbeddedResource Include="..\resources\forward.png">
       <Link>Resources\forward.png</Link>
       <LogicalName>forward.png</LogicalName>
-      <Gettext-ScanForTranslations>False</Gettext-ScanForTranslations>
+      <Gettext-ScanForTranslations>false</Gettext-ScanForTranslations>
     </EmbeddedResource>
     <EmbeddedResource Include="..\resources\pause.png">
       <Link>Resources\pause.png</Link>
       <LogicalName>pause.png</LogicalName>
-      <Gettext-ScanForTranslations>False</Gettext-ScanForTranslations>
+      <Gettext-ScanForTranslations>false</Gettext-ScanForTranslations>
     </EmbeddedResource>
     <EmbeddedResource Include="..\resources\undo.png">
       <Link>Resources\undo.png</Link>
       <LogicalName>undo.png</LogicalName>
-      <Gettext-ScanForTranslations>False</Gettext-ScanForTranslations>
+      <Gettext-ScanForTranslations>false</Gettext-ScanForTranslations>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
