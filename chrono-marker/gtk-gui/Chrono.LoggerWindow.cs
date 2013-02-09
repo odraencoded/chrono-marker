@@ -20,6 +20,7 @@ namespace Chrono
 		private global::Gtk.Action ViewAction;
 		private global::Gtk.ToggleAction KeepAboveAction;
 		private global::Gtk.Action HelpAction;
+		private global::Gtk.ToggleAction AutoScrollAction;
 		private global::Gtk.VBox vbox1;
 		private global::Gtk.MenuBar menubar1;
 		private global::Gtk.ScrolledWindow scrolledwindow1;
@@ -85,6 +86,10 @@ namespace Chrono
 			this.HelpAction = new global::Gtk.Action ("HelpAction", global::Mono.Unix.Catalog.GetString ("Help"), null, null);
 			this.HelpAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Help");
 			w1.Add (this.HelpAction, null);
+			this.AutoScrollAction = new global::Gtk.ToggleAction ("AutoScrollAction", global::Mono.Unix.Catalog.GetString ("Auto-Scroll"), global::Mono.Unix.Catalog.GetString ("Scrolls automatically to the newest log"), null);
+			this.AutoScrollAction.Active = true;
+			this.AutoScrollAction.ShortLabel = global::Mono.Unix.Catalog.GetString ("Auto-Scroll");
+			w1.Add (this.AutoScrollAction, null);
 			this.UIManager.InsertActionGroup (w1, 0);
 			this.AddAccelGroup (this.UIManager.AccelGroup);
 			this.Name = "Chrono.LoggerWindow";
@@ -94,7 +99,7 @@ namespace Chrono
 			this.vbox1 = new global::Gtk.VBox ();
 			this.vbox1.Name = "vbox1";
 			// Container child vbox1.Gtk.Box+BoxChild
-			this.UIManager.AddUiFromString ("<ui><menubar name='menubar1'><menu name='FileAction' action='FileAction'><separator/><menuitem name='quitAction' action='quitAction'/></menu><menu name='EditAction' action='EditAction'><menuitem name='undoAction' action='undoAction'/><menuitem name='redoAction' action='redoAction'/><separator/><menuitem name='copyAction' action='copyAction'/><menuitem name='deleteAction' action='deleteAction'/><separator/><menuitem name='SelectAllAction' action='SelectAllAction'/><separator/><menuitem name='stopwatchesAction' action='stopwatchesAction'/><menuitem name='preferencesAction' action='preferencesAction'/></menu><menu name='ViewAction' action='ViewAction'><menuitem name='KeepAboveAction' action='KeepAboveAction'/></menu><menu name='HelpAction' action='HelpAction'><menuitem name='aboutAction' action='aboutAction'/></menu></menubar></ui>");
+			this.UIManager.AddUiFromString ("<ui><menubar name='menubar1'><menu name='FileAction' action='FileAction'><separator/><menuitem name='quitAction' action='quitAction'/></menu><menu name='EditAction' action='EditAction'><menuitem name='undoAction' action='undoAction'/><menuitem name='redoAction' action='redoAction'/><separator/><menuitem name='copyAction' action='copyAction'/><menuitem name='deleteAction' action='deleteAction'/><separator/><menuitem name='SelectAllAction' action='SelectAllAction'/><separator/><menuitem name='stopwatchesAction' action='stopwatchesAction'/><menuitem name='preferencesAction' action='preferencesAction'/></menu><menu name='ViewAction' action='ViewAction'><menuitem name='AutoScrollAction' action='AutoScrollAction'/><separator/><menuitem name='KeepAboveAction' action='KeepAboveAction'/></menu><menu name='HelpAction' action='HelpAction'><menuitem name='aboutAction' action='aboutAction'/></menu></menubar></ui>");
 			this.menubar1 = ((global::Gtk.MenuBar)(this.UIManager.GetWidget ("/menubar1")));
 			this.menubar1.Name = "menubar1";
 			this.vbox1.Add (this.menubar1);
@@ -136,6 +141,8 @@ namespace Chrono
 			this.logView.Name = "logView";
 			this.logView.EnableSearch = false;
 			this.logView.Reorderable = true;
+			this.logView.RulesHint = true;
+			this.logView.HoverExpand = true;
 			this.GtkScrolledWindow.Add (this.logView);
 			this.vbox2.Add (this.GtkScrolledWindow);
 			global::Gtk.Box.BoxChild w6 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.GtkScrolledWindow]));

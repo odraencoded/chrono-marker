@@ -240,9 +240,15 @@ namespace Chrono
 				entry,
 				entry.ClockName,
 				entry.Description,
-				entry.Timestamp.ToString("HH:mm:ss.fff"));
-			
-			_logEntryRows.Add(entry, entryRow);
+				entry.Timestamp.ToString( "HH:mm:ss.fff" ) );
+
+			_logEntryRows.Add( entry, entryRow );
+
+			// This automatically moves the treeview to the newly added LogEntry
+			if( AutoScrollAction.Active ) {
+				TreePath entryPath = _logListStore.GetPath( entryRow );
+				logView.ScrollToCell( entryPath, null, false, 0, 0 );
+			}
 		}
 
 		private void RemoveLogEntry(LogEntry entry)

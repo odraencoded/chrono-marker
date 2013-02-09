@@ -1065,6 +1065,14 @@ You should have received a copy of the GNU General Public License along with Chr
         <property name="Label" translatable="yes">Help</property>
         <property name="ShortLabel" translatable="yes">Help</property>
       </action>
+      <action id="AutoScrollAction">
+        <property name="Type">Toggle</property>
+        <property name="Label" translatable="yes">Auto-Scroll</property>
+        <property name="ShortLabel" translatable="yes">Auto-Scroll</property>
+        <property name="Tooltip" translatable="yes">Scrolls automatically to the newest log</property>
+        <property name="DrawAsRadio">False</property>
+        <property name="Active">True</property>
+      </action>
     </action-group>
     <property name="MemberName" />
     <property name="Visible">False</property>
@@ -1095,6 +1103,8 @@ You should have received a copy of the GNU General Public License along with Chr
                 <node type="Menuitem" action="preferencesAction" />
               </node>
               <node type="Menu" action="ViewAction">
+              	<node type="Menuitem" action="AutoScrollAction" />
+                <node type="Separator" />
                 <node type="Menuitem" action="KeepAboveAction" />
               </node>
               <node type="Menu" action="HelpAction">
@@ -1151,6 +1161,8 @@ You should have received a copy of the GNU General Public License along with Chr
                             <property name="ShowScrollbars">True</property>
                             <property name="EnableSearch">False</property>
                             <property name="Reorderable">True</property>
+                            <property name="RulesHint">True</property>
+                            <property name="HoverExpand">True</property>
                             <signal name="PopupMenu" handler="logViewPopup_event" after="yes" />
                             <signal name="ButtonPressEvent" handler="logViewButtonPress_event" after="yes" />
                           </widget>
