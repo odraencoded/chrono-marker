@@ -116,16 +116,11 @@ namespace Chrono
 		public TimeSpan UpperCap { get { return new TimeSpan(7, 0, 0, 0, 0); } }
 		public TimeSpan LowerCap { get { return new TimeSpan(-7, 0, 0, 0, 0); } }
 
-		public string CurrentTime {
-			get
-			{
-				TimeSpan clockTime = Clock.ElapsedTime;
-
-				if(clockTime > UpperCap) clockTime = UpperCap;
-				else if(clockTime < LowerCap) clockTime = LowerCap;
-
-				return TimeFormatSettings.ToString(clockTime);
-			}
+		private TimeSpan ApplyCap(TimeSpan time) {
+			if(time > UpperCap) time = UpperCap;
+			else if(time < LowerCap) time = LowerCap;
+			
+			return time;
 		}
 
 		/// <summary>
@@ -133,6 +128,9 @@ namespace Chrono
 		/// </summary>
 		public event EventHandler Renamed;
 
+		/// <summary>
+		/// Creates a log for when a clock has started ticking
+		/// </summary>
         private void clockStarted_event(object sender, ClockEventArgs e)
 		{
 			string translatable, logDesc;
@@ -141,10 +139,15 @@ namespace Chrono
 				translatable = Catalog.GetString("Started ticking with {0}.");
 			else translatable = Catalog.GetString("Started counting down with {0}.");
 
-			logDesc = string.Format(translatable, CurrentTime);
+			TimeSpan time = ApplyCap(e.DisplayTime);
+			logDesc = string.Format(translatable, TimeFormatSettings.ToString(time));
 
 			Logger.AddEntry( new LogEntry(_name, logDesc, e.Timestamp) );
 		}
+
+		/// <summary>
+		/// Creates a log for when a clock has stopped ticking
+		/// </summary>
         private void clockStopped_event(object sender, ClockEventArgs e)
 		{
 			string translatable, logDesc;
@@ -153,7 +156,8 @@ namespace Chrono
 				translatable = Catalog.GetString( "Stopped ticking with {0}." );
 			else translatable = Catalog.GetString( "Stopped counting down with {0}." );
 
-			logDesc = string.Format( translatable, CurrentTime);
+			TimeSpan time = ApplyCap(e.DisplayTime);
+			logDesc = string.Format(translatable, TimeFormatSettings.ToString(time));
 
 			Logger.AddEntry( new LogEntry(_name, logDesc, e.Timestamp) );
         }

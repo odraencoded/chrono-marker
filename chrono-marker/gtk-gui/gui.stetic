@@ -1103,7 +1103,7 @@ You should have received a copy of the GNU General Public License along with Chr
                 <node type="Menuitem" action="preferencesAction" />
               </node>
               <node type="Menu" action="ViewAction">
-              	<node type="Menuitem" action="AutoScrollAction" />
+                <node type="Menuitem" action="AutoScrollAction" />
                 <node type="Separator" />
                 <node type="Menuitem" action="KeepAboveAction" />
               </node>
@@ -1161,7 +1161,6 @@ You should have received a copy of the GNU General Public License along with Chr
                             <property name="ShowScrollbars">True</property>
                             <property name="EnableSearch">False</property>
                             <property name="Reorderable">True</property>
-                            <property name="RulesHint">True</property>
                             <property name="HoverExpand">True</property>
                             <signal name="PopupMenu" handler="logViewPopup_event" after="yes" />
                             <signal name="ButtonPressEvent" handler="logViewButtonPress_event" after="yes" />

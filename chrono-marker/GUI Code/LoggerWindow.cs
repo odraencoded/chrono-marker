@@ -74,9 +74,9 @@ namespace Chrono
 				typeof( LogEntry ), typeof( string ), typeof( string ), typeof( string ));
 
 			logView.Model = _logListStore;
-			
 			logView.Selection.Mode = SelectionMode.Multiple;
-			
+			logView.EnableGridLines = TreeViewGridLines.Horizontal;
+
 			clockColumn.SortColumnId = 1;
 			descColumn.SortColumnId = 2;
 			timeColumn.SortColumnId = 3;
